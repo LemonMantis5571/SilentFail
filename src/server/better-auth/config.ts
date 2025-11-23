@@ -1,0 +1,33 @@
+import { betterAuth } from "better-auth";
+import { prismaAdapter } from "better-auth/adapters/prisma";
+import { env } from "~/env";
+import { db } from "~/server/db";
+
+export const auth = betterAuth({
+  database: prismaAdapter(db, {
+    provider: "postgresql",
+  }),
+  emailAndPassword: {
+    enabled: true,
+  },
+  socialProviders: {
+    github: {
+      clientId: env.BETTER_AUTH_GITHUB_CLIENT_ID,
+      clientSecret: env.BETTER_AUTH_GITHUB_CLIENT_SECRET,
+      redirectURI: "http://localhost:3000/api/auth/callback/github",
+    },
+  },
+  // Add this block back, but with these specific settings
+  advanced: {
+    // This tells Better Auth NOT to require HTTPS for cookies
+    useSecureCookies: false, 
+    cookie: {
+      // "Lax" works fine on localhost http://
+      // "None" would require https://
+      sameSite: "Lax", 
+      secure: false
+    }
+  }
+});
+
+export type Session = typeof auth.$Infer.Session;
