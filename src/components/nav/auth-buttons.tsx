@@ -19,41 +19,34 @@ import { authClient } from "~/server/better-auth/client";
 export function AuthButtons() {
     const router = useRouter();
     
-    // Better Auth Hook: Automatically manages loading/data state
+
     const { data: session, isPending } = authClient.useSession();
 
     const handleSignOut = async () => {
         await authClient.signOut({
             fetchOptions: {
                 onSuccess: () => {
-                    router.push("/"); // Redirect to home after logout
-                    router.refresh(); // Clear server cache
+                    router.push("/"); 
+                    router.refresh();
                 },
             },
         });
     };
 
     const handleSignIn = async () => {
-        // Option A: Redirect to a dedicated login page
-        // router.push("/sign-in");
-        
-        // Option B: Direct GitHub Sign-in (Uncomment to use)
-        await authClient.signIn.social({
-            provider: "github",
-            callbackURL: "/dashboard"
-        });
+        router.push("/login");
     }
 
-    // 1. Loading State (Optional: could also render a skeleton)
+
     if (isPending) {
         return <Button variant="ghost" size="sm" disabled><Loader2 className="h-4 w-4 animate-spin" /></Button>;
     }
 
-    // 2. Logged In State (Show Avatar/Dropdown)
+
     if (session) {
         return (
             <div className="flex items-center gap-4">
-                 <Button asChild size="sm" variant={"secondary"} className="hidden sm:inline-flex shadow-md shadow-primary/20">
+                 <Button asChild size="sm" className="hidden sm:inline-flex shadow-md shadow-primary/20  text-white bg-blue-600 hover:bg-blue-500">
                     <Link href="/dashboard">Dashboard</Link>
                 </Button>
 
@@ -77,7 +70,7 @@ export function AuthButtons() {
                         </DropdownMenuLabel>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem asChild>
-                            <Link href="/dashboard" className="cursor-pointer">
+                            <Link href="/dashboard" className="cursor-pointer ">
                                 <LayoutDashboard className="mr-2 h-4 w-4" />
                                 Dashboard
                             </Link>
@@ -93,7 +86,7 @@ export function AuthButtons() {
         );
     }
 
-    // 3. Logged Out State (Show Login/Get Started)
+
     return (
         <div className="flex items-center gap-4">
             <Button 
@@ -103,7 +96,7 @@ export function AuthButtons() {
             >
                 Log in
             </Button>
-            <Button size="sm" className="font-semibold shadow-md shadow-primary/20" onClick={handleSignIn}>
+            <Button size="sm" className="font-semibold shadow-md text-neutral-300 shadow-primary/20 bg-blue-600" onClick={handleSignIn}>
                 Get Started
             </Button>
         </div>

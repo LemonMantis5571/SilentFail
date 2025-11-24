@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { calculateSmartGrace } from "~/lib/smart-grace";
 import { db } from "~/server/db";
 
 
@@ -9,26 +10,61 @@ export async function GET(
   const { key } = await params;
 
   try {
+ 
     const monitor = await db.monitor.findUnique({
       where: { key },
+      include: { 
+        pings: { 
+            orderBy: { createdAt: 'desc' },
+            take: 10 
+        } 
+      }
     });
 
-    if (!monitor) {
-      return new NextResponse("Monitor not found", { status: 404 });
+    if (!monitor) return new NextResponse("Not Found", { status: 404 });
+
+    const now = new Date();
+    let latency = 0;
+
+
+    if (monitor.lastPing) {
+      const diffMs = now.getTime() - monitor.lastPing.getTime();
+      latency = Math.floor(diffMs / 1000);
     }
 
+
+    await db.pingEvent.create({
+      data: {
+        monitorId: monitor.id,
+        latency: latency
+      }
+    });
+
+
+    let newGracePeriod = monitor.gracePeriod;
+
+    if (monitor.useSmartGrace && monitor.pings.length >= 3) {
+       const historyLatencies = monitor.pings.map(p => p.latency);
+       const allLatencies = [latency, ...historyLatencies];
+       const smartGrace = calculateSmartGrace(allLatencies, monitor.interval * 60);
+       if (smartGrace !== monitor.gracePeriod) {
+         newGracePeriod = smartGrace;
+         console.log(`[AI Adjustment] ${monitor.name}: Grace period updated to ${smartGrace}m`);
+       }
+    }
     await db.monitor.update({
       where: { id: monitor.id },
       data: {
         status: "UP",
-        lastPing: new Date(),
+        lastPing: now,
+        gracePeriod: newGracePeriod 
       },
     });
 
-    return new NextResponse("pong", { status: 200 });
+    return new NextResponse("HeartBeat received", { status: 200 });
   } catch (error) {
-    console.error("Ping failed:", error);
-    return new NextResponse("Internal Server Error", { status: 500 });
+    console.error(error);
+    return new NextResponse("Error", { status: 500 });
   }
 }
 
@@ -50,11 +86,11 @@ export async function POST(
       return new NextResponse("Monitor not found", { status: 404 });
     }
 
-    // 1. Mark as DOWN immediately
+
     await db.monitor.update({
       where: { id: monitor.id },
       data: {
-        status: "DOWN", // Or a specific "CRASHED" status if you add it to Prisma later
+        status: "DOWN", 
         lastPing: new Date(),
       },
     });

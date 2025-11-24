@@ -15,11 +15,17 @@ export async function getMonitors() {
 
   return await db.monitor.findMany({
     where: { userId: session.user.id },
+    include: {
+        pings: {
+            take: 20,
+            orderBy: { createdAt: 'desc' }
+        }
+    },
     orderBy: { createdAt: 'desc' }
   });
 }
 
-export async function createMonitor(data: { name: string; interval: number; gracePeriod: number }) {
+export async function createMonitor(data: { name: string; interval: number; gracePeriod: number, smartGrace: boolean | undefined }) {
   const session = await auth.api.getSession({
     headers: await headers()
   });
@@ -31,7 +37,8 @@ export async function createMonitor(data: { name: string; interval: number; grac
       userId: session.user.id,
       name: data.name,
       interval: data.interval,
-      gracePeriod: data.gracePeriod, // <--- Add this line
+      gracePeriod: data.gracePeriod,
+      useSmartGrace: data.smartGrace,
       status: "PENDING"
     }
   });
@@ -54,4 +61,25 @@ export async function deleteMonitor(id: string) {
   });
 
   revalidatePath("/dashboard");
+}
+
+export async function getMonitor(id: string) {
+  const session = await auth.api.getSession({
+    headers: await headers()
+  });
+
+  if (!session) return null;
+
+  return await db.monitor.findUnique({
+    where: { 
+        id,
+        userId: session.user.id 
+    },
+    include: {
+      pings: {
+        orderBy: { createdAt: 'desc' },
+        take: 100 // Fetch last 100 data points for the graph
+      }
+    }
+  });
 }

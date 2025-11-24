@@ -17,13 +17,9 @@ export const auth = betterAuth({
       redirectURI: "http://localhost:3000/api/auth/callback/github",
     },
   },
-  // Add this block back, but with these specific settings
   advanced: {
-    // This tells Better Auth NOT to require HTTPS for cookies
     useSecureCookies: false, 
     cookie: {
-      // "Lax" works fine on localhost http://
-      // "None" would require https://
       sameSite: "Lax", 
       secure: false
     }

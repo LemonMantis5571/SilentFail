@@ -43,6 +43,11 @@ export type Verification = $Result.DefaultSelection<Prisma.$VerificationPayload>
  * 
  */
 export type Monitor = $Result.DefaultSelection<Prisma.$MonitorPayload>
+/**
+ * Model PingEvent
+ * 
+ */
+export type PingEvent = $Result.DefaultSelection<Prisma.$PingEventPayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -221,6 +226,16 @@ export class PrismaClient<
     * ```
     */
   get monitor(): Prisma.MonitorDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.pingEvent`: Exposes CRUD operations for the **PingEvent** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more PingEvents
+    * const pingEvents = await prisma.pingEvent.findMany()
+    * ```
+    */
+  get pingEvent(): Prisma.PingEventDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -667,7 +682,8 @@ export namespace Prisma {
     Session: 'Session',
     Account: 'Account',
     Verification: 'Verification',
-    Monitor: 'Monitor'
+    Monitor: 'Monitor',
+    PingEvent: 'PingEvent'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -686,7 +702,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "post" | "user" | "session" | "account" | "verification" | "monitor"
+      modelProps: "post" | "user" | "session" | "account" | "verification" | "monitor" | "pingEvent"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1134,6 +1150,80 @@ export namespace Prisma {
           }
         }
       }
+      PingEvent: {
+        payload: Prisma.$PingEventPayload<ExtArgs>
+        fields: Prisma.PingEventFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.PingEventFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PingEventPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.PingEventFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PingEventPayload>
+          }
+          findFirst: {
+            args: Prisma.PingEventFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PingEventPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.PingEventFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PingEventPayload>
+          }
+          findMany: {
+            args: Prisma.PingEventFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PingEventPayload>[]
+          }
+          create: {
+            args: Prisma.PingEventCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PingEventPayload>
+          }
+          createMany: {
+            args: Prisma.PingEventCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.PingEventCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PingEventPayload>[]
+          }
+          delete: {
+            args: Prisma.PingEventDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PingEventPayload>
+          }
+          update: {
+            args: Prisma.PingEventUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PingEventPayload>
+          }
+          deleteMany: {
+            args: Prisma.PingEventDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.PingEventUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.PingEventUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PingEventPayload>[]
+          }
+          upsert: {
+            args: Prisma.PingEventUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PingEventPayload>
+          }
+          aggregate: {
+            args: Prisma.PingEventAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePingEvent>
+          }
+          groupBy: {
+            args: Prisma.PingEventGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PingEventGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.PingEventCountArgs<ExtArgs>
+            result: $Utils.Optional<PingEventCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1236,6 +1326,7 @@ export namespace Prisma {
     account?: AccountOmit
     verification?: VerificationOmit
     monitor?: MonitorOmit
+    pingEvent?: PingEventOmit
   }
 
   /* Types for Logging */
@@ -1366,6 +1457,37 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountMonitorsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: MonitorWhereInput
+  }
+
+
+  /**
+   * Count Type MonitorCountOutputType
+   */
+
+  export type MonitorCountOutputType = {
+    pings: number
+  }
+
+  export type MonitorCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    pings?: boolean | MonitorCountOutputTypeCountPingsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * MonitorCountOutputType without action
+   */
+  export type MonitorCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonitorCountOutputType
+     */
+    select?: MonitorCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * MonitorCountOutputType without action
+   */
+  export type MonitorCountOutputTypeCountPingsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PingEventWhereInput
   }
 
 
@@ -6911,6 +7033,7 @@ export namespace Prisma {
     userId: string | null
     createdAt: Date | null
     updatedAt: Date | null
+    useSmartGrace: boolean | null
   }
 
   export type MonitorMaxAggregateOutputType = {
@@ -6924,6 +7047,7 @@ export namespace Prisma {
     userId: string | null
     createdAt: Date | null
     updatedAt: Date | null
+    useSmartGrace: boolean | null
   }
 
   export type MonitorCountAggregateOutputType = {
@@ -6937,6 +7061,7 @@ export namespace Prisma {
     userId: number
     createdAt: number
     updatedAt: number
+    useSmartGrace: number
     _all: number
   }
 
@@ -6962,6 +7087,7 @@ export namespace Prisma {
     userId?: true
     createdAt?: true
     updatedAt?: true
+    useSmartGrace?: true
   }
 
   export type MonitorMaxAggregateInputType = {
@@ -6975,6 +7101,7 @@ export namespace Prisma {
     userId?: true
     createdAt?: true
     updatedAt?: true
+    useSmartGrace?: true
   }
 
   export type MonitorCountAggregateInputType = {
@@ -6988,6 +7115,7 @@ export namespace Prisma {
     userId?: true
     createdAt?: true
     updatedAt?: true
+    useSmartGrace?: true
     _all?: true
   }
 
@@ -7088,6 +7216,7 @@ export namespace Prisma {
     userId: string
     createdAt: Date
     updatedAt: Date
+    useSmartGrace: boolean
     _count: MonitorCountAggregateOutputType | null
     _avg: MonitorAvgAggregateOutputType | null
     _sum: MonitorSumAggregateOutputType | null
@@ -7120,7 +7249,10 @@ export namespace Prisma {
     userId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    useSmartGrace?: boolean
+    pings?: boolean | Monitor$pingsArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
+    _count?: boolean | MonitorCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["monitor"]>
 
   export type MonitorSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -7134,6 +7266,7 @@ export namespace Prisma {
     userId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    useSmartGrace?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["monitor"]>
 
@@ -7148,6 +7281,7 @@ export namespace Prisma {
     userId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    useSmartGrace?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["monitor"]>
 
@@ -7162,11 +7296,14 @@ export namespace Prisma {
     userId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    useSmartGrace?: boolean
   }
 
-  export type MonitorOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "key" | "interval" | "gracePeriod" | "status" | "lastPing" | "userId" | "createdAt" | "updatedAt", ExtArgs["result"]["monitor"]>
+  export type MonitorOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "key" | "interval" | "gracePeriod" | "status" | "lastPing" | "userId" | "createdAt" | "updatedAt" | "useSmartGrace", ExtArgs["result"]["monitor"]>
   export type MonitorInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    pings?: boolean | Monitor$pingsArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
+    _count?: boolean | MonitorCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type MonitorIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -7178,6 +7315,7 @@ export namespace Prisma {
   export type $MonitorPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Monitor"
     objects: {
+      pings: Prisma.$PingEventPayload<ExtArgs>[]
       user: Prisma.$UserPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -7191,6 +7329,7 @@ export namespace Prisma {
       userId: string
       createdAt: Date
       updatedAt: Date
+      useSmartGrace: boolean
     }, ExtArgs["result"]["monitor"]>
     composites: {}
   }
@@ -7585,6 +7724,7 @@ export namespace Prisma {
    */
   export interface Prisma__MonitorClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    pings<T extends Monitor$pingsArgs<ExtArgs> = {}>(args?: Subset<T, Monitor$pingsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PingEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -7625,6 +7765,7 @@ export namespace Prisma {
     readonly userId: FieldRef<"Monitor", 'String'>
     readonly createdAt: FieldRef<"Monitor", 'DateTime'>
     readonly updatedAt: FieldRef<"Monitor", 'DateTime'>
+    readonly useSmartGrace: FieldRef<"Monitor", 'Boolean'>
   }
     
 
@@ -8021,6 +8162,30 @@ export namespace Prisma {
   }
 
   /**
+   * Monitor.pings
+   */
+  export type Monitor$pingsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PingEvent
+     */
+    select?: PingEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PingEvent
+     */
+    omit?: PingEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PingEventInclude<ExtArgs> | null
+    where?: PingEventWhereInput
+    orderBy?: PingEventOrderByWithRelationInput | PingEventOrderByWithRelationInput[]
+    cursor?: PingEventWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PingEventScalarFieldEnum | PingEventScalarFieldEnum[]
+  }
+
+  /**
    * Monitor without action
    */
   export type MonitorDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -8036,6 +8201,1085 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: MonitorInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model PingEvent
+   */
+
+  export type AggregatePingEvent = {
+    _count: PingEventCountAggregateOutputType | null
+    _avg: PingEventAvgAggregateOutputType | null
+    _sum: PingEventSumAggregateOutputType | null
+    _min: PingEventMinAggregateOutputType | null
+    _max: PingEventMaxAggregateOutputType | null
+  }
+
+  export type PingEventAvgAggregateOutputType = {
+    latency: number | null
+  }
+
+  export type PingEventSumAggregateOutputType = {
+    latency: number | null
+  }
+
+  export type PingEventMinAggregateOutputType = {
+    id: string | null
+    monitorId: string | null
+    createdAt: Date | null
+    latency: number | null
+  }
+
+  export type PingEventMaxAggregateOutputType = {
+    id: string | null
+    monitorId: string | null
+    createdAt: Date | null
+    latency: number | null
+  }
+
+  export type PingEventCountAggregateOutputType = {
+    id: number
+    monitorId: number
+    createdAt: number
+    latency: number
+    _all: number
+  }
+
+
+  export type PingEventAvgAggregateInputType = {
+    latency?: true
+  }
+
+  export type PingEventSumAggregateInputType = {
+    latency?: true
+  }
+
+  export type PingEventMinAggregateInputType = {
+    id?: true
+    monitorId?: true
+    createdAt?: true
+    latency?: true
+  }
+
+  export type PingEventMaxAggregateInputType = {
+    id?: true
+    monitorId?: true
+    createdAt?: true
+    latency?: true
+  }
+
+  export type PingEventCountAggregateInputType = {
+    id?: true
+    monitorId?: true
+    createdAt?: true
+    latency?: true
+    _all?: true
+  }
+
+  export type PingEventAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PingEvent to aggregate.
+     */
+    where?: PingEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PingEvents to fetch.
+     */
+    orderBy?: PingEventOrderByWithRelationInput | PingEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: PingEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PingEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PingEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned PingEvents
+    **/
+    _count?: true | PingEventCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: PingEventAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: PingEventSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: PingEventMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: PingEventMaxAggregateInputType
+  }
+
+  export type GetPingEventAggregateType<T extends PingEventAggregateArgs> = {
+        [P in keyof T & keyof AggregatePingEvent]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePingEvent[P]>
+      : GetScalarType<T[P], AggregatePingEvent[P]>
+  }
+
+
+
+
+  export type PingEventGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PingEventWhereInput
+    orderBy?: PingEventOrderByWithAggregationInput | PingEventOrderByWithAggregationInput[]
+    by: PingEventScalarFieldEnum[] | PingEventScalarFieldEnum
+    having?: PingEventScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: PingEventCountAggregateInputType | true
+    _avg?: PingEventAvgAggregateInputType
+    _sum?: PingEventSumAggregateInputType
+    _min?: PingEventMinAggregateInputType
+    _max?: PingEventMaxAggregateInputType
+  }
+
+  export type PingEventGroupByOutputType = {
+    id: string
+    monitorId: string
+    createdAt: Date
+    latency: number
+    _count: PingEventCountAggregateOutputType | null
+    _avg: PingEventAvgAggregateOutputType | null
+    _sum: PingEventSumAggregateOutputType | null
+    _min: PingEventMinAggregateOutputType | null
+    _max: PingEventMaxAggregateOutputType | null
+  }
+
+  type GetPingEventGroupByPayload<T extends PingEventGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<PingEventGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof PingEventGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PingEventGroupByOutputType[P]>
+            : GetScalarType<T[P], PingEventGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type PingEventSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    monitorId?: boolean
+    createdAt?: boolean
+    latency?: boolean
+    monitor?: boolean | MonitorDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["pingEvent"]>
+
+  export type PingEventSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    monitorId?: boolean
+    createdAt?: boolean
+    latency?: boolean
+    monitor?: boolean | MonitorDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["pingEvent"]>
+
+  export type PingEventSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    monitorId?: boolean
+    createdAt?: boolean
+    latency?: boolean
+    monitor?: boolean | MonitorDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["pingEvent"]>
+
+  export type PingEventSelectScalar = {
+    id?: boolean
+    monitorId?: boolean
+    createdAt?: boolean
+    latency?: boolean
+  }
+
+  export type PingEventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "monitorId" | "createdAt" | "latency", ExtArgs["result"]["pingEvent"]>
+  export type PingEventInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    monitor?: boolean | MonitorDefaultArgs<ExtArgs>
+  }
+  export type PingEventIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    monitor?: boolean | MonitorDefaultArgs<ExtArgs>
+  }
+  export type PingEventIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    monitor?: boolean | MonitorDefaultArgs<ExtArgs>
+  }
+
+  export type $PingEventPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "PingEvent"
+    objects: {
+      monitor: Prisma.$MonitorPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      monitorId: string
+      createdAt: Date
+      latency: number
+    }, ExtArgs["result"]["pingEvent"]>
+    composites: {}
+  }
+
+  type PingEventGetPayload<S extends boolean | null | undefined | PingEventDefaultArgs> = $Result.GetResult<Prisma.$PingEventPayload, S>
+
+  type PingEventCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<PingEventFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: PingEventCountAggregateInputType | true
+    }
+
+  export interface PingEventDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['PingEvent'], meta: { name: 'PingEvent' } }
+    /**
+     * Find zero or one PingEvent that matches the filter.
+     * @param {PingEventFindUniqueArgs} args - Arguments to find a PingEvent
+     * @example
+     * // Get one PingEvent
+     * const pingEvent = await prisma.pingEvent.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends PingEventFindUniqueArgs>(args: SelectSubset<T, PingEventFindUniqueArgs<ExtArgs>>): Prisma__PingEventClient<$Result.GetResult<Prisma.$PingEventPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one PingEvent that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {PingEventFindUniqueOrThrowArgs} args - Arguments to find a PingEvent
+     * @example
+     * // Get one PingEvent
+     * const pingEvent = await prisma.pingEvent.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends PingEventFindUniqueOrThrowArgs>(args: SelectSubset<T, PingEventFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PingEventClient<$Result.GetResult<Prisma.$PingEventPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first PingEvent that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PingEventFindFirstArgs} args - Arguments to find a PingEvent
+     * @example
+     * // Get one PingEvent
+     * const pingEvent = await prisma.pingEvent.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends PingEventFindFirstArgs>(args?: SelectSubset<T, PingEventFindFirstArgs<ExtArgs>>): Prisma__PingEventClient<$Result.GetResult<Prisma.$PingEventPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first PingEvent that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PingEventFindFirstOrThrowArgs} args - Arguments to find a PingEvent
+     * @example
+     * // Get one PingEvent
+     * const pingEvent = await prisma.pingEvent.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends PingEventFindFirstOrThrowArgs>(args?: SelectSubset<T, PingEventFindFirstOrThrowArgs<ExtArgs>>): Prisma__PingEventClient<$Result.GetResult<Prisma.$PingEventPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more PingEvents that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PingEventFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all PingEvents
+     * const pingEvents = await prisma.pingEvent.findMany()
+     * 
+     * // Get first 10 PingEvents
+     * const pingEvents = await prisma.pingEvent.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const pingEventWithIdOnly = await prisma.pingEvent.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends PingEventFindManyArgs>(args?: SelectSubset<T, PingEventFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PingEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a PingEvent.
+     * @param {PingEventCreateArgs} args - Arguments to create a PingEvent.
+     * @example
+     * // Create one PingEvent
+     * const PingEvent = await prisma.pingEvent.create({
+     *   data: {
+     *     // ... data to create a PingEvent
+     *   }
+     * })
+     * 
+     */
+    create<T extends PingEventCreateArgs>(args: SelectSubset<T, PingEventCreateArgs<ExtArgs>>): Prisma__PingEventClient<$Result.GetResult<Prisma.$PingEventPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many PingEvents.
+     * @param {PingEventCreateManyArgs} args - Arguments to create many PingEvents.
+     * @example
+     * // Create many PingEvents
+     * const pingEvent = await prisma.pingEvent.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends PingEventCreateManyArgs>(args?: SelectSubset<T, PingEventCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many PingEvents and returns the data saved in the database.
+     * @param {PingEventCreateManyAndReturnArgs} args - Arguments to create many PingEvents.
+     * @example
+     * // Create many PingEvents
+     * const pingEvent = await prisma.pingEvent.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many PingEvents and only return the `id`
+     * const pingEventWithIdOnly = await prisma.pingEvent.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends PingEventCreateManyAndReturnArgs>(args?: SelectSubset<T, PingEventCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PingEventPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a PingEvent.
+     * @param {PingEventDeleteArgs} args - Arguments to delete one PingEvent.
+     * @example
+     * // Delete one PingEvent
+     * const PingEvent = await prisma.pingEvent.delete({
+     *   where: {
+     *     // ... filter to delete one PingEvent
+     *   }
+     * })
+     * 
+     */
+    delete<T extends PingEventDeleteArgs>(args: SelectSubset<T, PingEventDeleteArgs<ExtArgs>>): Prisma__PingEventClient<$Result.GetResult<Prisma.$PingEventPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one PingEvent.
+     * @param {PingEventUpdateArgs} args - Arguments to update one PingEvent.
+     * @example
+     * // Update one PingEvent
+     * const pingEvent = await prisma.pingEvent.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends PingEventUpdateArgs>(args: SelectSubset<T, PingEventUpdateArgs<ExtArgs>>): Prisma__PingEventClient<$Result.GetResult<Prisma.$PingEventPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more PingEvents.
+     * @param {PingEventDeleteManyArgs} args - Arguments to filter PingEvents to delete.
+     * @example
+     * // Delete a few PingEvents
+     * const { count } = await prisma.pingEvent.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends PingEventDeleteManyArgs>(args?: SelectSubset<T, PingEventDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PingEvents.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PingEventUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many PingEvents
+     * const pingEvent = await prisma.pingEvent.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends PingEventUpdateManyArgs>(args: SelectSubset<T, PingEventUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PingEvents and returns the data updated in the database.
+     * @param {PingEventUpdateManyAndReturnArgs} args - Arguments to update many PingEvents.
+     * @example
+     * // Update many PingEvents
+     * const pingEvent = await prisma.pingEvent.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more PingEvents and only return the `id`
+     * const pingEventWithIdOnly = await prisma.pingEvent.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends PingEventUpdateManyAndReturnArgs>(args: SelectSubset<T, PingEventUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PingEventPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one PingEvent.
+     * @param {PingEventUpsertArgs} args - Arguments to update or create a PingEvent.
+     * @example
+     * // Update or create a PingEvent
+     * const pingEvent = await prisma.pingEvent.upsert({
+     *   create: {
+     *     // ... data to create a PingEvent
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the PingEvent we want to update
+     *   }
+     * })
+     */
+    upsert<T extends PingEventUpsertArgs>(args: SelectSubset<T, PingEventUpsertArgs<ExtArgs>>): Prisma__PingEventClient<$Result.GetResult<Prisma.$PingEventPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of PingEvents.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PingEventCountArgs} args - Arguments to filter PingEvents to count.
+     * @example
+     * // Count the number of PingEvents
+     * const count = await prisma.pingEvent.count({
+     *   where: {
+     *     // ... the filter for the PingEvents we want to count
+     *   }
+     * })
+    **/
+    count<T extends PingEventCountArgs>(
+      args?: Subset<T, PingEventCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PingEventCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a PingEvent.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PingEventAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends PingEventAggregateArgs>(args: Subset<T, PingEventAggregateArgs>): Prisma.PrismaPromise<GetPingEventAggregateType<T>>
+
+    /**
+     * Group by PingEvent.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PingEventGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends PingEventGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: PingEventGroupByArgs['orderBy'] }
+        : { orderBy?: PingEventGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, PingEventGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPingEventGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the PingEvent model
+   */
+  readonly fields: PingEventFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for PingEvent.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__PingEventClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    monitor<T extends MonitorDefaultArgs<ExtArgs> = {}>(args?: Subset<T, MonitorDefaultArgs<ExtArgs>>): Prisma__MonitorClient<$Result.GetResult<Prisma.$MonitorPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the PingEvent model
+   */
+  interface PingEventFieldRefs {
+    readonly id: FieldRef<"PingEvent", 'String'>
+    readonly monitorId: FieldRef<"PingEvent", 'String'>
+    readonly createdAt: FieldRef<"PingEvent", 'DateTime'>
+    readonly latency: FieldRef<"PingEvent", 'Int'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * PingEvent findUnique
+   */
+  export type PingEventFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PingEvent
+     */
+    select?: PingEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PingEvent
+     */
+    omit?: PingEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PingEventInclude<ExtArgs> | null
+    /**
+     * Filter, which PingEvent to fetch.
+     */
+    where: PingEventWhereUniqueInput
+  }
+
+  /**
+   * PingEvent findUniqueOrThrow
+   */
+  export type PingEventFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PingEvent
+     */
+    select?: PingEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PingEvent
+     */
+    omit?: PingEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PingEventInclude<ExtArgs> | null
+    /**
+     * Filter, which PingEvent to fetch.
+     */
+    where: PingEventWhereUniqueInput
+  }
+
+  /**
+   * PingEvent findFirst
+   */
+  export type PingEventFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PingEvent
+     */
+    select?: PingEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PingEvent
+     */
+    omit?: PingEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PingEventInclude<ExtArgs> | null
+    /**
+     * Filter, which PingEvent to fetch.
+     */
+    where?: PingEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PingEvents to fetch.
+     */
+    orderBy?: PingEventOrderByWithRelationInput | PingEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PingEvents.
+     */
+    cursor?: PingEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PingEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PingEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PingEvents.
+     */
+    distinct?: PingEventScalarFieldEnum | PingEventScalarFieldEnum[]
+  }
+
+  /**
+   * PingEvent findFirstOrThrow
+   */
+  export type PingEventFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PingEvent
+     */
+    select?: PingEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PingEvent
+     */
+    omit?: PingEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PingEventInclude<ExtArgs> | null
+    /**
+     * Filter, which PingEvent to fetch.
+     */
+    where?: PingEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PingEvents to fetch.
+     */
+    orderBy?: PingEventOrderByWithRelationInput | PingEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PingEvents.
+     */
+    cursor?: PingEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PingEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PingEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PingEvents.
+     */
+    distinct?: PingEventScalarFieldEnum | PingEventScalarFieldEnum[]
+  }
+
+  /**
+   * PingEvent findMany
+   */
+  export type PingEventFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PingEvent
+     */
+    select?: PingEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PingEvent
+     */
+    omit?: PingEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PingEventInclude<ExtArgs> | null
+    /**
+     * Filter, which PingEvents to fetch.
+     */
+    where?: PingEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PingEvents to fetch.
+     */
+    orderBy?: PingEventOrderByWithRelationInput | PingEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing PingEvents.
+     */
+    cursor?: PingEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PingEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PingEvents.
+     */
+    skip?: number
+    distinct?: PingEventScalarFieldEnum | PingEventScalarFieldEnum[]
+  }
+
+  /**
+   * PingEvent create
+   */
+  export type PingEventCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PingEvent
+     */
+    select?: PingEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PingEvent
+     */
+    omit?: PingEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PingEventInclude<ExtArgs> | null
+    /**
+     * The data needed to create a PingEvent.
+     */
+    data: XOR<PingEventCreateInput, PingEventUncheckedCreateInput>
+  }
+
+  /**
+   * PingEvent createMany
+   */
+  export type PingEventCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many PingEvents.
+     */
+    data: PingEventCreateManyInput | PingEventCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * PingEvent createManyAndReturn
+   */
+  export type PingEventCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PingEvent
+     */
+    select?: PingEventSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the PingEvent
+     */
+    omit?: PingEventOmit<ExtArgs> | null
+    /**
+     * The data used to create many PingEvents.
+     */
+    data: PingEventCreateManyInput | PingEventCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PingEventIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * PingEvent update
+   */
+  export type PingEventUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PingEvent
+     */
+    select?: PingEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PingEvent
+     */
+    omit?: PingEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PingEventInclude<ExtArgs> | null
+    /**
+     * The data needed to update a PingEvent.
+     */
+    data: XOR<PingEventUpdateInput, PingEventUncheckedUpdateInput>
+    /**
+     * Choose, which PingEvent to update.
+     */
+    where: PingEventWhereUniqueInput
+  }
+
+  /**
+   * PingEvent updateMany
+   */
+  export type PingEventUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update PingEvents.
+     */
+    data: XOR<PingEventUpdateManyMutationInput, PingEventUncheckedUpdateManyInput>
+    /**
+     * Filter which PingEvents to update
+     */
+    where?: PingEventWhereInput
+    /**
+     * Limit how many PingEvents to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * PingEvent updateManyAndReturn
+   */
+  export type PingEventUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PingEvent
+     */
+    select?: PingEventSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the PingEvent
+     */
+    omit?: PingEventOmit<ExtArgs> | null
+    /**
+     * The data used to update PingEvents.
+     */
+    data: XOR<PingEventUpdateManyMutationInput, PingEventUncheckedUpdateManyInput>
+    /**
+     * Filter which PingEvents to update
+     */
+    where?: PingEventWhereInput
+    /**
+     * Limit how many PingEvents to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PingEventIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * PingEvent upsert
+   */
+  export type PingEventUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PingEvent
+     */
+    select?: PingEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PingEvent
+     */
+    omit?: PingEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PingEventInclude<ExtArgs> | null
+    /**
+     * The filter to search for the PingEvent to update in case it exists.
+     */
+    where: PingEventWhereUniqueInput
+    /**
+     * In case the PingEvent found by the `where` argument doesn't exist, create a new PingEvent with this data.
+     */
+    create: XOR<PingEventCreateInput, PingEventUncheckedCreateInput>
+    /**
+     * In case the PingEvent was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PingEventUpdateInput, PingEventUncheckedUpdateInput>
+  }
+
+  /**
+   * PingEvent delete
+   */
+  export type PingEventDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PingEvent
+     */
+    select?: PingEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PingEvent
+     */
+    omit?: PingEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PingEventInclude<ExtArgs> | null
+    /**
+     * Filter which PingEvent to delete.
+     */
+    where: PingEventWhereUniqueInput
+  }
+
+  /**
+   * PingEvent deleteMany
+   */
+  export type PingEventDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PingEvents to delete
+     */
+    where?: PingEventWhereInput
+    /**
+     * Limit how many PingEvents to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * PingEvent without action
+   */
+  export type PingEventDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PingEvent
+     */
+    select?: PingEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PingEvent
+     */
+    omit?: PingEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PingEventInclude<ExtArgs> | null
   }
 
 
@@ -8132,10 +9376,21 @@ export namespace Prisma {
     lastPing: 'lastPing',
     userId: 'userId',
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    updatedAt: 'updatedAt',
+    useSmartGrace: 'useSmartGrace'
   };
 
   export type MonitorScalarFieldEnum = (typeof MonitorScalarFieldEnum)[keyof typeof MonitorScalarFieldEnum]
+
+
+  export const PingEventScalarFieldEnum: {
+    id: 'id',
+    monitorId: 'monitorId',
+    createdAt: 'createdAt',
+    latency: 'latency'
+  };
+
+  export type PingEventScalarFieldEnum = (typeof PingEventScalarFieldEnum)[keyof typeof PingEventScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -8598,6 +9853,8 @@ export namespace Prisma {
     userId?: StringFilter<"Monitor"> | string
     createdAt?: DateTimeFilter<"Monitor"> | Date | string
     updatedAt?: DateTimeFilter<"Monitor"> | Date | string
+    useSmartGrace?: BoolFilter<"Monitor"> | boolean
+    pings?: PingEventListRelationFilter
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }
 
@@ -8612,6 +9869,8 @@ export namespace Prisma {
     userId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    useSmartGrace?: SortOrder
+    pings?: PingEventOrderByRelationAggregateInput
     user?: UserOrderByWithRelationInput
   }
 
@@ -8629,6 +9888,8 @@ export namespace Prisma {
     userId?: StringFilter<"Monitor"> | string
     createdAt?: DateTimeFilter<"Monitor"> | Date | string
     updatedAt?: DateTimeFilter<"Monitor"> | Date | string
+    useSmartGrace?: BoolFilter<"Monitor"> | boolean
+    pings?: PingEventListRelationFilter
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }, "id" | "key">
 
@@ -8643,6 +9904,7 @@ export namespace Prisma {
     userId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    useSmartGrace?: SortOrder
     _count?: MonitorCountOrderByAggregateInput
     _avg?: MonitorAvgOrderByAggregateInput
     _max?: MonitorMaxOrderByAggregateInput
@@ -8664,6 +9926,59 @@ export namespace Prisma {
     userId?: StringWithAggregatesFilter<"Monitor"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Monitor"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Monitor"> | Date | string
+    useSmartGrace?: BoolWithAggregatesFilter<"Monitor"> | boolean
+  }
+
+  export type PingEventWhereInput = {
+    AND?: PingEventWhereInput | PingEventWhereInput[]
+    OR?: PingEventWhereInput[]
+    NOT?: PingEventWhereInput | PingEventWhereInput[]
+    id?: StringFilter<"PingEvent"> | string
+    monitorId?: StringFilter<"PingEvent"> | string
+    createdAt?: DateTimeFilter<"PingEvent"> | Date | string
+    latency?: IntFilter<"PingEvent"> | number
+    monitor?: XOR<MonitorScalarRelationFilter, MonitorWhereInput>
+  }
+
+  export type PingEventOrderByWithRelationInput = {
+    id?: SortOrder
+    monitorId?: SortOrder
+    createdAt?: SortOrder
+    latency?: SortOrder
+    monitor?: MonitorOrderByWithRelationInput
+  }
+
+  export type PingEventWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: PingEventWhereInput | PingEventWhereInput[]
+    OR?: PingEventWhereInput[]
+    NOT?: PingEventWhereInput | PingEventWhereInput[]
+    monitorId?: StringFilter<"PingEvent"> | string
+    createdAt?: DateTimeFilter<"PingEvent"> | Date | string
+    latency?: IntFilter<"PingEvent"> | number
+    monitor?: XOR<MonitorScalarRelationFilter, MonitorWhereInput>
+  }, "id">
+
+  export type PingEventOrderByWithAggregationInput = {
+    id?: SortOrder
+    monitorId?: SortOrder
+    createdAt?: SortOrder
+    latency?: SortOrder
+    _count?: PingEventCountOrderByAggregateInput
+    _avg?: PingEventAvgOrderByAggregateInput
+    _max?: PingEventMaxOrderByAggregateInput
+    _min?: PingEventMinOrderByAggregateInput
+    _sum?: PingEventSumOrderByAggregateInput
+  }
+
+  export type PingEventScalarWhereWithAggregatesInput = {
+    AND?: PingEventScalarWhereWithAggregatesInput | PingEventScalarWhereWithAggregatesInput[]
+    OR?: PingEventScalarWhereWithAggregatesInput[]
+    NOT?: PingEventScalarWhereWithAggregatesInput | PingEventScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"PingEvent"> | string
+    monitorId?: StringWithAggregatesFilter<"PingEvent"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"PingEvent"> | Date | string
+    latency?: IntWithAggregatesFilter<"PingEvent"> | number
   }
 
   export type PostCreateInput = {
@@ -9067,6 +10382,8 @@ export namespace Prisma {
     lastPing?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    useSmartGrace?: boolean
+    pings?: PingEventCreateNestedManyWithoutMonitorInput
     user: UserCreateNestedOneWithoutMonitorsInput
   }
 
@@ -9081,6 +10398,8 @@ export namespace Prisma {
     userId: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    useSmartGrace?: boolean
+    pings?: PingEventUncheckedCreateNestedManyWithoutMonitorInput
   }
 
   export type MonitorUpdateInput = {
@@ -9093,6 +10412,8 @@ export namespace Prisma {
     lastPing?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    useSmartGrace?: BoolFieldUpdateOperationsInput | boolean
+    pings?: PingEventUpdateManyWithoutMonitorNestedInput
     user?: UserUpdateOneRequiredWithoutMonitorsNestedInput
   }
 
@@ -9107,6 +10428,8 @@ export namespace Prisma {
     userId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    useSmartGrace?: BoolFieldUpdateOperationsInput | boolean
+    pings?: PingEventUncheckedUpdateManyWithoutMonitorNestedInput
   }
 
   export type MonitorCreateManyInput = {
@@ -9120,6 +10443,7 @@ export namespace Prisma {
     userId: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    useSmartGrace?: boolean
   }
 
   export type MonitorUpdateManyMutationInput = {
@@ -9132,6 +10456,7 @@ export namespace Prisma {
     lastPing?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    useSmartGrace?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type MonitorUncheckedUpdateManyInput = {
@@ -9145,6 +10470,55 @@ export namespace Prisma {
     userId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    useSmartGrace?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type PingEventCreateInput = {
+    id?: string
+    createdAt?: Date | string
+    latency: number
+    monitor: MonitorCreateNestedOneWithoutPingsInput
+  }
+
+  export type PingEventUncheckedCreateInput = {
+    id?: string
+    monitorId: string
+    createdAt?: Date | string
+    latency: number
+  }
+
+  export type PingEventUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    latency?: IntFieldUpdateOperationsInput | number
+    monitor?: MonitorUpdateOneRequiredWithoutPingsNestedInput
+  }
+
+  export type PingEventUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    monitorId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    latency?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type PingEventCreateManyInput = {
+    id?: string
+    monitorId: string
+    createdAt?: Date | string
+    latency: number
+  }
+
+  export type PingEventUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    latency?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type PingEventUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    monitorId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    latency?: IntFieldUpdateOperationsInput | number
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -9499,6 +10873,16 @@ export namespace Prisma {
     not?: NestedIntFilter<$PrismaModel> | number
   }
 
+  export type PingEventListRelationFilter = {
+    every?: PingEventWhereInput
+    some?: PingEventWhereInput
+    none?: PingEventWhereInput
+  }
+
+  export type PingEventOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type MonitorCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
@@ -9510,6 +10894,7 @@ export namespace Prisma {
     userId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    useSmartGrace?: SortOrder
   }
 
   export type MonitorAvgOrderByAggregateInput = {
@@ -9528,6 +10913,7 @@ export namespace Prisma {
     userId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    useSmartGrace?: SortOrder
   }
 
   export type MonitorMinOrderByAggregateInput = {
@@ -9541,6 +10927,7 @@ export namespace Prisma {
     userId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    useSmartGrace?: SortOrder
   }
 
   export type MonitorSumOrderByAggregateInput = {
@@ -9562,6 +10949,40 @@ export namespace Prisma {
     _sum?: NestedIntFilter<$PrismaModel>
     _min?: NestedIntFilter<$PrismaModel>
     _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type MonitorScalarRelationFilter = {
+    is?: MonitorWhereInput
+    isNot?: MonitorWhereInput
+  }
+
+  export type PingEventCountOrderByAggregateInput = {
+    id?: SortOrder
+    monitorId?: SortOrder
+    createdAt?: SortOrder
+    latency?: SortOrder
+  }
+
+  export type PingEventAvgOrderByAggregateInput = {
+    latency?: SortOrder
+  }
+
+  export type PingEventMaxOrderByAggregateInput = {
+    id?: SortOrder
+    monitorId?: SortOrder
+    createdAt?: SortOrder
+    latency?: SortOrder
+  }
+
+  export type PingEventMinOrderByAggregateInput = {
+    id?: SortOrder
+    monitorId?: SortOrder
+    createdAt?: SortOrder
+    latency?: SortOrder
+  }
+
+  export type PingEventSumOrderByAggregateInput = {
+    latency?: SortOrder
   }
 
   export type UserCreateNestedOneWithoutPostsInput = {
@@ -9794,10 +11215,24 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutAccountsInput, UserUpdateWithoutAccountsInput>, UserUncheckedUpdateWithoutAccountsInput>
   }
 
+  export type PingEventCreateNestedManyWithoutMonitorInput = {
+    create?: XOR<PingEventCreateWithoutMonitorInput, PingEventUncheckedCreateWithoutMonitorInput> | PingEventCreateWithoutMonitorInput[] | PingEventUncheckedCreateWithoutMonitorInput[]
+    connectOrCreate?: PingEventCreateOrConnectWithoutMonitorInput | PingEventCreateOrConnectWithoutMonitorInput[]
+    createMany?: PingEventCreateManyMonitorInputEnvelope
+    connect?: PingEventWhereUniqueInput | PingEventWhereUniqueInput[]
+  }
+
   export type UserCreateNestedOneWithoutMonitorsInput = {
     create?: XOR<UserCreateWithoutMonitorsInput, UserUncheckedCreateWithoutMonitorsInput>
     connectOrCreate?: UserCreateOrConnectWithoutMonitorsInput
     connect?: UserWhereUniqueInput
+  }
+
+  export type PingEventUncheckedCreateNestedManyWithoutMonitorInput = {
+    create?: XOR<PingEventCreateWithoutMonitorInput, PingEventUncheckedCreateWithoutMonitorInput> | PingEventCreateWithoutMonitorInput[] | PingEventUncheckedCreateWithoutMonitorInput[]
+    connectOrCreate?: PingEventCreateOrConnectWithoutMonitorInput | PingEventCreateOrConnectWithoutMonitorInput[]
+    createMany?: PingEventCreateManyMonitorInputEnvelope
+    connect?: PingEventWhereUniqueInput | PingEventWhereUniqueInput[]
   }
 
   export type IntFieldUpdateOperationsInput = {
@@ -9808,12 +11243,54 @@ export namespace Prisma {
     divide?: number
   }
 
+  export type PingEventUpdateManyWithoutMonitorNestedInput = {
+    create?: XOR<PingEventCreateWithoutMonitorInput, PingEventUncheckedCreateWithoutMonitorInput> | PingEventCreateWithoutMonitorInput[] | PingEventUncheckedCreateWithoutMonitorInput[]
+    connectOrCreate?: PingEventCreateOrConnectWithoutMonitorInput | PingEventCreateOrConnectWithoutMonitorInput[]
+    upsert?: PingEventUpsertWithWhereUniqueWithoutMonitorInput | PingEventUpsertWithWhereUniqueWithoutMonitorInput[]
+    createMany?: PingEventCreateManyMonitorInputEnvelope
+    set?: PingEventWhereUniqueInput | PingEventWhereUniqueInput[]
+    disconnect?: PingEventWhereUniqueInput | PingEventWhereUniqueInput[]
+    delete?: PingEventWhereUniqueInput | PingEventWhereUniqueInput[]
+    connect?: PingEventWhereUniqueInput | PingEventWhereUniqueInput[]
+    update?: PingEventUpdateWithWhereUniqueWithoutMonitorInput | PingEventUpdateWithWhereUniqueWithoutMonitorInput[]
+    updateMany?: PingEventUpdateManyWithWhereWithoutMonitorInput | PingEventUpdateManyWithWhereWithoutMonitorInput[]
+    deleteMany?: PingEventScalarWhereInput | PingEventScalarWhereInput[]
+  }
+
   export type UserUpdateOneRequiredWithoutMonitorsNestedInput = {
     create?: XOR<UserCreateWithoutMonitorsInput, UserUncheckedCreateWithoutMonitorsInput>
     connectOrCreate?: UserCreateOrConnectWithoutMonitorsInput
     upsert?: UserUpsertWithoutMonitorsInput
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutMonitorsInput, UserUpdateWithoutMonitorsInput>, UserUncheckedUpdateWithoutMonitorsInput>
+  }
+
+  export type PingEventUncheckedUpdateManyWithoutMonitorNestedInput = {
+    create?: XOR<PingEventCreateWithoutMonitorInput, PingEventUncheckedCreateWithoutMonitorInput> | PingEventCreateWithoutMonitorInput[] | PingEventUncheckedCreateWithoutMonitorInput[]
+    connectOrCreate?: PingEventCreateOrConnectWithoutMonitorInput | PingEventCreateOrConnectWithoutMonitorInput[]
+    upsert?: PingEventUpsertWithWhereUniqueWithoutMonitorInput | PingEventUpsertWithWhereUniqueWithoutMonitorInput[]
+    createMany?: PingEventCreateManyMonitorInputEnvelope
+    set?: PingEventWhereUniqueInput | PingEventWhereUniqueInput[]
+    disconnect?: PingEventWhereUniqueInput | PingEventWhereUniqueInput[]
+    delete?: PingEventWhereUniqueInput | PingEventWhereUniqueInput[]
+    connect?: PingEventWhereUniqueInput | PingEventWhereUniqueInput[]
+    update?: PingEventUpdateWithWhereUniqueWithoutMonitorInput | PingEventUpdateWithWhereUniqueWithoutMonitorInput[]
+    updateMany?: PingEventUpdateManyWithWhereWithoutMonitorInput | PingEventUpdateManyWithWhereWithoutMonitorInput[]
+    deleteMany?: PingEventScalarWhereInput | PingEventScalarWhereInput[]
+  }
+
+  export type MonitorCreateNestedOneWithoutPingsInput = {
+    create?: XOR<MonitorCreateWithoutPingsInput, MonitorUncheckedCreateWithoutPingsInput>
+    connectOrCreate?: MonitorCreateOrConnectWithoutPingsInput
+    connect?: MonitorWhereUniqueInput
+  }
+
+  export type MonitorUpdateOneRequiredWithoutPingsNestedInput = {
+    create?: XOR<MonitorCreateWithoutPingsInput, MonitorUncheckedCreateWithoutPingsInput>
+    connectOrCreate?: MonitorCreateOrConnectWithoutPingsInput
+    upsert?: MonitorUpsertWithoutPingsInput
+    connect?: MonitorWhereUniqueInput
+    update?: XOR<XOR<MonitorUpdateToOneWithWhereWithoutPingsInput, MonitorUpdateWithoutPingsInput>, MonitorUncheckedUpdateWithoutPingsInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -10162,6 +11639,8 @@ export namespace Prisma {
     lastPing?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    useSmartGrace?: boolean
+    pings?: PingEventCreateNestedManyWithoutMonitorInput
   }
 
   export type MonitorUncheckedCreateWithoutUserInput = {
@@ -10174,6 +11653,8 @@ export namespace Prisma {
     lastPing?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    useSmartGrace?: boolean
+    pings?: PingEventUncheckedCreateNestedManyWithoutMonitorInput
   }
 
   export type MonitorCreateOrConnectWithoutUserInput = {
@@ -10308,6 +11789,7 @@ export namespace Prisma {
     userId?: StringFilter<"Monitor"> | string
     createdAt?: DateTimeFilter<"Monitor"> | Date | string
     updatedAt?: DateTimeFilter<"Monitor"> | Date | string
+    useSmartGrace?: BoolFilter<"Monitor"> | boolean
   }
 
   export type UserCreateWithoutSessionsInput = {
@@ -10446,6 +11928,28 @@ export namespace Prisma {
     monitors?: MonitorUncheckedUpdateManyWithoutUserNestedInput
   }
 
+  export type PingEventCreateWithoutMonitorInput = {
+    id?: string
+    createdAt?: Date | string
+    latency: number
+  }
+
+  export type PingEventUncheckedCreateWithoutMonitorInput = {
+    id?: string
+    createdAt?: Date | string
+    latency: number
+  }
+
+  export type PingEventCreateOrConnectWithoutMonitorInput = {
+    where: PingEventWhereUniqueInput
+    create: XOR<PingEventCreateWithoutMonitorInput, PingEventUncheckedCreateWithoutMonitorInput>
+  }
+
+  export type PingEventCreateManyMonitorInputEnvelope = {
+    data: PingEventCreateManyMonitorInput | PingEventCreateManyMonitorInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserCreateWithoutMonitorsInput = {
     id: string
     name: string
@@ -10475,6 +11979,32 @@ export namespace Prisma {
   export type UserCreateOrConnectWithoutMonitorsInput = {
     where: UserWhereUniqueInput
     create: XOR<UserCreateWithoutMonitorsInput, UserUncheckedCreateWithoutMonitorsInput>
+  }
+
+  export type PingEventUpsertWithWhereUniqueWithoutMonitorInput = {
+    where: PingEventWhereUniqueInput
+    update: XOR<PingEventUpdateWithoutMonitorInput, PingEventUncheckedUpdateWithoutMonitorInput>
+    create: XOR<PingEventCreateWithoutMonitorInput, PingEventUncheckedCreateWithoutMonitorInput>
+  }
+
+  export type PingEventUpdateWithWhereUniqueWithoutMonitorInput = {
+    where: PingEventWhereUniqueInput
+    data: XOR<PingEventUpdateWithoutMonitorInput, PingEventUncheckedUpdateWithoutMonitorInput>
+  }
+
+  export type PingEventUpdateManyWithWhereWithoutMonitorInput = {
+    where: PingEventScalarWhereInput
+    data: XOR<PingEventUpdateManyMutationInput, PingEventUncheckedUpdateManyWithoutMonitorInput>
+  }
+
+  export type PingEventScalarWhereInput = {
+    AND?: PingEventScalarWhereInput | PingEventScalarWhereInput[]
+    OR?: PingEventScalarWhereInput[]
+    NOT?: PingEventScalarWhereInput | PingEventScalarWhereInput[]
+    id?: StringFilter<"PingEvent"> | string
+    monitorId?: StringFilter<"PingEvent"> | string
+    createdAt?: DateTimeFilter<"PingEvent"> | Date | string
+    latency?: IntFilter<"PingEvent"> | number
   }
 
   export type UserUpsertWithoutMonitorsInput = {
@@ -10512,6 +12042,78 @@ export namespace Prisma {
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     posts?: PostUncheckedUpdateManyWithoutCreatedByNestedInput
+  }
+
+  export type MonitorCreateWithoutPingsInput = {
+    id?: string
+    name: string
+    key?: string
+    interval: number
+    gracePeriod?: number
+    status?: string
+    lastPing?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    useSmartGrace?: boolean
+    user: UserCreateNestedOneWithoutMonitorsInput
+  }
+
+  export type MonitorUncheckedCreateWithoutPingsInput = {
+    id?: string
+    name: string
+    key?: string
+    interval: number
+    gracePeriod?: number
+    status?: string
+    lastPing?: Date | string | null
+    userId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    useSmartGrace?: boolean
+  }
+
+  export type MonitorCreateOrConnectWithoutPingsInput = {
+    where: MonitorWhereUniqueInput
+    create: XOR<MonitorCreateWithoutPingsInput, MonitorUncheckedCreateWithoutPingsInput>
+  }
+
+  export type MonitorUpsertWithoutPingsInput = {
+    update: XOR<MonitorUpdateWithoutPingsInput, MonitorUncheckedUpdateWithoutPingsInput>
+    create: XOR<MonitorCreateWithoutPingsInput, MonitorUncheckedCreateWithoutPingsInput>
+    where?: MonitorWhereInput
+  }
+
+  export type MonitorUpdateToOneWithWhereWithoutPingsInput = {
+    where?: MonitorWhereInput
+    data: XOR<MonitorUpdateWithoutPingsInput, MonitorUncheckedUpdateWithoutPingsInput>
+  }
+
+  export type MonitorUpdateWithoutPingsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    key?: StringFieldUpdateOperationsInput | string
+    interval?: IntFieldUpdateOperationsInput | number
+    gracePeriod?: IntFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    lastPing?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    useSmartGrace?: BoolFieldUpdateOperationsInput | boolean
+    user?: UserUpdateOneRequiredWithoutMonitorsNestedInput
+  }
+
+  export type MonitorUncheckedUpdateWithoutPingsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    key?: StringFieldUpdateOperationsInput | string
+    interval?: IntFieldUpdateOperationsInput | number
+    gracePeriod?: IntFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    lastPing?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    useSmartGrace?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type SessionCreateManyUserInput = {
@@ -10556,6 +12158,7 @@ export namespace Prisma {
     lastPing?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    useSmartGrace?: boolean
   }
 
   export type SessionUpdateWithoutUserInput = {
@@ -10664,6 +12267,8 @@ export namespace Prisma {
     lastPing?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    useSmartGrace?: BoolFieldUpdateOperationsInput | boolean
+    pings?: PingEventUpdateManyWithoutMonitorNestedInput
   }
 
   export type MonitorUncheckedUpdateWithoutUserInput = {
@@ -10676,6 +12281,8 @@ export namespace Prisma {
     lastPing?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    useSmartGrace?: BoolFieldUpdateOperationsInput | boolean
+    pings?: PingEventUncheckedUpdateManyWithoutMonitorNestedInput
   }
 
   export type MonitorUncheckedUpdateManyWithoutUserInput = {
@@ -10688,6 +12295,31 @@ export namespace Prisma {
     lastPing?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    useSmartGrace?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type PingEventCreateManyMonitorInput = {
+    id?: string
+    createdAt?: Date | string
+    latency: number
+  }
+
+  export type PingEventUpdateWithoutMonitorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    latency?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type PingEventUncheckedUpdateWithoutMonitorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    latency?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type PingEventUncheckedUpdateManyWithoutMonitorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    latency?: IntFieldUpdateOperationsInput | number
   }
 
 

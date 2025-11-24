@@ -185,7 +185,15 @@ exports.Prisma.MonitorScalarFieldEnum = {
   lastPing: 'lastPing',
   userId: 'userId',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  useSmartGrace: 'useSmartGrace'
+};
+
+exports.Prisma.PingEventScalarFieldEnum = {
+  id: 'id',
+  monitorId: 'monitorId',
+  createdAt: 'createdAt',
+  latency: 'latency'
 };
 
 exports.Prisma.SortOrder = {
@@ -210,7 +218,8 @@ exports.Prisma.ModelName = {
   Session: 'Session',
   Account: 'Account',
   Verification: 'Verification',
-  Monitor: 'Monitor'
+  Monitor: 'Monitor',
+  PingEvent: 'PingEvent'
 };
 
 /**

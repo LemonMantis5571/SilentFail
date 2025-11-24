@@ -29,10 +29,10 @@ model Post {
 
 model User {
   id            String    @id
-  name          String //@db.Text
+  name          String 
   email         String
   emailVerified Boolean   @default(false)
-  image         String? //@db.Text
+  image         String?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @default(now()) @updatedAt
   sessions      Session[]
@@ -50,8 +50,8 @@ model Session {
   token     String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  ipAddress String? //@db.Text
-  userAgent String? //@db.Text
+  ipAddress String? 
+  userAgent String? 
   userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -61,17 +61,17 @@ model Session {
 
 model Account {
   id                    String    @id
-  accountId             String //@db.Text
-  providerId            String //@db.Text
+  accountId             String 
+  providerId            String 
   userId                String
   user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  accessToken           String? //@db.Text
-  refreshToken          String? //@db.Text
-  idToken               String? //@db.Text
+  accessToken           String? 
+  refreshToken          String? 
+  idToken               String?
   accessTokenExpiresAt  DateTime?
   refreshTokenExpiresAt DateTime?
-  scope                 String? //@db.Text
-  password              String? //@db.Text
+  scope                 String? 
+  password              String?
   createdAt             DateTime  @default(now())
   updatedAt             DateTime  @updatedAt
 
@@ -80,8 +80,8 @@ model Account {
 
 model Verification {
   id         String   @id
-  identifier String //@db.Text
-  value      String //@db.Text
+  identifier String 
+  value      String
   expiresAt  DateTime
   createdAt  DateTime @default(now())
   updatedAt  DateTime @default(now()) @updatedAt
@@ -92,25 +92,27 @@ model Verification {
 model Monitor {
   id   String @id @default(cuid())
   name String
-
-  // The unique key for the curl URL: https://site.com/ping/abc-123
   key String @unique @default(cuid())
-
-  // Settings
-  interval    Int // Expected interval in minutes
-  gracePeriod Int @default(5) // Grace period in minutes
-
-  // State
-  status   String    @default("PENDING") // UP, DOWN, PENDING, PAUSED
+  interval    Int 
+  gracePeriod Int @default(5) 
+  status   String    @default("PENDING") 
   lastPing DateTime?
-
-  // Relations
+  pings       PingEvent[]
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  useSmartGrace Boolean @default(false)
 
   @@index([userId])
   @@map("monitor")
+}
+
+
+model PingEvent {
+  id        String   @id @default(cuid())
+  monitorId String
+  monitor   Monitor  @relation(fields: [monitorId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  latency   Int      
 }
