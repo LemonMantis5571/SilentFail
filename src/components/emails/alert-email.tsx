@@ -33,7 +33,7 @@ export default function AlertEmail({
           <Container className="border border-solid border-[#eaeaea] rounded my-10 mx-auto p-5 w-[465px]">
             <Section className="mt-8">
               <div className="w-10 h-10 bg-red-500 rounded-full mx-auto flex items-center justify-center mb-4">
-                 {/* Simple text icon since SVGs can be tricky in email clients */}
+          
                  <span className="text-white text-2xl font-bold">!</span>
               </div>
             </Section>

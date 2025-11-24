@@ -9,25 +9,33 @@ import {
   DialogTitle,
   DialogTrigger,
   DialogFooter,
+  DialogDescription, // Added Description for context
 } from "~/components/ui/dialog";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
-import { Plus, Wand2, Loader2 } from "lucide-react";
-import { toast } from "sonner"; 
+import { Plus, Loader2 } from "lucide-react";
 import { createMonitor } from "~/app/actions/monitor";
+import { toast } from "sonner"; 
 
 export function CreateMonitorButton() {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [name, setName] = useState<string>("");
-  const [interval, setInterval] = useState("1440"); // Default 24 hours
+  const [name, setName] = useState("");
+  const [interval, setInterval] = useState("1440"); // Default 24h
+  const [gracePeriod, setGracePeriod] = useState("5"); // Default 5m
 
   const handleSubmit = async () => {
     setLoading(true);
     try {
-      await createMonitor({ name, interval: parseInt(interval) });
+      await createMonitor({ 
+          name, 
+          interval: parseInt(interval),
+          gracePeriod: parseInt(gracePeriod) // Pass it to the backend
+      });
       setOpen(false);
       setName("");
+      setInterval("1440");
+      setGracePeriod("5");
       toast.success("Monitor created successfully");
     } catch (error) {
       toast.error("Failed to create monitor");
@@ -46,8 +54,13 @@ export function CreateMonitorButton() {
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Create Monitor</DialogTitle>
+          <DialogDescription>
+            Configure how often your script runs and how patient we should be.
+          </DialogDescription>
         </DialogHeader>
-        <div className="grid gap-4 py-4">
+        <div className="grid gap-6 py-4">
+          
+          {/* Name Field */}
           <div className="grid gap-2">
             <Label htmlFor="name">Friendly Name</Label>
             <Input
@@ -57,25 +70,43 @@ export function CreateMonitorButton() {
               onChange={(e) => setName(e.target.value)}
             />
           </div>
-          <div className="grid gap-2">
-            <Label htmlFor="interval">Expected Interval (Minutes)</Label>
-            <div className="flex gap-2">
-                <Input
-                id="interval"
-                type="number"
-                value={interval}
-                onChange={(e) => setInterval(e.target.value)}
-                />
-                <Button variant="outline" size="icon" title="Ask AI (Coming Soon)">
-                    <Wand2 className="h-4 w-4 text-primary" />
-                </Button>
+
+          {/* Time Settings Row */}
+          <div className="grid grid-cols-2 gap-4">
+            <div className="grid gap-2">
+                <Label htmlFor="interval">Interval (min)</Label>
+                <div className="relative">
+                    <Input
+                        id="interval"
+                        type="number"
+                        min="1"
+                        value={interval}
+                        onChange={(e) => setInterval(e.target.value)}
+                    />
+                </div>
+                <p className="text-[10px] text-muted-foreground">Expected frequency</p>
+            </div>
+
+            <div className="grid gap-2">
+                <Label htmlFor="grace">Grace Period (min)</Label>
+                <div className="relative">
+                    <Input
+                        id="grace"
+                        type="number"
+                        min="0"
+                        value={gracePeriod}
+                        onChange={(e) => setGracePeriod(e.target.value)}
+                    />
+                </div>
+                <p className="text-[10px] text-muted-foreground">Buffer before alerting</p>
             </div>
           </div>
+
         </div>
         <DialogFooter>
           <Button onClick={handleSubmit} disabled={loading || !name}>
             {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
-            Create
+            Create Monitor
           </Button>
         </DialogFooter>
       </DialogContent>

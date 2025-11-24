@@ -53,7 +53,7 @@ export function AuthButtons() {
     if (session) {
         return (
             <div className="flex items-center gap-4">
-                 <Button asChild size="sm" className="hidden sm:inline-flex shadow-md shadow-primary/20">
+                 <Button asChild size="sm" variant={"secondary"} className="hidden sm:inline-flex shadow-md shadow-primary/20">
                     <Link href="/dashboard">Dashboard</Link>
                 </Button>
 

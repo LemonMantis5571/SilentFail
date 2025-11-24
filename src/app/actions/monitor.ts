@@ -19,7 +19,7 @@ export async function getMonitors() {
   });
 }
 
-export async function createMonitor(data: { name: string; interval: number }) {
+export async function createMonitor(data: { name: string; interval: number; gracePeriod: number }) {
   const session = await auth.api.getSession({
     headers: await headers()
   });
@@ -31,6 +31,7 @@ export async function createMonitor(data: { name: string; interval: number }) {
       userId: session.user.id,
       name: data.name,
       interval: data.interval,
+      gracePeriod: data.gracePeriod, // <--- Add this line
       status: "PENDING"
     }
   });

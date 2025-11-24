@@ -10,7 +10,7 @@ import { Toaster } from "~/components/ui/sonner";
 export const metadata: Metadata = {
   title: "SilentFail",
   description: "Dead Man's Switch for Cron Jobs",
-  icons: [{ rel: "icon", url: "/favicon.ico" }],
+  icons: [{ rel: "icon", url: "/silentFailLogo.jpg" }],
 };
 
 const geist = Geist({

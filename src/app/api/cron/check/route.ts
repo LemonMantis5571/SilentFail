@@ -34,7 +34,7 @@ export async function GET(req: Request) {
     const deadMonitorIds: string[] = [];
     const emailPromises = [];
 
-    // 2. Logic
+
     for (const monitor of activeMonitors) {
       if (!monitor.lastPing) continue;
 
@@ -43,14 +43,12 @@ export async function GET(req: Request) {
 
       if (now > deadTime) {
         deadMonitorIds.push(monitor.id);
-        
-        // 3. Queue the Email
+      
         console.log(`Sending alert for ${monitor.name} to ${monitor.user.email}`);
         
         emailPromises.push(
             resend.emails.send({
-                // use 'onboarding@resend.dev' until you verify your own domain
-                from: 'briter456@gmail.com', 
+                from: 'onboarding@resend.dev',
                 to: monitor.user.email, 
                 subject: `🚨 Alert: ${monitor.name} is DOWN`,
                 react: AlertEmail({ 
@@ -58,20 +56,21 @@ export async function GET(req: Request) {
                     monitorId: monitor.id, 
                     lastPing: monitor.lastPing 
                 })
+            }).catch(err => {
+                console.error(`Failed to send email to ${monitor.user.email}:`, err);
+                return null; 
             })
         );
       }
     }
 
-    // 4. Update DB & Send Emails in parallel
     if (deadMonitorIds.length > 0) {
       await Promise.all([
-          // Update Status
+    
           db.monitor.updateMany({
             where: { id: { in: deadMonitorIds } },
             data: { status: "DOWN" }
           }),
-          // Send Emails
           ...emailPromises
       ]);
     }
