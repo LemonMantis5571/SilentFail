@@ -78,8 +78,40 @@ export async function getMonitor(id: string) {
     include: {
       pings: {
         orderBy: { createdAt: 'desc' },
-        take: 100 // Fetch last 100 data points for the graph
+        take: 100
+      },
+      downtimes: {
+        orderBy: { startedAt: 'desc' },
+        take: 50 // Get recent downtime incidents
       }
+    }
+  });
+}
+
+export async function recordDowntime(monitorId: string, startedAt: Date) {
+  return await db.downtime.create({
+    data: {
+      monitorId,
+      startedAt
+    }
+  });
+}
+
+// New action to end downtime
+export async function endDowntime(downtimeId: string, endedAt: Date) {
+  const downtime = await db.downtime.findUnique({
+    where: { id: downtimeId }
+  });
+  
+  if (!downtime) return null;
+  
+  const duration = Math.floor((endedAt.getTime() - downtime.startedAt.getTime()) / (1000 * 60));
+  
+  return await db.downtime.update({
+    where: { id: downtimeId },
+    data: {
+      endedAt,
+      duration
     }
   });
 }

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { db } from "~/server/db";
 import { Resend } from "resend";
-import AlertEmail from "~/components/emails/alert-email"; // Import the template
+import AlertEmail from "~/components/emails/alert-email";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -16,7 +16,7 @@ export async function GET(req: Request) {
   try {
     const now = new Date();
     
-    // 1. Fetch monitors + User Email
+
     const activeMonitors = await db.monitor.findMany({
       where: { status: "UP" },
       select: {
@@ -26,14 +26,14 @@ export async function GET(req: Request) {
         gracePeriod: true,
         name: true,
         user: {
-            select: { email: true } 
+          select: { email: true } 
         }
       }
     });
 
     const deadMonitorIds: string[] = [];
     const emailPromises = [];
-
+    const downtimePromises = [];
 
     for (const monitor of activeMonitors) {
       if (!monitor.lastPing) continue;
@@ -46,39 +46,53 @@ export async function GET(req: Request) {
       
         console.log(`Sending alert for ${monitor.name} to ${monitor.user.email}`);
         
+   
         emailPromises.push(
-            resend.emails.send({
-                from: 'onboarding@resend.dev',
-                to: monitor.user.email, 
-                subject: `🚨 Alert: ${monitor.name} is DOWN`,
-                react: AlertEmail({ 
-                    monitorName: monitor.name, 
-                    monitorId: monitor.id, 
-                    lastPing: monitor.lastPing 
-                })
-            }).catch(err => {
-                console.error(`Failed to send email to ${monitor.user.email}:`, err);
-                return null; 
+          resend.emails.send({
+            from: 'onboarding@resend.dev',
+            to: monitor.user.email, 
+            subject: `🚨 Alert: ${monitor.name} is DOWN`,
+            react: AlertEmail({ 
+              monitorName: monitor.name, 
+              monitorId: monitor.id, 
+              lastPing: monitor.lastPing 
             })
+          }).catch(err => {
+            console.error(`Failed to send email to ${monitor.user.email}:`, err);
+            return null; 
+          })
+        );
+
+        downtimePromises.push(
+          db.downtime.create({
+            data: {
+              monitorId: monitor.id,
+              startedAt: deadTime,
+            }
+          }).catch(err => {
+            console.error(`Failed to create downtime record for ${monitor.name}:`, err);
+            return null;
+          })
         );
       }
     }
 
     if (deadMonitorIds.length > 0) {
       await Promise.all([
-    
-          db.monitor.updateMany({
-            where: { id: { in: deadMonitorIds } },
-            data: { status: "DOWN" }
-          }),
-          ...emailPromises
+        db.monitor.updateMany({
+          where: { id: { in: deadMonitorIds } },
+          data: { status: "DOWN" }
+        }),
+        ...emailPromises,
+        ...downtimePromises
       ]);
     }
 
     return NextResponse.json({
       success: true,
       markedDown: deadMonitorIds.length,
-      emailsSent: emailPromises.length
+      emailsSent: emailPromises.length,
+      downtimesCreated: downtimePromises.length
     });
 
   } catch (error) {

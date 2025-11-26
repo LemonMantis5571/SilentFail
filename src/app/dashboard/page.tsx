@@ -12,13 +12,20 @@ import { getMonitors, deleteMonitor } from "../actions/monitor";
 import { CopyUrlButton } from "~/components/dashboard/copy-button";
 import { MonitorSparkline } from "~/components/dashboard/monitor-sparkline";
 import Link from "next/link";
+import { auth } from "~/server/better-auth";
+
+
 
 export default async function DashboardPage() {
     const monitors = await getMonitors();
-
+    const session = await auth.api.getSession();
     const total = monitors.length;
     const active = monitors.filter(m => m.status === 'UP').length;
     const down = monitors.filter(m => m.status === 'DOWN').length;
+
+    if (!session) {
+        return null;
+    }
 
     return (
         <div className="min-h-screen bg-[#020817] text-slate-300 font-sans selection:bg-blue-500/30">
@@ -125,6 +132,33 @@ function MonitorCard({ monitor }: { monitor: any }) {
                 </CardHeader>
 
                 <CardContent className="space-y-4 pb-2">
+                    <div className="grid grid-cols-2 gap-3">
+                        <div className="space-y-1">
+                            <div className="text-xs text-slate-500">Expected Every</div>
+                            <div className="text-sm font-semibold text-slate-200 flex items-center gap-1">
+                                <Clock className="h-3 w-3 text-blue-400" />
+                                {monitor.interval}m
+                            </div>
+                        </div>
+                        <div className="space-y-1">
+                            <div className="text-xs text-slate-500">Grace Period</div>
+                            <div className="text-sm font-semibold text-slate-200 flex items-center gap-1">
+                                <Zap className="h-3 w-3 text-amber-400" />
+                                {monitor.gracePeriod}m
+                                {monitor.useSmartGrace && <span className="text-[10px] text-amber-400/70 font-normal">(Smart)</span>}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="space-y-2">
+                        <div className="flex items-center justify-between text-xs">
+                            <span className="text-slate-500">Recent Activity</span>
+                            <span className="text-slate-400 font-mono">
+                                {monitor.pings.length > 0 ? `${monitor.pings.length} pings` : 'No data'}
+                            </span>
+                        </div>
+                        <MonitorSparkline data={monitor.pings} status={monitor.status} />
+                    </div>
 
                     <div className="rounded-md bg-black/40 border border-slate-800 p-3 font-mono text-[10px] flex items-center justify-between group-hover:border-slate-700 transition-colors">
                         <div className="truncate mr-2 text-slate-400 group-hover:text-slate-300 transition-colors">
@@ -133,7 +167,6 @@ function MonitorCard({ monitor }: { monitor: any }) {
                         </div>
                         <CopyUrlButton url={`curl ${pingUrl}`} />
                     </div>
-                    <MonitorSparkline data={monitor.pings} status={monitor.status} />
                 </CardContent>
             </div>
 

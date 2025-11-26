@@ -196,6 +196,16 @@ exports.Prisma.PingEventScalarFieldEnum = {
   latency: 'latency'
 };
 
+exports.Prisma.DowntimeScalarFieldEnum = {
+  id: 'id',
+  monitorId: 'monitorId',
+  startedAt: 'startedAt',
+  endedAt: 'endedAt',
+  duration: 'duration',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -219,7 +229,8 @@ exports.Prisma.ModelName = {
   Account: 'Account',
   Verification: 'Verification',
   Monitor: 'Monitor',
-  PingEvent: 'PingEvent'
+  PingEvent: 'PingEvent',
+  Downtime: 'Downtime'
 };
 
 /**

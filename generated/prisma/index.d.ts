@@ -48,6 +48,11 @@ export type Monitor = $Result.DefaultSelection<Prisma.$MonitorPayload>
  * 
  */
 export type PingEvent = $Result.DefaultSelection<Prisma.$PingEventPayload>
+/**
+ * Model Downtime
+ * 
+ */
+export type Downtime = $Result.DefaultSelection<Prisma.$DowntimePayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -236,6 +241,16 @@ export class PrismaClient<
     * ```
     */
   get pingEvent(): Prisma.PingEventDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.downtime`: Exposes CRUD operations for the **Downtime** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Downtimes
+    * const downtimes = await prisma.downtime.findMany()
+    * ```
+    */
+  get downtime(): Prisma.DowntimeDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -683,7 +698,8 @@ export namespace Prisma {
     Account: 'Account',
     Verification: 'Verification',
     Monitor: 'Monitor',
-    PingEvent: 'PingEvent'
+    PingEvent: 'PingEvent',
+    Downtime: 'Downtime'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -702,7 +718,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "post" | "user" | "session" | "account" | "verification" | "monitor" | "pingEvent"
+      modelProps: "post" | "user" | "session" | "account" | "verification" | "monitor" | "pingEvent" | "downtime"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1224,6 +1240,80 @@ export namespace Prisma {
           }
         }
       }
+      Downtime: {
+        payload: Prisma.$DowntimePayload<ExtArgs>
+        fields: Prisma.DowntimeFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.DowntimeFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DowntimePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.DowntimeFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DowntimePayload>
+          }
+          findFirst: {
+            args: Prisma.DowntimeFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DowntimePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.DowntimeFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DowntimePayload>
+          }
+          findMany: {
+            args: Prisma.DowntimeFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DowntimePayload>[]
+          }
+          create: {
+            args: Prisma.DowntimeCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DowntimePayload>
+          }
+          createMany: {
+            args: Prisma.DowntimeCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.DowntimeCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DowntimePayload>[]
+          }
+          delete: {
+            args: Prisma.DowntimeDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DowntimePayload>
+          }
+          update: {
+            args: Prisma.DowntimeUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DowntimePayload>
+          }
+          deleteMany: {
+            args: Prisma.DowntimeDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.DowntimeUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.DowntimeUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DowntimePayload>[]
+          }
+          upsert: {
+            args: Prisma.DowntimeUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DowntimePayload>
+          }
+          aggregate: {
+            args: Prisma.DowntimeAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateDowntime>
+          }
+          groupBy: {
+            args: Prisma.DowntimeGroupByArgs<ExtArgs>
+            result: $Utils.Optional<DowntimeGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.DowntimeCountArgs<ExtArgs>
+            result: $Utils.Optional<DowntimeCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1327,6 +1417,7 @@ export namespace Prisma {
     verification?: VerificationOmit
     monitor?: MonitorOmit
     pingEvent?: PingEventOmit
+    downtime?: DowntimeOmit
   }
 
   /* Types for Logging */
@@ -1466,10 +1557,12 @@ export namespace Prisma {
 
   export type MonitorCountOutputType = {
     pings: number
+    downtimes: number
   }
 
   export type MonitorCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     pings?: boolean | MonitorCountOutputTypeCountPingsArgs
+    downtimes?: boolean | MonitorCountOutputTypeCountDowntimesArgs
   }
 
   // Custom InputTypes
@@ -1488,6 +1581,13 @@ export namespace Prisma {
    */
   export type MonitorCountOutputTypeCountPingsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: PingEventWhereInput
+  }
+
+  /**
+   * MonitorCountOutputType without action
+   */
+  export type MonitorCountOutputTypeCountDowntimesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DowntimeWhereInput
   }
 
 
@@ -7252,6 +7352,7 @@ export namespace Prisma {
     useSmartGrace?: boolean
     pings?: boolean | Monitor$pingsArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
+    downtimes?: boolean | Monitor$downtimesArgs<ExtArgs>
     _count?: boolean | MonitorCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["monitor"]>
 
@@ -7303,6 +7404,7 @@ export namespace Prisma {
   export type MonitorInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     pings?: boolean | Monitor$pingsArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
+    downtimes?: boolean | Monitor$downtimesArgs<ExtArgs>
     _count?: boolean | MonitorCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type MonitorIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -7317,6 +7419,7 @@ export namespace Prisma {
     objects: {
       pings: Prisma.$PingEventPayload<ExtArgs>[]
       user: Prisma.$UserPayload<ExtArgs>
+      downtimes: Prisma.$DowntimePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -7726,6 +7829,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     pings<T extends Monitor$pingsArgs<ExtArgs> = {}>(args?: Subset<T, Monitor$pingsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PingEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    downtimes<T extends Monitor$downtimesArgs<ExtArgs> = {}>(args?: Subset<T, Monitor$downtimesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DowntimePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -8183,6 +8287,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: PingEventScalarFieldEnum | PingEventScalarFieldEnum[]
+  }
+
+  /**
+   * Monitor.downtimes
+   */
+  export type Monitor$downtimesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Downtime
+     */
+    select?: DowntimeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Downtime
+     */
+    omit?: DowntimeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DowntimeInclude<ExtArgs> | null
+    where?: DowntimeWhereInput
+    orderBy?: DowntimeOrderByWithRelationInput | DowntimeOrderByWithRelationInput[]
+    cursor?: DowntimeWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: DowntimeScalarFieldEnum | DowntimeScalarFieldEnum[]
   }
 
   /**
@@ -9284,6 +9412,1124 @@ export namespace Prisma {
 
 
   /**
+   * Model Downtime
+   */
+
+  export type AggregateDowntime = {
+    _count: DowntimeCountAggregateOutputType | null
+    _avg: DowntimeAvgAggregateOutputType | null
+    _sum: DowntimeSumAggregateOutputType | null
+    _min: DowntimeMinAggregateOutputType | null
+    _max: DowntimeMaxAggregateOutputType | null
+  }
+
+  export type DowntimeAvgAggregateOutputType = {
+    duration: number | null
+  }
+
+  export type DowntimeSumAggregateOutputType = {
+    duration: number | null
+  }
+
+  export type DowntimeMinAggregateOutputType = {
+    id: string | null
+    monitorId: string | null
+    startedAt: Date | null
+    endedAt: Date | null
+    duration: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type DowntimeMaxAggregateOutputType = {
+    id: string | null
+    monitorId: string | null
+    startedAt: Date | null
+    endedAt: Date | null
+    duration: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type DowntimeCountAggregateOutputType = {
+    id: number
+    monitorId: number
+    startedAt: number
+    endedAt: number
+    duration: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type DowntimeAvgAggregateInputType = {
+    duration?: true
+  }
+
+  export type DowntimeSumAggregateInputType = {
+    duration?: true
+  }
+
+  export type DowntimeMinAggregateInputType = {
+    id?: true
+    monitorId?: true
+    startedAt?: true
+    endedAt?: true
+    duration?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type DowntimeMaxAggregateInputType = {
+    id?: true
+    monitorId?: true
+    startedAt?: true
+    endedAt?: true
+    duration?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type DowntimeCountAggregateInputType = {
+    id?: true
+    monitorId?: true
+    startedAt?: true
+    endedAt?: true
+    duration?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type DowntimeAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Downtime to aggregate.
+     */
+    where?: DowntimeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Downtimes to fetch.
+     */
+    orderBy?: DowntimeOrderByWithRelationInput | DowntimeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: DowntimeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Downtimes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Downtimes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Downtimes
+    **/
+    _count?: true | DowntimeCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: DowntimeAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: DowntimeSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: DowntimeMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: DowntimeMaxAggregateInputType
+  }
+
+  export type GetDowntimeAggregateType<T extends DowntimeAggregateArgs> = {
+        [P in keyof T & keyof AggregateDowntime]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateDowntime[P]>
+      : GetScalarType<T[P], AggregateDowntime[P]>
+  }
+
+
+
+
+  export type DowntimeGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DowntimeWhereInput
+    orderBy?: DowntimeOrderByWithAggregationInput | DowntimeOrderByWithAggregationInput[]
+    by: DowntimeScalarFieldEnum[] | DowntimeScalarFieldEnum
+    having?: DowntimeScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: DowntimeCountAggregateInputType | true
+    _avg?: DowntimeAvgAggregateInputType
+    _sum?: DowntimeSumAggregateInputType
+    _min?: DowntimeMinAggregateInputType
+    _max?: DowntimeMaxAggregateInputType
+  }
+
+  export type DowntimeGroupByOutputType = {
+    id: string
+    monitorId: string
+    startedAt: Date
+    endedAt: Date | null
+    duration: number | null
+    createdAt: Date
+    updatedAt: Date
+    _count: DowntimeCountAggregateOutputType | null
+    _avg: DowntimeAvgAggregateOutputType | null
+    _sum: DowntimeSumAggregateOutputType | null
+    _min: DowntimeMinAggregateOutputType | null
+    _max: DowntimeMaxAggregateOutputType | null
+  }
+
+  type GetDowntimeGroupByPayload<T extends DowntimeGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<DowntimeGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof DowntimeGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], DowntimeGroupByOutputType[P]>
+            : GetScalarType<T[P], DowntimeGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type DowntimeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    monitorId?: boolean
+    startedAt?: boolean
+    endedAt?: boolean
+    duration?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    monitor?: boolean | MonitorDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["downtime"]>
+
+  export type DowntimeSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    monitorId?: boolean
+    startedAt?: boolean
+    endedAt?: boolean
+    duration?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    monitor?: boolean | MonitorDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["downtime"]>
+
+  export type DowntimeSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    monitorId?: boolean
+    startedAt?: boolean
+    endedAt?: boolean
+    duration?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    monitor?: boolean | MonitorDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["downtime"]>
+
+  export type DowntimeSelectScalar = {
+    id?: boolean
+    monitorId?: boolean
+    startedAt?: boolean
+    endedAt?: boolean
+    duration?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type DowntimeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "monitorId" | "startedAt" | "endedAt" | "duration" | "createdAt" | "updatedAt", ExtArgs["result"]["downtime"]>
+  export type DowntimeInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    monitor?: boolean | MonitorDefaultArgs<ExtArgs>
+  }
+  export type DowntimeIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    monitor?: boolean | MonitorDefaultArgs<ExtArgs>
+  }
+  export type DowntimeIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    monitor?: boolean | MonitorDefaultArgs<ExtArgs>
+  }
+
+  export type $DowntimePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Downtime"
+    objects: {
+      monitor: Prisma.$MonitorPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      monitorId: string
+      startedAt: Date
+      endedAt: Date | null
+      duration: number | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["downtime"]>
+    composites: {}
+  }
+
+  type DowntimeGetPayload<S extends boolean | null | undefined | DowntimeDefaultArgs> = $Result.GetResult<Prisma.$DowntimePayload, S>
+
+  type DowntimeCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<DowntimeFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: DowntimeCountAggregateInputType | true
+    }
+
+  export interface DowntimeDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Downtime'], meta: { name: 'Downtime' } }
+    /**
+     * Find zero or one Downtime that matches the filter.
+     * @param {DowntimeFindUniqueArgs} args - Arguments to find a Downtime
+     * @example
+     * // Get one Downtime
+     * const downtime = await prisma.downtime.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends DowntimeFindUniqueArgs>(args: SelectSubset<T, DowntimeFindUniqueArgs<ExtArgs>>): Prisma__DowntimeClient<$Result.GetResult<Prisma.$DowntimePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Downtime that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {DowntimeFindUniqueOrThrowArgs} args - Arguments to find a Downtime
+     * @example
+     * // Get one Downtime
+     * const downtime = await prisma.downtime.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends DowntimeFindUniqueOrThrowArgs>(args: SelectSubset<T, DowntimeFindUniqueOrThrowArgs<ExtArgs>>): Prisma__DowntimeClient<$Result.GetResult<Prisma.$DowntimePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Downtime that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DowntimeFindFirstArgs} args - Arguments to find a Downtime
+     * @example
+     * // Get one Downtime
+     * const downtime = await prisma.downtime.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends DowntimeFindFirstArgs>(args?: SelectSubset<T, DowntimeFindFirstArgs<ExtArgs>>): Prisma__DowntimeClient<$Result.GetResult<Prisma.$DowntimePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Downtime that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DowntimeFindFirstOrThrowArgs} args - Arguments to find a Downtime
+     * @example
+     * // Get one Downtime
+     * const downtime = await prisma.downtime.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends DowntimeFindFirstOrThrowArgs>(args?: SelectSubset<T, DowntimeFindFirstOrThrowArgs<ExtArgs>>): Prisma__DowntimeClient<$Result.GetResult<Prisma.$DowntimePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Downtimes that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DowntimeFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Downtimes
+     * const downtimes = await prisma.downtime.findMany()
+     * 
+     * // Get first 10 Downtimes
+     * const downtimes = await prisma.downtime.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const downtimeWithIdOnly = await prisma.downtime.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends DowntimeFindManyArgs>(args?: SelectSubset<T, DowntimeFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DowntimePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Downtime.
+     * @param {DowntimeCreateArgs} args - Arguments to create a Downtime.
+     * @example
+     * // Create one Downtime
+     * const Downtime = await prisma.downtime.create({
+     *   data: {
+     *     // ... data to create a Downtime
+     *   }
+     * })
+     * 
+     */
+    create<T extends DowntimeCreateArgs>(args: SelectSubset<T, DowntimeCreateArgs<ExtArgs>>): Prisma__DowntimeClient<$Result.GetResult<Prisma.$DowntimePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Downtimes.
+     * @param {DowntimeCreateManyArgs} args - Arguments to create many Downtimes.
+     * @example
+     * // Create many Downtimes
+     * const downtime = await prisma.downtime.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends DowntimeCreateManyArgs>(args?: SelectSubset<T, DowntimeCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Downtimes and returns the data saved in the database.
+     * @param {DowntimeCreateManyAndReturnArgs} args - Arguments to create many Downtimes.
+     * @example
+     * // Create many Downtimes
+     * const downtime = await prisma.downtime.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Downtimes and only return the `id`
+     * const downtimeWithIdOnly = await prisma.downtime.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends DowntimeCreateManyAndReturnArgs>(args?: SelectSubset<T, DowntimeCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DowntimePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Downtime.
+     * @param {DowntimeDeleteArgs} args - Arguments to delete one Downtime.
+     * @example
+     * // Delete one Downtime
+     * const Downtime = await prisma.downtime.delete({
+     *   where: {
+     *     // ... filter to delete one Downtime
+     *   }
+     * })
+     * 
+     */
+    delete<T extends DowntimeDeleteArgs>(args: SelectSubset<T, DowntimeDeleteArgs<ExtArgs>>): Prisma__DowntimeClient<$Result.GetResult<Prisma.$DowntimePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Downtime.
+     * @param {DowntimeUpdateArgs} args - Arguments to update one Downtime.
+     * @example
+     * // Update one Downtime
+     * const downtime = await prisma.downtime.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends DowntimeUpdateArgs>(args: SelectSubset<T, DowntimeUpdateArgs<ExtArgs>>): Prisma__DowntimeClient<$Result.GetResult<Prisma.$DowntimePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Downtimes.
+     * @param {DowntimeDeleteManyArgs} args - Arguments to filter Downtimes to delete.
+     * @example
+     * // Delete a few Downtimes
+     * const { count } = await prisma.downtime.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends DowntimeDeleteManyArgs>(args?: SelectSubset<T, DowntimeDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Downtimes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DowntimeUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Downtimes
+     * const downtime = await prisma.downtime.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends DowntimeUpdateManyArgs>(args: SelectSubset<T, DowntimeUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Downtimes and returns the data updated in the database.
+     * @param {DowntimeUpdateManyAndReturnArgs} args - Arguments to update many Downtimes.
+     * @example
+     * // Update many Downtimes
+     * const downtime = await prisma.downtime.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Downtimes and only return the `id`
+     * const downtimeWithIdOnly = await prisma.downtime.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends DowntimeUpdateManyAndReturnArgs>(args: SelectSubset<T, DowntimeUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DowntimePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Downtime.
+     * @param {DowntimeUpsertArgs} args - Arguments to update or create a Downtime.
+     * @example
+     * // Update or create a Downtime
+     * const downtime = await prisma.downtime.upsert({
+     *   create: {
+     *     // ... data to create a Downtime
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Downtime we want to update
+     *   }
+     * })
+     */
+    upsert<T extends DowntimeUpsertArgs>(args: SelectSubset<T, DowntimeUpsertArgs<ExtArgs>>): Prisma__DowntimeClient<$Result.GetResult<Prisma.$DowntimePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Downtimes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DowntimeCountArgs} args - Arguments to filter Downtimes to count.
+     * @example
+     * // Count the number of Downtimes
+     * const count = await prisma.downtime.count({
+     *   where: {
+     *     // ... the filter for the Downtimes we want to count
+     *   }
+     * })
+    **/
+    count<T extends DowntimeCountArgs>(
+      args?: Subset<T, DowntimeCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], DowntimeCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Downtime.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DowntimeAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends DowntimeAggregateArgs>(args: Subset<T, DowntimeAggregateArgs>): Prisma.PrismaPromise<GetDowntimeAggregateType<T>>
+
+    /**
+     * Group by Downtime.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DowntimeGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends DowntimeGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: DowntimeGroupByArgs['orderBy'] }
+        : { orderBy?: DowntimeGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, DowntimeGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetDowntimeGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Downtime model
+   */
+  readonly fields: DowntimeFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Downtime.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__DowntimeClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    monitor<T extends MonitorDefaultArgs<ExtArgs> = {}>(args?: Subset<T, MonitorDefaultArgs<ExtArgs>>): Prisma__MonitorClient<$Result.GetResult<Prisma.$MonitorPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Downtime model
+   */
+  interface DowntimeFieldRefs {
+    readonly id: FieldRef<"Downtime", 'String'>
+    readonly monitorId: FieldRef<"Downtime", 'String'>
+    readonly startedAt: FieldRef<"Downtime", 'DateTime'>
+    readonly endedAt: FieldRef<"Downtime", 'DateTime'>
+    readonly duration: FieldRef<"Downtime", 'Int'>
+    readonly createdAt: FieldRef<"Downtime", 'DateTime'>
+    readonly updatedAt: FieldRef<"Downtime", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Downtime findUnique
+   */
+  export type DowntimeFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Downtime
+     */
+    select?: DowntimeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Downtime
+     */
+    omit?: DowntimeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DowntimeInclude<ExtArgs> | null
+    /**
+     * Filter, which Downtime to fetch.
+     */
+    where: DowntimeWhereUniqueInput
+  }
+
+  /**
+   * Downtime findUniqueOrThrow
+   */
+  export type DowntimeFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Downtime
+     */
+    select?: DowntimeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Downtime
+     */
+    omit?: DowntimeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DowntimeInclude<ExtArgs> | null
+    /**
+     * Filter, which Downtime to fetch.
+     */
+    where: DowntimeWhereUniqueInput
+  }
+
+  /**
+   * Downtime findFirst
+   */
+  export type DowntimeFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Downtime
+     */
+    select?: DowntimeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Downtime
+     */
+    omit?: DowntimeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DowntimeInclude<ExtArgs> | null
+    /**
+     * Filter, which Downtime to fetch.
+     */
+    where?: DowntimeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Downtimes to fetch.
+     */
+    orderBy?: DowntimeOrderByWithRelationInput | DowntimeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Downtimes.
+     */
+    cursor?: DowntimeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Downtimes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Downtimes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Downtimes.
+     */
+    distinct?: DowntimeScalarFieldEnum | DowntimeScalarFieldEnum[]
+  }
+
+  /**
+   * Downtime findFirstOrThrow
+   */
+  export type DowntimeFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Downtime
+     */
+    select?: DowntimeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Downtime
+     */
+    omit?: DowntimeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DowntimeInclude<ExtArgs> | null
+    /**
+     * Filter, which Downtime to fetch.
+     */
+    where?: DowntimeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Downtimes to fetch.
+     */
+    orderBy?: DowntimeOrderByWithRelationInput | DowntimeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Downtimes.
+     */
+    cursor?: DowntimeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Downtimes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Downtimes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Downtimes.
+     */
+    distinct?: DowntimeScalarFieldEnum | DowntimeScalarFieldEnum[]
+  }
+
+  /**
+   * Downtime findMany
+   */
+  export type DowntimeFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Downtime
+     */
+    select?: DowntimeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Downtime
+     */
+    omit?: DowntimeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DowntimeInclude<ExtArgs> | null
+    /**
+     * Filter, which Downtimes to fetch.
+     */
+    where?: DowntimeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Downtimes to fetch.
+     */
+    orderBy?: DowntimeOrderByWithRelationInput | DowntimeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Downtimes.
+     */
+    cursor?: DowntimeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Downtimes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Downtimes.
+     */
+    skip?: number
+    distinct?: DowntimeScalarFieldEnum | DowntimeScalarFieldEnum[]
+  }
+
+  /**
+   * Downtime create
+   */
+  export type DowntimeCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Downtime
+     */
+    select?: DowntimeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Downtime
+     */
+    omit?: DowntimeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DowntimeInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Downtime.
+     */
+    data: XOR<DowntimeCreateInput, DowntimeUncheckedCreateInput>
+  }
+
+  /**
+   * Downtime createMany
+   */
+  export type DowntimeCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Downtimes.
+     */
+    data: DowntimeCreateManyInput | DowntimeCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Downtime createManyAndReturn
+   */
+  export type DowntimeCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Downtime
+     */
+    select?: DowntimeSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Downtime
+     */
+    omit?: DowntimeOmit<ExtArgs> | null
+    /**
+     * The data used to create many Downtimes.
+     */
+    data: DowntimeCreateManyInput | DowntimeCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DowntimeIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Downtime update
+   */
+  export type DowntimeUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Downtime
+     */
+    select?: DowntimeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Downtime
+     */
+    omit?: DowntimeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DowntimeInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Downtime.
+     */
+    data: XOR<DowntimeUpdateInput, DowntimeUncheckedUpdateInput>
+    /**
+     * Choose, which Downtime to update.
+     */
+    where: DowntimeWhereUniqueInput
+  }
+
+  /**
+   * Downtime updateMany
+   */
+  export type DowntimeUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Downtimes.
+     */
+    data: XOR<DowntimeUpdateManyMutationInput, DowntimeUncheckedUpdateManyInput>
+    /**
+     * Filter which Downtimes to update
+     */
+    where?: DowntimeWhereInput
+    /**
+     * Limit how many Downtimes to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Downtime updateManyAndReturn
+   */
+  export type DowntimeUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Downtime
+     */
+    select?: DowntimeSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Downtime
+     */
+    omit?: DowntimeOmit<ExtArgs> | null
+    /**
+     * The data used to update Downtimes.
+     */
+    data: XOR<DowntimeUpdateManyMutationInput, DowntimeUncheckedUpdateManyInput>
+    /**
+     * Filter which Downtimes to update
+     */
+    where?: DowntimeWhereInput
+    /**
+     * Limit how many Downtimes to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DowntimeIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Downtime upsert
+   */
+  export type DowntimeUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Downtime
+     */
+    select?: DowntimeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Downtime
+     */
+    omit?: DowntimeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DowntimeInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Downtime to update in case it exists.
+     */
+    where: DowntimeWhereUniqueInput
+    /**
+     * In case the Downtime found by the `where` argument doesn't exist, create a new Downtime with this data.
+     */
+    create: XOR<DowntimeCreateInput, DowntimeUncheckedCreateInput>
+    /**
+     * In case the Downtime was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<DowntimeUpdateInput, DowntimeUncheckedUpdateInput>
+  }
+
+  /**
+   * Downtime delete
+   */
+  export type DowntimeDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Downtime
+     */
+    select?: DowntimeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Downtime
+     */
+    omit?: DowntimeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DowntimeInclude<ExtArgs> | null
+    /**
+     * Filter which Downtime to delete.
+     */
+    where: DowntimeWhereUniqueInput
+  }
+
+  /**
+   * Downtime deleteMany
+   */
+  export type DowntimeDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Downtimes to delete
+     */
+    where?: DowntimeWhereInput
+    /**
+     * Limit how many Downtimes to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Downtime without action
+   */
+  export type DowntimeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Downtime
+     */
+    select?: DowntimeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Downtime
+     */
+    omit?: DowntimeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DowntimeInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -9391,6 +10637,19 @@ export namespace Prisma {
   };
 
   export type PingEventScalarFieldEnum = (typeof PingEventScalarFieldEnum)[keyof typeof PingEventScalarFieldEnum]
+
+
+  export const DowntimeScalarFieldEnum: {
+    id: 'id',
+    monitorId: 'monitorId',
+    startedAt: 'startedAt',
+    endedAt: 'endedAt',
+    duration: 'duration',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type DowntimeScalarFieldEnum = (typeof DowntimeScalarFieldEnum)[keyof typeof DowntimeScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -9856,6 +11115,7 @@ export namespace Prisma {
     useSmartGrace?: BoolFilter<"Monitor"> | boolean
     pings?: PingEventListRelationFilter
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    downtimes?: DowntimeListRelationFilter
   }
 
   export type MonitorOrderByWithRelationInput = {
@@ -9872,6 +11132,7 @@ export namespace Prisma {
     useSmartGrace?: SortOrder
     pings?: PingEventOrderByRelationAggregateInput
     user?: UserOrderByWithRelationInput
+    downtimes?: DowntimeOrderByRelationAggregateInput
   }
 
   export type MonitorWhereUniqueInput = Prisma.AtLeast<{
@@ -9891,6 +11152,7 @@ export namespace Prisma {
     useSmartGrace?: BoolFilter<"Monitor"> | boolean
     pings?: PingEventListRelationFilter
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    downtimes?: DowntimeListRelationFilter
   }, "id" | "key">
 
   export type MonitorOrderByWithAggregationInput = {
@@ -9979,6 +11241,73 @@ export namespace Prisma {
     monitorId?: StringWithAggregatesFilter<"PingEvent"> | string
     createdAt?: DateTimeWithAggregatesFilter<"PingEvent"> | Date | string
     latency?: IntWithAggregatesFilter<"PingEvent"> | number
+  }
+
+  export type DowntimeWhereInput = {
+    AND?: DowntimeWhereInput | DowntimeWhereInput[]
+    OR?: DowntimeWhereInput[]
+    NOT?: DowntimeWhereInput | DowntimeWhereInput[]
+    id?: StringFilter<"Downtime"> | string
+    monitorId?: StringFilter<"Downtime"> | string
+    startedAt?: DateTimeFilter<"Downtime"> | Date | string
+    endedAt?: DateTimeNullableFilter<"Downtime"> | Date | string | null
+    duration?: IntNullableFilter<"Downtime"> | number | null
+    createdAt?: DateTimeFilter<"Downtime"> | Date | string
+    updatedAt?: DateTimeFilter<"Downtime"> | Date | string
+    monitor?: XOR<MonitorScalarRelationFilter, MonitorWhereInput>
+  }
+
+  export type DowntimeOrderByWithRelationInput = {
+    id?: SortOrder
+    monitorId?: SortOrder
+    startedAt?: SortOrder
+    endedAt?: SortOrderInput | SortOrder
+    duration?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    monitor?: MonitorOrderByWithRelationInput
+  }
+
+  export type DowntimeWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: DowntimeWhereInput | DowntimeWhereInput[]
+    OR?: DowntimeWhereInput[]
+    NOT?: DowntimeWhereInput | DowntimeWhereInput[]
+    monitorId?: StringFilter<"Downtime"> | string
+    startedAt?: DateTimeFilter<"Downtime"> | Date | string
+    endedAt?: DateTimeNullableFilter<"Downtime"> | Date | string | null
+    duration?: IntNullableFilter<"Downtime"> | number | null
+    createdAt?: DateTimeFilter<"Downtime"> | Date | string
+    updatedAt?: DateTimeFilter<"Downtime"> | Date | string
+    monitor?: XOR<MonitorScalarRelationFilter, MonitorWhereInput>
+  }, "id">
+
+  export type DowntimeOrderByWithAggregationInput = {
+    id?: SortOrder
+    monitorId?: SortOrder
+    startedAt?: SortOrder
+    endedAt?: SortOrderInput | SortOrder
+    duration?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: DowntimeCountOrderByAggregateInput
+    _avg?: DowntimeAvgOrderByAggregateInput
+    _max?: DowntimeMaxOrderByAggregateInput
+    _min?: DowntimeMinOrderByAggregateInput
+    _sum?: DowntimeSumOrderByAggregateInput
+  }
+
+  export type DowntimeScalarWhereWithAggregatesInput = {
+    AND?: DowntimeScalarWhereWithAggregatesInput | DowntimeScalarWhereWithAggregatesInput[]
+    OR?: DowntimeScalarWhereWithAggregatesInput[]
+    NOT?: DowntimeScalarWhereWithAggregatesInput | DowntimeScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Downtime"> | string
+    monitorId?: StringWithAggregatesFilter<"Downtime"> | string
+    startedAt?: DateTimeWithAggregatesFilter<"Downtime"> | Date | string
+    endedAt?: DateTimeNullableWithAggregatesFilter<"Downtime"> | Date | string | null
+    duration?: IntNullableWithAggregatesFilter<"Downtime"> | number | null
+    createdAt?: DateTimeWithAggregatesFilter<"Downtime"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Downtime"> | Date | string
   }
 
   export type PostCreateInput = {
@@ -10385,6 +11714,7 @@ export namespace Prisma {
     useSmartGrace?: boolean
     pings?: PingEventCreateNestedManyWithoutMonitorInput
     user: UserCreateNestedOneWithoutMonitorsInput
+    downtimes?: DowntimeCreateNestedManyWithoutMonitorInput
   }
 
   export type MonitorUncheckedCreateInput = {
@@ -10400,6 +11730,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     useSmartGrace?: boolean
     pings?: PingEventUncheckedCreateNestedManyWithoutMonitorInput
+    downtimes?: DowntimeUncheckedCreateNestedManyWithoutMonitorInput
   }
 
   export type MonitorUpdateInput = {
@@ -10415,6 +11746,7 @@ export namespace Prisma {
     useSmartGrace?: BoolFieldUpdateOperationsInput | boolean
     pings?: PingEventUpdateManyWithoutMonitorNestedInput
     user?: UserUpdateOneRequiredWithoutMonitorsNestedInput
+    downtimes?: DowntimeUpdateManyWithoutMonitorNestedInput
   }
 
   export type MonitorUncheckedUpdateInput = {
@@ -10430,6 +11762,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     useSmartGrace?: BoolFieldUpdateOperationsInput | boolean
     pings?: PingEventUncheckedUpdateManyWithoutMonitorNestedInput
+    downtimes?: DowntimeUncheckedUpdateManyWithoutMonitorNestedInput
   }
 
   export type MonitorCreateManyInput = {
@@ -10519,6 +11852,75 @@ export namespace Prisma {
     monitorId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     latency?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type DowntimeCreateInput = {
+    id?: string
+    startedAt: Date | string
+    endedAt?: Date | string | null
+    duration?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    monitor: MonitorCreateNestedOneWithoutDowntimesInput
+  }
+
+  export type DowntimeUncheckedCreateInput = {
+    id?: string
+    monitorId: string
+    startedAt: Date | string
+    endedAt?: Date | string | null
+    duration?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DowntimeUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    endedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    monitor?: MonitorUpdateOneRequiredWithoutDowntimesNestedInput
+  }
+
+  export type DowntimeUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    monitorId?: StringFieldUpdateOperationsInput | string
+    startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    endedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DowntimeCreateManyInput = {
+    id?: string
+    monitorId: string
+    startedAt: Date | string
+    endedAt?: Date | string | null
+    duration?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DowntimeUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    endedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DowntimeUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    monitorId?: StringFieldUpdateOperationsInput | string
+    startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    endedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -10879,7 +12281,17 @@ export namespace Prisma {
     none?: PingEventWhereInput
   }
 
+  export type DowntimeListRelationFilter = {
+    every?: DowntimeWhereInput
+    some?: DowntimeWhereInput
+    none?: DowntimeWhereInput
+  }
+
   export type PingEventOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type DowntimeOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -10983,6 +12395,71 @@ export namespace Prisma {
 
   export type PingEventSumOrderByAggregateInput = {
     latency?: SortOrder
+  }
+
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type DowntimeCountOrderByAggregateInput = {
+    id?: SortOrder
+    monitorId?: SortOrder
+    startedAt?: SortOrder
+    endedAt?: SortOrder
+    duration?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type DowntimeAvgOrderByAggregateInput = {
+    duration?: SortOrder
+  }
+
+  export type DowntimeMaxOrderByAggregateInput = {
+    id?: SortOrder
+    monitorId?: SortOrder
+    startedAt?: SortOrder
+    endedAt?: SortOrder
+    duration?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type DowntimeMinOrderByAggregateInput = {
+    id?: SortOrder
+    monitorId?: SortOrder
+    startedAt?: SortOrder
+    endedAt?: SortOrder
+    duration?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type DowntimeSumOrderByAggregateInput = {
+    duration?: SortOrder
+  }
+
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type UserCreateNestedOneWithoutPostsInput = {
@@ -11228,11 +12705,25 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
+  export type DowntimeCreateNestedManyWithoutMonitorInput = {
+    create?: XOR<DowntimeCreateWithoutMonitorInput, DowntimeUncheckedCreateWithoutMonitorInput> | DowntimeCreateWithoutMonitorInput[] | DowntimeUncheckedCreateWithoutMonitorInput[]
+    connectOrCreate?: DowntimeCreateOrConnectWithoutMonitorInput | DowntimeCreateOrConnectWithoutMonitorInput[]
+    createMany?: DowntimeCreateManyMonitorInputEnvelope
+    connect?: DowntimeWhereUniqueInput | DowntimeWhereUniqueInput[]
+  }
+
   export type PingEventUncheckedCreateNestedManyWithoutMonitorInput = {
     create?: XOR<PingEventCreateWithoutMonitorInput, PingEventUncheckedCreateWithoutMonitorInput> | PingEventCreateWithoutMonitorInput[] | PingEventUncheckedCreateWithoutMonitorInput[]
     connectOrCreate?: PingEventCreateOrConnectWithoutMonitorInput | PingEventCreateOrConnectWithoutMonitorInput[]
     createMany?: PingEventCreateManyMonitorInputEnvelope
     connect?: PingEventWhereUniqueInput | PingEventWhereUniqueInput[]
+  }
+
+  export type DowntimeUncheckedCreateNestedManyWithoutMonitorInput = {
+    create?: XOR<DowntimeCreateWithoutMonitorInput, DowntimeUncheckedCreateWithoutMonitorInput> | DowntimeCreateWithoutMonitorInput[] | DowntimeUncheckedCreateWithoutMonitorInput[]
+    connectOrCreate?: DowntimeCreateOrConnectWithoutMonitorInput | DowntimeCreateOrConnectWithoutMonitorInput[]
+    createMany?: DowntimeCreateManyMonitorInputEnvelope
+    connect?: DowntimeWhereUniqueInput | DowntimeWhereUniqueInput[]
   }
 
   export type IntFieldUpdateOperationsInput = {
@@ -11265,6 +12756,20 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutMonitorsInput, UserUpdateWithoutMonitorsInput>, UserUncheckedUpdateWithoutMonitorsInput>
   }
 
+  export type DowntimeUpdateManyWithoutMonitorNestedInput = {
+    create?: XOR<DowntimeCreateWithoutMonitorInput, DowntimeUncheckedCreateWithoutMonitorInput> | DowntimeCreateWithoutMonitorInput[] | DowntimeUncheckedCreateWithoutMonitorInput[]
+    connectOrCreate?: DowntimeCreateOrConnectWithoutMonitorInput | DowntimeCreateOrConnectWithoutMonitorInput[]
+    upsert?: DowntimeUpsertWithWhereUniqueWithoutMonitorInput | DowntimeUpsertWithWhereUniqueWithoutMonitorInput[]
+    createMany?: DowntimeCreateManyMonitorInputEnvelope
+    set?: DowntimeWhereUniqueInput | DowntimeWhereUniqueInput[]
+    disconnect?: DowntimeWhereUniqueInput | DowntimeWhereUniqueInput[]
+    delete?: DowntimeWhereUniqueInput | DowntimeWhereUniqueInput[]
+    connect?: DowntimeWhereUniqueInput | DowntimeWhereUniqueInput[]
+    update?: DowntimeUpdateWithWhereUniqueWithoutMonitorInput | DowntimeUpdateWithWhereUniqueWithoutMonitorInput[]
+    updateMany?: DowntimeUpdateManyWithWhereWithoutMonitorInput | DowntimeUpdateManyWithWhereWithoutMonitorInput[]
+    deleteMany?: DowntimeScalarWhereInput | DowntimeScalarWhereInput[]
+  }
+
   export type PingEventUncheckedUpdateManyWithoutMonitorNestedInput = {
     create?: XOR<PingEventCreateWithoutMonitorInput, PingEventUncheckedCreateWithoutMonitorInput> | PingEventCreateWithoutMonitorInput[] | PingEventUncheckedCreateWithoutMonitorInput[]
     connectOrCreate?: PingEventCreateOrConnectWithoutMonitorInput | PingEventCreateOrConnectWithoutMonitorInput[]
@@ -11279,6 +12784,20 @@ export namespace Prisma {
     deleteMany?: PingEventScalarWhereInput | PingEventScalarWhereInput[]
   }
 
+  export type DowntimeUncheckedUpdateManyWithoutMonitorNestedInput = {
+    create?: XOR<DowntimeCreateWithoutMonitorInput, DowntimeUncheckedCreateWithoutMonitorInput> | DowntimeCreateWithoutMonitorInput[] | DowntimeUncheckedCreateWithoutMonitorInput[]
+    connectOrCreate?: DowntimeCreateOrConnectWithoutMonitorInput | DowntimeCreateOrConnectWithoutMonitorInput[]
+    upsert?: DowntimeUpsertWithWhereUniqueWithoutMonitorInput | DowntimeUpsertWithWhereUniqueWithoutMonitorInput[]
+    createMany?: DowntimeCreateManyMonitorInputEnvelope
+    set?: DowntimeWhereUniqueInput | DowntimeWhereUniqueInput[]
+    disconnect?: DowntimeWhereUniqueInput | DowntimeWhereUniqueInput[]
+    delete?: DowntimeWhereUniqueInput | DowntimeWhereUniqueInput[]
+    connect?: DowntimeWhereUniqueInput | DowntimeWhereUniqueInput[]
+    update?: DowntimeUpdateWithWhereUniqueWithoutMonitorInput | DowntimeUpdateWithWhereUniqueWithoutMonitorInput[]
+    updateMany?: DowntimeUpdateManyWithWhereWithoutMonitorInput | DowntimeUpdateManyWithWhereWithoutMonitorInput[]
+    deleteMany?: DowntimeScalarWhereInput | DowntimeScalarWhereInput[]
+  }
+
   export type MonitorCreateNestedOneWithoutPingsInput = {
     create?: XOR<MonitorCreateWithoutPingsInput, MonitorUncheckedCreateWithoutPingsInput>
     connectOrCreate?: MonitorCreateOrConnectWithoutPingsInput
@@ -11291,6 +12810,28 @@ export namespace Prisma {
     upsert?: MonitorUpsertWithoutPingsInput
     connect?: MonitorWhereUniqueInput
     update?: XOR<XOR<MonitorUpdateToOneWithWhereWithoutPingsInput, MonitorUpdateWithoutPingsInput>, MonitorUncheckedUpdateWithoutPingsInput>
+  }
+
+  export type MonitorCreateNestedOneWithoutDowntimesInput = {
+    create?: XOR<MonitorCreateWithoutDowntimesInput, MonitorUncheckedCreateWithoutDowntimesInput>
+    connectOrCreate?: MonitorCreateOrConnectWithoutDowntimesInput
+    connect?: MonitorWhereUniqueInput
+  }
+
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type MonitorUpdateOneRequiredWithoutDowntimesNestedInput = {
+    create?: XOR<MonitorCreateWithoutDowntimesInput, MonitorUncheckedCreateWithoutDowntimesInput>
+    connectOrCreate?: MonitorCreateOrConnectWithoutDowntimesInput
+    upsert?: MonitorUpsertWithoutDowntimesInput
+    connect?: MonitorWhereUniqueInput
+    update?: XOR<XOR<MonitorUpdateToOneWithWhereWithoutDowntimesInput, MonitorUpdateWithoutDowntimesInput>, MonitorUncheckedUpdateWithoutDowntimesInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -11467,6 +13008,33 @@ export namespace Prisma {
     not?: NestedFloatFilter<$PrismaModel> | number
   }
 
+  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type NestedFloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
   export type UserCreateWithoutPostsInput = {
     id: string
     name: string
@@ -11641,6 +13209,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     useSmartGrace?: boolean
     pings?: PingEventCreateNestedManyWithoutMonitorInput
+    downtimes?: DowntimeCreateNestedManyWithoutMonitorInput
   }
 
   export type MonitorUncheckedCreateWithoutUserInput = {
@@ -11655,6 +13224,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     useSmartGrace?: boolean
     pings?: PingEventUncheckedCreateNestedManyWithoutMonitorInput
+    downtimes?: DowntimeUncheckedCreateNestedManyWithoutMonitorInput
   }
 
   export type MonitorCreateOrConnectWithoutUserInput = {
@@ -11981,6 +13551,34 @@ export namespace Prisma {
     create: XOR<UserCreateWithoutMonitorsInput, UserUncheckedCreateWithoutMonitorsInput>
   }
 
+  export type DowntimeCreateWithoutMonitorInput = {
+    id?: string
+    startedAt: Date | string
+    endedAt?: Date | string | null
+    duration?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DowntimeUncheckedCreateWithoutMonitorInput = {
+    id?: string
+    startedAt: Date | string
+    endedAt?: Date | string | null
+    duration?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DowntimeCreateOrConnectWithoutMonitorInput = {
+    where: DowntimeWhereUniqueInput
+    create: XOR<DowntimeCreateWithoutMonitorInput, DowntimeUncheckedCreateWithoutMonitorInput>
+  }
+
+  export type DowntimeCreateManyMonitorInputEnvelope = {
+    data: DowntimeCreateManyMonitorInput | DowntimeCreateManyMonitorInput[]
+    skipDuplicates?: boolean
+  }
+
   export type PingEventUpsertWithWhereUniqueWithoutMonitorInput = {
     where: PingEventWhereUniqueInput
     update: XOR<PingEventUpdateWithoutMonitorInput, PingEventUncheckedUpdateWithoutMonitorInput>
@@ -12044,6 +13642,35 @@ export namespace Prisma {
     posts?: PostUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
+  export type DowntimeUpsertWithWhereUniqueWithoutMonitorInput = {
+    where: DowntimeWhereUniqueInput
+    update: XOR<DowntimeUpdateWithoutMonitorInput, DowntimeUncheckedUpdateWithoutMonitorInput>
+    create: XOR<DowntimeCreateWithoutMonitorInput, DowntimeUncheckedCreateWithoutMonitorInput>
+  }
+
+  export type DowntimeUpdateWithWhereUniqueWithoutMonitorInput = {
+    where: DowntimeWhereUniqueInput
+    data: XOR<DowntimeUpdateWithoutMonitorInput, DowntimeUncheckedUpdateWithoutMonitorInput>
+  }
+
+  export type DowntimeUpdateManyWithWhereWithoutMonitorInput = {
+    where: DowntimeScalarWhereInput
+    data: XOR<DowntimeUpdateManyMutationInput, DowntimeUncheckedUpdateManyWithoutMonitorInput>
+  }
+
+  export type DowntimeScalarWhereInput = {
+    AND?: DowntimeScalarWhereInput | DowntimeScalarWhereInput[]
+    OR?: DowntimeScalarWhereInput[]
+    NOT?: DowntimeScalarWhereInput | DowntimeScalarWhereInput[]
+    id?: StringFilter<"Downtime"> | string
+    monitorId?: StringFilter<"Downtime"> | string
+    startedAt?: DateTimeFilter<"Downtime"> | Date | string
+    endedAt?: DateTimeNullableFilter<"Downtime"> | Date | string | null
+    duration?: IntNullableFilter<"Downtime"> | number | null
+    createdAt?: DateTimeFilter<"Downtime"> | Date | string
+    updatedAt?: DateTimeFilter<"Downtime"> | Date | string
+  }
+
   export type MonitorCreateWithoutPingsInput = {
     id?: string
     name: string
@@ -12056,6 +13683,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     useSmartGrace?: boolean
     user: UserCreateNestedOneWithoutMonitorsInput
+    downtimes?: DowntimeCreateNestedManyWithoutMonitorInput
   }
 
   export type MonitorUncheckedCreateWithoutPingsInput = {
@@ -12070,6 +13698,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     useSmartGrace?: boolean
+    downtimes?: DowntimeUncheckedCreateNestedManyWithoutMonitorInput
   }
 
   export type MonitorCreateOrConnectWithoutPingsInput = {
@@ -12100,6 +13729,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     useSmartGrace?: BoolFieldUpdateOperationsInput | boolean
     user?: UserUpdateOneRequiredWithoutMonitorsNestedInput
+    downtimes?: DowntimeUpdateManyWithoutMonitorNestedInput
   }
 
   export type MonitorUncheckedUpdateWithoutPingsInput = {
@@ -12114,6 +13744,83 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     useSmartGrace?: BoolFieldUpdateOperationsInput | boolean
+    downtimes?: DowntimeUncheckedUpdateManyWithoutMonitorNestedInput
+  }
+
+  export type MonitorCreateWithoutDowntimesInput = {
+    id?: string
+    name: string
+    key?: string
+    interval: number
+    gracePeriod?: number
+    status?: string
+    lastPing?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    useSmartGrace?: boolean
+    pings?: PingEventCreateNestedManyWithoutMonitorInput
+    user: UserCreateNestedOneWithoutMonitorsInput
+  }
+
+  export type MonitorUncheckedCreateWithoutDowntimesInput = {
+    id?: string
+    name: string
+    key?: string
+    interval: number
+    gracePeriod?: number
+    status?: string
+    lastPing?: Date | string | null
+    userId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    useSmartGrace?: boolean
+    pings?: PingEventUncheckedCreateNestedManyWithoutMonitorInput
+  }
+
+  export type MonitorCreateOrConnectWithoutDowntimesInput = {
+    where: MonitorWhereUniqueInput
+    create: XOR<MonitorCreateWithoutDowntimesInput, MonitorUncheckedCreateWithoutDowntimesInput>
+  }
+
+  export type MonitorUpsertWithoutDowntimesInput = {
+    update: XOR<MonitorUpdateWithoutDowntimesInput, MonitorUncheckedUpdateWithoutDowntimesInput>
+    create: XOR<MonitorCreateWithoutDowntimesInput, MonitorUncheckedCreateWithoutDowntimesInput>
+    where?: MonitorWhereInput
+  }
+
+  export type MonitorUpdateToOneWithWhereWithoutDowntimesInput = {
+    where?: MonitorWhereInput
+    data: XOR<MonitorUpdateWithoutDowntimesInput, MonitorUncheckedUpdateWithoutDowntimesInput>
+  }
+
+  export type MonitorUpdateWithoutDowntimesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    key?: StringFieldUpdateOperationsInput | string
+    interval?: IntFieldUpdateOperationsInput | number
+    gracePeriod?: IntFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    lastPing?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    useSmartGrace?: BoolFieldUpdateOperationsInput | boolean
+    pings?: PingEventUpdateManyWithoutMonitorNestedInput
+    user?: UserUpdateOneRequiredWithoutMonitorsNestedInput
+  }
+
+  export type MonitorUncheckedUpdateWithoutDowntimesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    key?: StringFieldUpdateOperationsInput | string
+    interval?: IntFieldUpdateOperationsInput | number
+    gracePeriod?: IntFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    lastPing?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    useSmartGrace?: BoolFieldUpdateOperationsInput | boolean
+    pings?: PingEventUncheckedUpdateManyWithoutMonitorNestedInput
   }
 
   export type SessionCreateManyUserInput = {
@@ -12269,6 +13976,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     useSmartGrace?: BoolFieldUpdateOperationsInput | boolean
     pings?: PingEventUpdateManyWithoutMonitorNestedInput
+    downtimes?: DowntimeUpdateManyWithoutMonitorNestedInput
   }
 
   export type MonitorUncheckedUpdateWithoutUserInput = {
@@ -12283,6 +13991,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     useSmartGrace?: BoolFieldUpdateOperationsInput | boolean
     pings?: PingEventUncheckedUpdateManyWithoutMonitorNestedInput
+    downtimes?: DowntimeUncheckedUpdateManyWithoutMonitorNestedInput
   }
 
   export type MonitorUncheckedUpdateManyWithoutUserInput = {
@@ -12304,6 +14013,15 @@ export namespace Prisma {
     latency: number
   }
 
+  export type DowntimeCreateManyMonitorInput = {
+    id?: string
+    startedAt: Date | string
+    endedAt?: Date | string | null
+    duration?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type PingEventUpdateWithoutMonitorInput = {
     id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -12320,6 +14038,33 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     latency?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type DowntimeUpdateWithoutMonitorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    endedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DowntimeUncheckedUpdateWithoutMonitorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    endedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DowntimeUncheckedUpdateManyWithoutMonitorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    endedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 

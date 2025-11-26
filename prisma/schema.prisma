@@ -103,7 +103,7 @@ model Monitor {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   useSmartGrace Boolean @default(false)
-
+  downtimes Downtime[]
   @@index([userId])
   @@map("monitor")
 }
@@ -115,4 +115,20 @@ model PingEvent {
   monitor   Monitor  @relation(fields: [monitorId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
   latency   Int      
+}
+
+model Downtime {
+  id          String   @id @default(cuid())
+  monitorId   String
+  monitor     Monitor  @relation(fields: [monitorId], references: [id], onDelete: Cascade)
+  
+  startedAt   DateTime
+  endedAt     DateTime?  // null means still down
+  duration    Int?       // duration in minutes, calculated when endedAt is set
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@index([monitorId])
+  @@index([startedAt])
 }

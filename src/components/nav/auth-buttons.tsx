@@ -34,7 +34,11 @@ export function AuthButtons() {
     };
 
     const handleSignIn = async () => {
-        router.push("/login");
+        router.push("/sign-in");
+    }
+
+    const handleSignUp = async () => {
+        router.push("/sign-up");
     }
 
 
@@ -96,7 +100,7 @@ export function AuthButtons() {
             >
                 Log in
             </Button>
-            <Button size="sm" className="font-semibold shadow-md text-neutral-300 shadow-primary/20 bg-blue-600" onClick={handleSignIn}>
+            <Button size="sm" className="font-semibold shadow-md text-neutral-300 shadow-primary/20 bg-blue-600" onClick={handleSignUp}>
                 Get Started
             </Button>
         </div>
