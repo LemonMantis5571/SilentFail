@@ -13,6 +13,8 @@ export async function GET(req: Request) {
     return new NextResponse("Unauthorized", { status: 401 });
   }
 
+  const fromEmail = process.env.EMAIL_FROM || "onboarding@resend.dev";
+
   try {
     const now = new Date();
     
@@ -49,7 +51,7 @@ export async function GET(req: Request) {
    
         emailPromises.push(
           resend.emails.send({
-            from: 'onboarding@resend.dev',
+            from: fromEmail,
             to: monitor.user.email, 
             subject: `🚨 Alert: ${monitor.name} is DOWN`,
             react: AlertEmail({ 

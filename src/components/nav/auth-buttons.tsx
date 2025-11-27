@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { Button } from "~/components/ui/button";
 
-import { Loader2, LogOut, LayoutDashboard } from "lucide-react";
+import { LogOut, LayoutDashboard, Settings } from "lucide-react";
 import { useRouter } from "next/navigation";
 import {
   DropdownMenu,
@@ -18,8 +18,6 @@ import { authClient } from "~/server/better-auth/client";
 
 export function AuthButtons() {
     const router = useRouter();
-    
-
     const { data: session, isPending } = authClient.useSession();
 
     const handleSignOut = async () => {
@@ -38,18 +36,22 @@ export function AuthButtons() {
     }
 
     const handleSignUp = async () => {
-        router.push("/sign-up");
+        router.push("/sign-in");
     }
 
-
+    // Subtle skeleton that matches the button size
     if (isPending) {
-        return <Button variant="ghost" size="sm" disabled><Loader2 className="h-4 w-4 animate-spin" /></Button>;
+        return (
+            <div className="flex items-center gap-4">
+                <div className="hidden sm:block h-9 w-24 bg-muted/50 rounded-md animate-pulse" />
+                <div className="h-8 w-8 bg-muted/50 rounded-full animate-pulse" />
+            </div>
+        );
     }
-
 
     if (session) {
         return (
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4 animate-in fade-in duration-200">
                  <Button asChild size="sm" className="hidden sm:inline-flex shadow-md shadow-primary/20  text-white bg-blue-600 hover:bg-blue-500">
                     <Link href="/dashboard">Dashboard</Link>
                 </Button>
@@ -79,6 +81,12 @@ export function AuthButtons() {
                                 Dashboard
                             </Link>
                         </DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                            <Link href="/settings" className="cursor-pointer ">
+                                <Settings className="mr-2 h-4 w-4" />
+                                Settings
+                            </Link>
+                        </DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem onClick={handleSignOut} className="text-red-500 focus:text-red-500 cursor-pointer">
                             <LogOut className="mr-2 h-4 w-4" />
@@ -90,9 +98,8 @@ export function AuthButtons() {
         );
     }
 
-
     return (
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 animate-in fade-in duration-200">
             <Button 
                 variant="ghost" 
                 onClick={handleSignIn}

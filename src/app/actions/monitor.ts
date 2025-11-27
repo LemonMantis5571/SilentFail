@@ -89,6 +89,7 @@ export async function getMonitor(id: string) {
 }
 
 export async function recordDowntime(monitorId: string, startedAt: Date) {
+
   return await db.downtime.create({
     data: {
       monitorId,

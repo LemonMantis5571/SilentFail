@@ -7,6 +7,7 @@ import { ArrowLeft, Clock, Zap, Activity, AlertTriangle, TrendingDown } from "lu
 import Link from "next/link";
 import { AnalyticsChart } from "~/components/monitor-details/analytics-charts";
 import { auth } from "~/server/better-auth";
+import { headers } from "next/headers";
 
 function formatDuration(seconds: number) {
     if (seconds < 1) return `${Math.round(seconds * 1000)}ms`;
@@ -67,7 +68,9 @@ function calculateAccurateDowntime(downtimes: any[], hours: number = 24) {
 export default async function MonitorPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
     const monitor = await getMonitor(id);
-    const session = await auth.api.getSession();
+        const session = await auth.api.getSession({
+            headers: await headers()  
+        });
 
     if (!monitor) return notFound();
 
