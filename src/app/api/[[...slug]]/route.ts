@@ -15,62 +15,54 @@ const app = new Elysia({ prefix: '/api' })
     });
   })
 
-  /**
-   * ------------------------------------------------------------------
-   * INGEST GROUP: Public endpoints for pings
-   * ------------------------------------------------------------------
-   */
   .group('/ping', (app) => app
     .get('/:key', async ({ params: { key } }) => {
       try {
         const monitor = await db.monitor.findUnique({ 
             where: { key },
             include: {
-                pings: {
-                    take: 10,
-                    orderBy: { createdAt: 'desc' }
-                }
+                pings: { take: 10, orderBy: { createdAt: 'desc' } }
             }
         });
         
-        if (!monitor) {
-          return new Response("Monitor not found", { status: 404 });
-        }
+        if (!monitor) return new Response("Monitor not found", { status: 404 });
 
         const now = new Date();
         let latency = 0; 
-
 
         if (monitor.lastPing) {
             const diffMs = now.getTime() - monitor.lastPing.getTime();
             latency = Math.floor(diffMs / 1000); 
         }
 
-  
+        // 1. Record Ping
         await db.pingEvent.create({
-            data: {
-                monitorId: monitor.id,
-                latency: latency
-            }
+            data: { monitorId: monitor.id, latency }
         });
 
-   
-        let newGracePeriod = monitor.gracePeriod;
 
-        if (monitor.useSmartGrace && monitor.pings.length >= 3) {
-            const historyLatencies = monitor.pings.map(p => p.latency);
-            const allLatencies = [latency, ...historyLatencies];
-            
-         
-            const smartGrace = calculateSmartGrace(allLatencies, monitor.interval * 60);
-            
-            if (smartGrace !== monitor.gracePeriod) {
-                newGracePeriod = smartGrace;
-                console.log(`[Smart Grace] ${monitor.name}: Updated to ${smartGrace}m`);
-            }
+        const activeDowntime = await db.downtime.findFirst({
+            where: { monitorId: monitor.id, endedAt: null }
+        });
+
+        if (activeDowntime) {
+            const durationMinutes = Math.floor((now.getTime() - activeDowntime.startedAt.getTime()) / (1000 * 60));
+            await db.downtime.update({
+                where: { id: activeDowntime.id },
+                data: { endedAt: now, duration: durationMinutes }
+            });
+            console.log(`[Recovery] Closed downtime for ${monitor.name}`);
         }
 
-  
+        // 3. Smart Grace Logic
+        let newGracePeriod = monitor.gracePeriod;
+        if (monitor.useSmartGrace && monitor.pings.length >= 3) {
+            const historyLatencies = monitor.pings.map(p => p.latency);
+            const smartGrace = calculateSmartGrace([latency, ...historyLatencies], monitor.interval * 60);
+            if (smartGrace !== monitor.gracePeriod) newGracePeriod = smartGrace;
+        }
+
+        // 4. Update Monitor
         await db.monitor.update({
           where: { id: monitor.id },
           data: {
@@ -82,40 +74,28 @@ const app = new Elysia({ prefix: '/api' })
 
         return new Response("HeartBeat received", { status: 200 });
       } catch (error) {
-        console.error("Ping failed:", error);
         return new Response("Internal Error", { status: 500 });
       }
     })
 
-    // 2. Crash Report (Direct DB Write)
-    // Usage: curl -X POST -d "Error log..." https://site.com/api/ping/key-123
     .post('/:key', async ({ params: { key }, body }) => {
-      try {
         const monitor = await db.monitor.findUnique({ where: { key } });
-        if (!monitor) return new Response("Monitor not found", { status: 404 });
+        if (!monitor) return new Response("Not found", { status: 404 });
 
-        // Mark DOWN immediately
         await db.monitor.update({
-          where: { id: monitor.id },
-          data: { status: "DOWN", lastPing: new Date() }
+            where: { id: monitor.id },
+            data: { status: "DOWN", lastPing: new Date() }
+        });
+        
+        // Start a downtime record immediately
+        await db.downtime.create({
+            data: { monitorId: monitor.id, startedAt: new Date() }
         });
 
-        // Log the crash (In a real app, save 'body' to a Logs table)
-        console.log(`[Crash Report] ${monitor.name}:`, body);
-
-        return { success: true, message: "Crash reported" };
-      } catch (e) {
-        return new Response("Internal Error", { status: 500 });
-      }
-    }, {
-      body: t.String() // Expect raw text body for logs
-    })
+        return { success: true };
+    }, { body: t.String() })
   )
-  /**
-   * ------------------------------------------------------------------
-   * CRON GROUP: Protected endpoints for workers
-   * ------------------------------------------------------------------
-   */
+
   .group('/cron', (app) => app
     .onBeforeHandle(({ request }) => {
       const authHeader = request.headers.get("authorization");
@@ -124,13 +104,10 @@ const app = new Elysia({ prefix: '/api' })
       }
     })
 
-    // 3. Check Worker (Find dead monitors)
-    // Runs every minute to check for expired deadlines
     .get('/check', async () => {
       const now = new Date();
       const fromEmail = process.env.EMAIL_FROM || "onboarding@resend.dev"; 
 
-      // Fetch UP monitors
       const activeMonitors = await db.monitor.findMany({
         where: { status: "UP" },
         select: {
@@ -141,19 +118,20 @@ const app = new Elysia({ prefix: '/api' })
 
       const deadMonitorIds: string[] = [];
       const emailPromises: any[] = [];
+      const downtimePromises: any[] = [];
 
       for (const monitor of activeMonitors) {
         if (!monitor.lastPing) continue;
 
         const expectedTime = new Date(monitor.lastPing.getTime() + (monitor.interval * 60000));
         const deadTime = new Date(expectedTime.getTime() + (monitor.gracePeriod * 60000));
-        console.log(`[Check] ${monitor.name}: Now=${now.toISOString()}, DeadTime=${deadTime.toISOString()}`);
 
         if (now > deadTime) {
           deadMonitorIds.push(monitor.id);
           
-          console.log(`Sending alert for ${monitor.name}`);
+          console.log(`[Alert] ${monitor.name} is DOWN`);
           
+          // Queue Email
           emailPromises.push(
             resend.emails.send({
               from: fromEmail,
@@ -164,6 +142,16 @@ const app = new Elysia({ prefix: '/api' })
                 monitorId: monitor.id, 
                 lastPing: monitor.lastPing 
               })
+            }).catch(e => console.error(e))
+          );
+
+          // Queue Downtime Record Creation
+          downtimePromises.push(
+            db.downtime.create({
+                data: {
+                    monitorId: monitor.id,
+                    startedAt: deadTime 
+                }
             })
           );
         }
@@ -175,7 +163,8 @@ const app = new Elysia({ prefix: '/api' })
             where: { id: { in: deadMonitorIds } },
             data: { status: "DOWN" }
           }),
-          ...emailPromises
+          ...emailPromises,
+          ...downtimePromises
         ]);
       }
 
@@ -187,6 +176,5 @@ const app = new Elysia({ prefix: '/api' })
     })
   );
 
-// Export handlers for Next.js App Router
 export const GET = app.handle;
 export const POST = app.handle;
