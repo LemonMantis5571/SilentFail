@@ -7,23 +7,30 @@ import { revalidatePath } from "next/cache";
 import { auth } from "~/server/better-auth";
 
 export async function getMonitors() {
-  const session = await auth.api.getSession({
-    headers: await headers()
-  });
+  try {
+    const session = await auth.api.getSession({
+        headers: await headers()
+    });
 
-  if (!session) return [];
+    if (!session) return [];
 
-  return await db.monitor.findMany({
-    where: { userId: session.user.id },
-    include: {
-        pings: {
-            take: 20,
-            orderBy: { createdAt: 'desc' }
-        }
-    },
-    orderBy: { createdAt: 'desc' }
-  });
+    return await db.monitor.findMany({
+        where: { userId: session.user.id },
+        include: {
+            pings: {
+                take: 20,
+                orderBy: { createdAt: 'desc' }
+            }
+        },
+        orderBy: { createdAt: 'desc' }
+    });
+  } catch (error) {
+    return [];
+  }
 }
+
+
+export type MonitorWithPings = Awaited<ReturnType<typeof getMonitors>>[number];
 
 export async function createMonitor(data: { name: string; interval: number; gracePeriod: number, smartGrace: boolean | undefined }) {
   const session = await auth.api.getSession({

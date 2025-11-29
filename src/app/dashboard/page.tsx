@@ -8,7 +8,7 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
-import { getMonitors, deleteMonitor } from "../actions/monitor";
+import { getMonitors, deleteMonitor, type MonitorWithPings } from "../actions/monitor";
 import { CopyUrlButton } from "~/components/dashboard/copy-button";
 import { MonitorSparkline } from "~/components/dashboard/monitor-sparkline";
 import Link from "next/link";
@@ -19,7 +19,7 @@ import { auth } from "~/server/better-auth";
 export default async function DashboardPage() {
     const monitors = await getMonitors();
     const session = await auth.api.getSession({
-        headers: await headers()  
+        headers: await headers()
     });
 
     const total = monitors.length;
@@ -33,7 +33,7 @@ export default async function DashboardPage() {
     return (
         <div className="min-h-screen bg-[#020817] text-slate-300 font-sans selection:bg-indigo-500/30">
             <div className="p-8 max-w-7xl mx-auto space-y-12">
-                
+
                 {/* Header */}
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-white/5">
                     <div className="space-y-1">
@@ -91,7 +91,7 @@ function StatsCard({ title, value, icon: Icon, color = "text-white" }: any) {
     )
 }
 
-function MonitorCard({ monitor }: { monitor: any }) {
+function MonitorCard({ monitor }: { monitor: MonitorWithPings }) {
     const pingUrl = `${process.env.NEXT_PUBLIC_APP_URL}/api/ping/${monitor.key}`;
 
     return (
@@ -101,7 +101,7 @@ function MonitorCard({ monitor }: { monitor: any }) {
                     <div className="space-y-1.5">
                         <CardTitle className="text-lg font-bold flex items-center gap-2 text-white">
                             {monitor.name}
-                            
+
                             {/* Modern Status Dot */}
                             <span className="relative flex h-2.5 w-2.5">
                                 {monitor.status === 'UP' && (
@@ -114,10 +114,15 @@ function MonitorCard({ monitor }: { monitor: any }) {
                                 {monitor.status === 'PENDING' && <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-amber-500"></span>}
                             </span>
                         </CardTitle>
-                        
+
                         <div className="flex items-center gap-3">
-                            <CardDescription className="text-xs font-bold text-slate-400 bg-white/5 px-2 py-1 rounded-md">
+                            <CardDescription className="text-xs font-bold flex gap-4 text-slate-400 bg-white/5 px-2 py-1 rounded-md">
                                 {monitor.interval}m interval
+
+
+                            </CardDescription>
+                            <CardDescription className="text-xs font-bold flex gap-4 text-slate-400 bg-white/5 px-2 py-1 rounded-md">
+                                {monitor.gracePeriod}m grace
                             </CardDescription>
                             {monitor.useSmartGrace && (
                                 <span className="text-[10px] font-bold text-amber-400 flex items-center gap-1">
@@ -126,7 +131,7 @@ function MonitorCard({ monitor }: { monitor: any }) {
                             )}
                         </div>
                     </div>
-                    
+
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button variant="ghost" size="icon" className="-mr-2 h-8 w-8 text-slate-500 hover:text-white hover:bg-white/10">
@@ -165,7 +170,7 @@ function MonitorCard({ monitor }: { monitor: any }) {
                     </div>
                 </CardContent>
             </div>
-            
+
             {/* Footer Area */}
             <div className="px-6 pb-4 pt-0">
                 <div className="flex items-center justify-between text-xs font-medium text-slate-500 border-t border-white/5 pt-3">
