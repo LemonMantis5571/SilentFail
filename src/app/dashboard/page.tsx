@@ -15,6 +15,7 @@ import Link from "next/link";
 
 import { headers } from "next/headers";
 import { auth } from "~/server/better-auth";
+import { DeleteMonitorItem } from "~/components/dashboard/delete-monitor-item";
 
 export default async function DashboardPage() {
   const monitors = await getMonitors();
@@ -139,12 +140,7 @@ function MonitorCard({ monitor }: { monitor: MonitorWithPings }) {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="bg-[#0f172a] border-slate-700 text-slate-300">
-              <DropdownMenuItem onClick={async () => {
-                "use server";
-                await deleteMonitor(monitor.id);
-              }} className="text-rose-500 focus:text-rose-500 focus:bg-rose-500/10 cursor-pointer font-medium">
-                <Trash2 className="mr-2 h-4 w-4" /> Delete
-              </DropdownMenuItem>
+              <DeleteMonitorItem id={monitor.id} name={monitor.name} />
               <DropdownMenuItem asChild>
                 <Link href={`/monitors/${monitor.id}`} className="cursor-pointer font-medium">
                   <Activity className="mr-2 h-4 w-4" /> Analytics
