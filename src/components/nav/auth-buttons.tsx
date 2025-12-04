@@ -3,15 +3,15 @@
 import Link from "next/link";
 import { Button } from "~/components/ui/button";
 
-import { LogOut, LayoutDashboard, Settings } from "lucide-react";
+import { LogOut, LayoutDashboard, Settings, ListStartIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { authClient } from "~/server/better-auth/client";
@@ -24,7 +24,7 @@ export function AuthButtons() {
         await authClient.signOut({
             fetchOptions: {
                 onSuccess: () => {
-                    router.push("/"); 
+                    router.push("/");
                     router.refresh();
                 },
             },
@@ -52,7 +52,7 @@ export function AuthButtons() {
     if (session) {
         return (
             <div className="flex items-center gap-4 animate-in fade-in duration-200">
-                 <Button asChild size="sm" className="hidden sm:inline-flex shadow-md shadow-primary/20  text-white bg-blue-600 hover:bg-blue-500">
+                <Button asChild size="sm" className="hidden sm:inline-flex shadow-md shadow-primary/20  text-white bg-blue-600 hover:bg-blue-500">
                     <Link href="/dashboard">Dashboard</Link>
                 </Button>
 
@@ -82,6 +82,12 @@ export function AuthButtons() {
                             </Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem asChild>
+                            <Link href="/get-started" className="cursor-pointer ">
+                                <ListStartIcon className="mr-2 h-4 w-4" />
+                                Get Started
+                            </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem asChild>
                             <Link href="/settings" className="cursor-pointer ">
                                 <Settings className="mr-2 h-4 w-4" />
                                 Settings
@@ -100,8 +106,8 @@ export function AuthButtons() {
 
     return (
         <div className="flex items-center gap-4 animate-in fade-in duration-200">
-            <Button 
-                variant="ghost" 
+            <Button
+                variant="ghost"
                 onClick={handleSignIn}
                 className="text-sm font-medium hover:text-primary transition-colors hidden sm:block"
             >

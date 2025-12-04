@@ -1,29 +1,76 @@
-# Create T3 App
+SilentFail
+The "Dead Man's Switch" for your cron jobs & background scripts.
+SilentFail listens for a heartbeat from your backup scripts, data imports, and scheduled tasks. If a script fails to check in within the expected timeframe, SilentFail alerts you instantly.
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+🚀 Features
+Zero Config: Just a simple HTTP curl request to start monitoring.
+Smart Grace Periods: AI-driven logic adapts to your script's historical run times.
+Instant Alerts: Get notified via Email (Resend) immediately upon failure.
+Incident History: Track uptime, latency drift, and past downtime events.
+Self-Healing: Downtime incidents automatically resolve when the next successful ping arrives.
+Modern UI: Built with Next.js 15, Tailwind v4, Shadcn/UI, and Framer Motion.
 
-## What's next? How do I make an app with this?
+🛠 Tech Stack
+Framework: Next.js 15 (App Router)
+API: ElysiaJS (running via Next.js Route Handlers)
+Database: PostgreSQL (via Prisma ORM)
+Auth: Better Auth (GitHub & Discord)
+Email: Resend
+Styling: Tailwind CSS + Shadcn/UI + Framer Motion
+📦 Getting Started
+Prerequisites
+Node.js 18+
+PostgreSQL Database (Local or Neon/Supabase)
+GitHub/Discord OAuth Credentials
+Resend API Key
+Installation
+Clone the repository
+git clone [https://github.com/yourusername/silentfail.git](https://github.com/yourusername/silentfail.git)
+cd silentfail
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+Install dependencies
+npm install
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Drizzle](https://orm.drizzle.team)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
 
-## Learn More
+Set up Environment Variables
+Copy .env.example to .env and fill in your secrets.
+cp .env.example .env
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+Initialize Database
+npx prisma db push
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
 
-## How do I deploy this?
+Run Development Server
+npm run dev
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+Open http://localhost:3000 in your browser.
+🔑 Environment Variables
+# Database
+DATABASE_URL="postgresql://user:password@localhost:5432/silentfail"
+
+# Authentication (Better Auth)
+BETTER_AUTH_SECRET="your_generated_secret"
+BETTER_AUTH_URL="http://localhost:3000" # Change for production
+
+# OAuth Providers
+BETTER_AUTH_GITHUB_CLIENT_ID=""
+BETTER_AUTH_GITHUB_CLIENT_SECRET=""
+BETTER_AUTH_DISCORD_CLIENT_ID=""
+BETTER_AUTH_DISCORD_CLIENT_SECRET=""
+
+# Email (Resend)
+RESEND_API_KEY="re_123..."
+EMAIL_FROM="SilentFail <onboarding@resend.dev>"
+
+# Cron Security
+CRON_SECRET="generate_a_long_random_string"
+
+
+⚡ How to Monitor a Script
+Create a monitor in the dashboard (e.g., "Nightly Backup").
+Get your unique Ping URL.
+Add it to your script:
+# Example: Database Backup
+pg_dump mydb > backup.sql && curl 
