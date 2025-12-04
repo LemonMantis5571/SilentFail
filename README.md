@@ -1,128 +1,55 @@
-SilentFail
+# SilentFail
 
-The "Dead Man's Switch" for your cron jobs & background scripts.
+A lightweight "Dead Man's Switch" for cron jobs and background scripts — detect silent failures when automated tasks stop checking in.
 
-SilentFail listens for a heartbeat from your backup scripts, data imports, and scheduled tasks. If a script fails to check in within the expected timeframe, SilentFail alerts you instantly.
+Quick highlights:
+- Zero-config HTTP ping monitoring
+- AI-driven adaptive grace periods
+- Instant email alerts (Resend)
+- Incident history and automatic resolution on next successful ping
+- Built with modern UX/stack: Next.js 15, Tailwind v4, Shadcn/UI, Framer Motion
 
-🚀 Features
+---
 
-Zero Config: Just a simple HTTP curl request to start monitoring.
+## Features
 
-Smart Grace Periods: AI-driven logic adapts to your script's historical run times.
+- Simple HTTP ping endpoint per monitor
+- Grace periods adapt to historical run-times
+- Email alerts via Resend
+- Uptime, latency drift, and downtime history
+- Self-healing: incidents resolve automatically when your script pings again
+- OAuth (GitHub & Discord) via Better Auth
+- PostgreSQL (Prisma) persistence
 
-Instant Alerts: Get notified via Email (Resend) immediately upon failure.
+---
 
-Incident History: Track uptime, latency drift, and past downtime events.
+## Tech Stack
 
-Self-Healing: Downtime incidents automatically resolve when the next successful ping arrives.
+- Framework: Next.js 15 (App Router)
+- API: ElysiaJS (via Next.js Route Handlers)
+- DB: PostgreSQL + Prisma
+- Auth: Better Auth (GitHub, Discord)
+- Email: Resend
+- UI: Tailwind CSS, Shadcn/UI, Framer Motion
 
-Modern UI: Built with Next.js 15, Tailwind v4, Shadcn/UI, and Framer Motion.
+---
 
-🛠 Tech Stack
+## Quick start
 
-Framework: Next.js 15 (App Router)
+Prerequisites:
+- Node.js 18+
+- PostgreSQL (local, Neon or Supabase)
+- GitHub/Discord OAuth app credentials
+- Resend API key
 
-API: ElysiaJS (running via Next.js Route Handlers)
+Install and run:
 
-Database: PostgreSQL (via Prisma ORM)
-
-Auth: Better Auth (GitHub & Discord)
-
-Email: Resend
-
-Styling: Tailwind CSS + Shadcn/UI + Framer Motion
-
-📦 Getting Started
-
-Prerequisites
-
-Node.js 18+
-
-PostgreSQL Database (Local or Neon/Supabase)
-
-GitHub/Discord OAuth Credentials
-
-Resend API Key
-
-Installation
-
-Clone the repository
-
-git clone [https://github.com/yourusername/silentfail.git](https://github.com/yourusername/silentfail.git)
+```bash
+git clone https://github.com/yourusername/silentfail.git
 cd silentfail
-
-
-Install dependencies
-
 npm install
-
-
-Set up Environment Variables
-Copy .env.example to .env and fill in your secrets.
-
 cp .env.example .env
-
-
-Initialize Database
-
+# fill .env with your secrets
 npx prisma db push
-
-
-Run Development Server
-
 npm run dev
-
-
-Open http://localhost:3000 in your browser.
-
-🔑 Environment Variables
-
-# Database
-DATABASE_URL="postgresql://user:password@localhost:5432/silentfail"
-
-# Authentication (Better Auth)
-BETTER_AUTH_SECRET="your_generated_secret"
-BETTER_AUTH_URL="http://localhost:3000" # Change for production
-
-# OAuth Providers
-BETTER_AUTH_GITHUB_CLIENT_ID=""
-BETTER_AUTH_GITHUB_CLIENT_SECRET=""
-BETTER_AUTH_DISCORD_CLIENT_ID=""
-BETTER_AUTH_DISCORD_CLIENT_SECRET=""
-
-# Email (Resend)
-RESEND_API_KEY="re_123..."
-EMAIL_FROM="SilentFail <onboarding@resend.dev>"
-
-# Cron Security
-CRON_SECRET="generate_a_long_random_string"
-
-
-⚡ How to Monitor a Script
-
-Create a monitor in the dashboard (e.g., "Nightly Backup").
-
-Get your unique Ping URL.
-
-Add it to your script:
-
-# Example: Database Backup
-pg_dump mydb > backup.sql && curl [https://your-app.com/api/ping/your-unique-key](https://your-app.com/api/ping/your-unique-key)
-
-
-🐳 Docker Deployment
-
-The app is container-ready.
-
-docker build -t silentfail .
-docker run -p 3000:3000 --env-file .env silentfail
-
-
-Note: When running in Docker behind a proxy, ensure BETTER_AUTH_URL matches your public domain.
-
-🤝 Contributing
-
-Contributions are welcome! Please fork the repo and submit a Pull Request.
-
-📄 License
-
+# open http://localhost:3000
