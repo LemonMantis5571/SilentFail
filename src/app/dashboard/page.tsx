@@ -11,6 +11,7 @@ import {
 import { getMonitors, deleteMonitor, type MonitorWithPings } from "../actions/monitor";
 import { CopyUrlButton } from "~/components/dashboard/copy-button";
 import { MonitorSparkline } from "~/components/dashboard/monitor-sparkline";
+import { RefreshMonitorsButton } from "~/components/dashboard/refresh-button";
 import Link from "next/link";
 
 import { headers } from "next/headers";
@@ -53,9 +54,12 @@ export default async function DashboardPage() {
 
         {/* Monitors Section */}
         <div className="space-y-6">
-          <div className="flex items-center gap-2">
-            <Terminal className="h-5 w-5 text-indigo-400" />
-            <h2 className="text-xl font-bold text-white tracking-tight">Active Monitors</h2>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Terminal className="h-5 w-5 text-indigo-400" />
+              <h2 className="text-xl font-bold text-white tracking-tight">Active Monitors</h2>
+            </div>
+            <RefreshMonitorsButton />
           </div>
 
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">

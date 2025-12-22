@@ -32,7 +32,7 @@ export default function RootLayout({
     // 3. Apply variables to HTML so Tailwind can pick them up
     <html lang="en" className={`${sans.variable} ${mono.variable} dark`}>
       <body className="min-h-screen bg-background font-sans text-foreground antialiased">
-        
+
         <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur-md supports-backdrop-filter:bg-background/60">
           <div className="container mx-auto px-4 h-14 flex items-center justify-between">
             <Link href="/" className="flex items-center gap-2 font-bold text-xl tracking-tight hover:opacity-90 transition-opacity">
@@ -45,13 +45,13 @@ export default function RootLayout({
               {/* Thicker font for logo */}
               <span className="font-extrabold tracking-tight">SilentFail</span>
             </Link>
-            
+
             <nav className="hidden md:flex items-center gap-6 text-sm font-semibold text-muted-foreground">
               <Link href="/#features" className="hover:text-primary transition-colors">Features</Link>
-              <Link href="/#how-it-works" className="hover:text-primary transition-colors">How it Works</Link>
-              <Link href="/#pricing" className="hover:text-primary transition-colors">Pricing</Link>
+              <Link href="/get-started" className="hover:text-primary transition-colors">Get Started</Link>
+              <Link href="/dashboard" className="hover:text-primary transition-colors">Dashboard</Link>
             </nav>
-            
+
             <AuthButtons />
           </div>
         </header>

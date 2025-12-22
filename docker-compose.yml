@@ -23,14 +23,12 @@ services:
     container_name: silentfail-cron
     restart: unless-stopped
     environment:
-      # For local dev: use host.docker.internal to reach host machine
-      # For production: set APP_URL to your app's URL
-      - APP_URL=${APP_URL:-http://host.docker.internal:3000}
+      # Host mode: container shares host network (localhost works directly)
+      - APP_URL=${APP_URL:-http://localhost:3000}
       - CRON_SECRET=${CRON_SECRET:-}
       - CRON_INTERVAL=${CRON_INTERVAL:-60}
-    # Linux users: uncomment if host.docker.internal doesn't work
-    # extra_hosts:
-    #   - "host.docker.internal:host-gateway"
+    # Host network: more reliable on Linux than extra_hosts
+    network_mode: host
     depends_on:
       db:
         condition: service_healthy
