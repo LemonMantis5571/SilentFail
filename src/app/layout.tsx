@@ -10,7 +10,7 @@ import { ShieldAlert } from "lucide-react";
 export const metadata: Metadata = {
   title: "SilentFail",
   description: "Dead Man's Switch for Cron Jobs",
-  icons: [{ rel: "icon", url: "/favicon.ico" }],
+  icons: [{ rel: "icon", url: "/favicon.png" }],
 };
 
 const sans = Plus_Jakarta_Sans({
