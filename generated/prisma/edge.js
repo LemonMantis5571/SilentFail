@@ -212,7 +212,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "C:\\Users\\brite\\OneDrive\\Documents\\DeadsManLogic\\silentfail\\generated\\prisma",
+      "value": "/home/lemonmantis/Documentos/SilentFail/generated/prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -221,12 +221,12 @@ const config = {
     "binaryTargets": [
       {
         "fromEnvVar": null,
-        "value": "windows",
+        "value": "debian-openssl-3.0.x",
         "native": true
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "C:\\Users\\brite\\OneDrive\\Documents\\DeadsManLogic\\silentfail\\prisma\\schema.prisma",
+    "sourceFilePath": "/home/lemonmantis/Documentos/SilentFail/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
@@ -240,6 +240,7 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {

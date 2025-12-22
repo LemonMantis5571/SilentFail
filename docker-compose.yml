@@ -1,6 +1,3 @@
-
-version: "3.9"
-
 services:
   db:
     image: postgres:16
@@ -15,10 +12,28 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      test: [ "CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}" ]
       interval: 10s
       timeout: 5s
       retries: 5
+
+  # Cron runner for monitor health checks
+  cron:
+    build: ./docker/cron
+    container_name: silentfail-cron
+    restart: unless-stopped
+    environment:
+      # For local dev: use host.docker.internal to reach host machine
+      # For production: set APP_URL to your app's URL
+      - APP_URL=${APP_URL:-http://host.docker.internal:3000}
+      - CRON_SECRET=${CRON_SECRET:-}
+      - CRON_INTERVAL=${CRON_INTERVAL:-60}
+    # Linux users: uncomment if host.docker.internal doesn't work
+    # extra_hosts:
+    #   - "host.docker.internal:host-gateway"
+    depends_on:
+      db:
+        condition: service_healthy
 
 volumes:
   postgres_data:

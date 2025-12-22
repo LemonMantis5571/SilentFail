@@ -9,20 +9,20 @@ import { auth } from "~/server/better-auth";
 export async function getMonitors() {
   try {
     const session = await auth.api.getSession({
-        headers: await headers()
+      headers: await headers()
     });
 
     if (!session) return [];
 
     return await db.monitor.findMany({
-        where: { userId: session.user.id },
-        include: {
-            pings: {
-                take: 20,
-                orderBy: { createdAt: 'desc' }
-            }
-        },
-        orderBy: { createdAt: 'desc' }
+      where: { userId: session.user.id },
+      include: {
+        pings: {
+          take: 20,
+          orderBy: { createdAt: 'desc' }
+        }
+      },
+      orderBy: { createdAt: 'desc' }
     });
   } catch (error) {
     return [];
@@ -61,9 +61,9 @@ export async function deleteMonitor(id: string) {
   if (!session) throw new Error("Unauthorized");
 
   await db.monitor.delete({
-    where: { 
+    where: {
       id,
-      userId: session.user.id 
+      userId: session.user.id
     }
   });
 
@@ -78,9 +78,9 @@ export async function getMonitor(id: string) {
   if (!session) return null;
 
   return await db.monitor.findUnique({
-    where: { 
-        id,
-        userId: session.user.id 
+    where: {
+      id,
+      userId: session.user.id
     },
     include: {
       pings: {
@@ -110,11 +110,11 @@ export async function endDowntime(downtimeId: string, endedAt: Date) {
   const downtime = await db.downtime.findUnique({
     where: { id: downtimeId }
   });
-  
+
   if (!downtime) return null;
-  
+
   const duration = Math.floor((endedAt.getTime() - downtime.startedAt.getTime()) / (1000 * 60));
-  
+
   return await db.downtime.update({
     where: { id: downtimeId },
     data: {
