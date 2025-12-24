@@ -36,41 +36,48 @@ function calculateAccurateDowntime(downtimes: any[], hours: number = 24) {
     const cutoffTime = new Date(now.getTime() - hours * 60 * 60 * 1000);
 
     let totalDowntimeMinutes = 0;
+
+    // Filter downtimes that overlap with the window [cutoffTime, now]
+    const relevantDowntimes = downtimes.filter(d => {
+        const start = new Date(d.startedAt);
+        const end = d.endedAt ? new Date(d.endedAt) : now;
+        return start < now && end > cutoffTime;
+    });
+
+    relevantDowntimes.forEach(d => {
+        const start = new Date(d.startedAt);
+        const end = d.endedAt ? new Date(d.endedAt) : now;
+
+        // Clamp to window
+        const clampedStart = start < cutoffTime ? cutoffTime : start;
+        const clampedEnd = end > now ? now : end;
+
+        const durationMs = clampedEnd.getTime() - clampedStart.getTime();
+        const durationMinutes = Math.round(durationMs / (1000 * 60));
+
+        totalDowntimeMinutes += durationMinutes;
+    });
+
     const activeDowntime = downtimes.find(d => !d.endedAt);
-
-    // Calculate completed downtimes in time range
-    downtimes
-        .filter(d => d.endedAt && new Date(d.startedAt) >= cutoffTime)
-        .forEach(d => {
-            totalDowntimeMinutes += d.duration || 0;
-        });
-
-    // Add ongoing downtime if exists
-    if (activeDowntime) {
-        const activeStart = new Date(activeDowntime.startedAt);
-        const activeDowntimeStart = activeStart > cutoffTime ? activeStart : cutoffTime;
-        const activeMinutes = Math.floor((now.getTime() - activeDowntimeStart.getTime()) / (1000 * 60));
-        totalDowntimeMinutes += activeMinutes;
-    }
 
     // Calculate uptime percentage
     const totalMinutes = hours * 60;
     const uptimePercentage = ((totalMinutes - totalDowntimeMinutes) / totalMinutes) * 100;
 
     return {
-        totalDowntimeMinutes,
+        totalDowntimeMinutes: Math.min(totalDowntimeMinutes, totalMinutes),
         uptimePercentage: Math.max(0, Math.min(100, uptimePercentage)),
         activeDowntime: !!activeDowntime,
-        incidentCount: downtimes.filter(d => new Date(d.startedAt) >= cutoffTime).length
+        incidentCount: relevantDowntimes.length
     };
 }
 
 export default async function MonitorPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
     const monitor = await getMonitor(id);
-        const session = await auth.api.getSession({
-            headers: await headers()  
-        });
+    const session = await auth.api.getSession({
+        headers: await headers()
+    });
 
     if (!monitor) return notFound();
 
@@ -140,7 +147,7 @@ export default async function MonitorPage({ params }: { params: Promise<{ id: st
                     />
 
                     <StatCard
-                        title="Total Downtime"
+                        title="Downtime (24h)"
                         value={formatDowntime(downtimeMetrics.totalDowntimeMinutes)}
                         icon={AlertTriangle}
                         colorClass={downtimeMetrics.totalDowntimeMinutes === 0 ? "text-emerald-400" : "text-rose-400"}
