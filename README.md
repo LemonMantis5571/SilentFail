@@ -7,7 +7,9 @@
 ## ✨ Quick Highlights
 
 - 🔔 **Zero-config HTTP ping monitoring**
+- 🐋 **Dockerized Cron Worker** (Reliable background checks)
 - 🧠 **AI-driven adaptive grace periods**
+- ⏱️ **Precision Downtime Tracking**
 - 📧 **Instant email alerts** (Resend)
 - 📊 **Incident history & automatic resolution**
 - ⚡ **Modern stack:** Next.js 15, Tailwind v4, Shadcn/UI, Framer Motion
@@ -47,7 +49,7 @@ bun install
 cp .env.example .env
 # Edit .env and add BETTER_AUTH_SECRET (generate with: openssl rand -base64 32)
 
-# Start database and create tables
+# Start database and cron worker
 docker-compose up -d
 bun run db:push
 
@@ -84,8 +86,10 @@ BETTER_AUTH_DISCORD_CLIENT_SECRET="your_client_secret"
 RESEND_API_KEY="re_..."
 EMAIL_FROM="SilentFail <onboarding@resend.dev>"
 
-# Cron security
+# Cron security & Configuration
 CRON_SECRET="your_cron_secret"
+CRON_INTERVAL="60" # Seconds between checks
+APP_URL="http://localhost:3000" # URL for cron to ping
 ```
 
 ---

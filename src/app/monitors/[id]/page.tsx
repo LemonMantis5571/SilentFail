@@ -145,6 +145,13 @@ export default async function MonitorPage({ params }: { params: Promise<{ id: st
                         }
                         subtext={downtimeMetrics.activeDowntime ? "Currently down" : "All systems operational"}
                     />
+                    <StatCard
+                        title="Total Pings"
+                        value={pings.length}
+                        icon={TrendingDown}
+                        subtext="Last 100 checks"
+                    />
+
 
                     <StatCard
                         title="Downtime (24h)"
@@ -161,12 +168,7 @@ export default async function MonitorPage({ params }: { params: Promise<{ id: st
                         subtext="Past scheduled run"
                     />
 
-                    <StatCard
-                        title="Total Pings"
-                        value={pings.length}
-                        icon={TrendingDown}
-                        subtext="Last 100 checks"
-                    />
+
                 </div>
 
                 {/* Downtime Incidents */}
