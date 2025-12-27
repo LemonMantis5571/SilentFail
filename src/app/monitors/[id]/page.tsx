@@ -8,6 +8,9 @@ import Link from "next/link";
 import { AnalyticsChart } from "~/components/monitor-details/analytics-charts";
 import { auth } from "~/server/better-auth";
 import { headers } from "next/headers";
+import { CopyUrlButton } from "~/components/dashboard/copy-button";
+import { RotateKeyButton } from "~/components/monitor-details/rotate-key-button";
+import { EditMonitorModal } from "~/components/monitor-details/edit-monitor-modal";
 
 function formatDuration(seconds: number) {
     if (seconds < 1) return `${Math.round(seconds * 1000)}ms`;
@@ -100,6 +103,8 @@ export default async function MonitorPage({ params }: { params: Promise<{ id: st
     // Calculate downtime metrics
     const downtimeMetrics = calculateAccurateDowntime(downtimes, 24);
 
+    const pingUrl = `${process.env.NEXT_PUBLIC_APP_URL}api/ping/${monitor.key}`;
+
     return (
         <div className="min-h-screen bg-[#020817] text-slate-300 p-8">
             <div className="max-w-6xl mx-auto space-y-8">
@@ -128,6 +133,59 @@ export default async function MonitorPage({ params }: { params: Promise<{ id: st
                             Grace: {monitor.gracePeriod}m {monitor.useSmartGrace && "(Smart)"}
                         </p>
                     </div>
+                </div>
+                <EditMonitorModal monitor={{
+                    id: monitor.id,
+                    name: monitor.name,
+                    interval: monitor.interval,
+                    gracePeriod: monitor.gracePeriod,
+                    useSmartGrace: monitor.useSmartGrace || false
+                }} />
+
+                {/* Connectivity & Security Section */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <Card className="bg-[#0B1121] border-slate-800">
+                        <CardHeader>
+                            <CardTitle className="text-slate-200 flex items-center gap-2">
+                                <Zap className="h-4 w-4 text-indigo-400" />
+                                Connectivity
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2 block">
+                                Ping URL
+                            </label>
+                            <div className="flex items-center gap-2">
+                                <div className="flex-1 rounded-md bg-slate-950 border border-slate-800 p-2 font-mono text-xs text-slate-300 truncate">
+                                    {pingUrl}
+                                </div>
+                                <CopyUrlButton url={pingUrl} />
+                            </div>
+                            <p className="text-xs text-slate-500 mt-2">
+                                Make a GET, POST, or HEAD request to this URL to reset the timer.
+                            </p>
+                        </CardContent>
+                    </Card>
+
+                    <Card className="bg-[#0B1121] border-slate-800 border-l-4 border-l-amber-500/20">
+                        <CardHeader>
+                            <CardTitle className="text-slate-200 flex items-center gap-2">
+                                <AlertTriangle className="h-4 w-4 text-amber-500" />
+                                Danger Zone
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent className="flex flex-col justify-between py-4">
+                            <div className="space-y-1 mb-4">
+                                <h3 className="text-sm font-medium text-slate-300">Rotate Monitor Key</h3>
+                                <p className="text-xs text-slate-500">
+                                    If this URL leaks, regenerate it immediately. The old URL will stop working.
+                                </p>
+                            </div>
+                            <div className="flex justify-end">
+                                <RotateKeyButton monitorId={monitor.id} />
+                            </div>
+                        </CardContent>
+                    </Card>
                 </div>
 
                 {/* Stats Grid */}
@@ -274,7 +332,7 @@ export default async function MonitorPage({ params }: { params: Promise<{ id: st
                 </div>
 
             </div>
-        </div>
+        </div >
     );
 }
 

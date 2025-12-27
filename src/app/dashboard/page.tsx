@@ -1,7 +1,7 @@
 import { CreateMonitorButton } from "~/components/dashboard/create-monitor";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "~/components/ui/card";
 import { Button } from "~/components/ui/button";
-import { MoreVertical, Trash2, Clock, Activity, ShieldAlert, Zap, Terminal } from "lucide-react";
+import { MoreVertical, Trash2, Clock, Activity, ShieldAlert, Zap, Terminal, Edit } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -144,12 +144,13 @@ function MonitorCard({ monitor }: { monitor: MonitorWithPings }) {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="bg-[#0f172a] border-slate-700 text-slate-300">
-              <DeleteMonitorItem id={monitor.id} name={monitor.name} />
               <DropdownMenuItem asChild>
                 <Link href={`/monitors/${monitor.id}`} className="cursor-pointer font-medium">
-                  <Activity className="mr-2 h-4 w-4" /> Analytics
+                  <Activity className="mr-2 h-4 w-4" /> Details
                 </Link>
               </DropdownMenuItem>
+
+              <DeleteMonitorItem id={monitor.id} name={monitor.name} />
             </DropdownMenuContent>
           </DropdownMenu>
         </CardHeader>

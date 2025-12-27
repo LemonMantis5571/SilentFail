@@ -123,3 +123,56 @@ export async function endDowntime(downtimeId: string, endedAt: Date) {
     }
   });
 }
+
+export async function rotateMonitorKey(id: string) {
+  const session = await auth.api.getSession({
+    headers: await headers()
+  });
+
+  if (!session) throw new Error("Unauthorized");
+
+  // Verify ownership
+  const monitor = await db.monitor.findUnique({
+    where: { id, userId: session.user.id }
+  });
+
+  if (!monitor) throw new Error("Monitor not found");
+
+  await db.monitor.update({
+    where: { id },
+    data: {
+      key: crypto.randomUUID() // Generate new CUID/UUID
+    }
+  });
+
+  revalidatePath(`/monitors/${id}`);
+  revalidatePath("/dashboard");
+}
+
+export async function updateMonitor(id: string, data: { name: string; interval: number; gracePeriod: number, smartGrace: boolean | undefined }) {
+  const session = await auth.api.getSession({
+    headers: await headers()
+  });
+
+  if (!session) throw new Error("Unauthorized");
+
+  // Verify ownership
+  const monitor = await db.monitor.findUnique({
+    where: { id, userId: session.user.id }
+  });
+
+  if (!monitor) throw new Error("Monitor not found");
+
+  await db.monitor.update({
+    where: { id },
+    data: {
+      name: data.name,
+      interval: data.interval,
+      gracePeriod: data.gracePeriod,
+      useSmartGrace: data.smartGrace,
+    }
+  });
+
+  revalidatePath(`/monitors/${id}`);
+  revalidatePath("/dashboard");
+}
