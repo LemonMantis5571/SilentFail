@@ -1,8 +1,5 @@
-
+import "dotenv/config";
 import { parseArgs } from "util";
-
-// Load env vars if you want to rely on .env (optional, Bun does this auto, Node might need dotenv)
-// But for this project context, we assume the user runs with `bun run worker` which loads .env
 
 const APP_URL = process.env.APP_URL || "http://localhost:3000";
 const CRON_SECRET = process.env.CRON_SECRET || "";
@@ -25,7 +22,7 @@ async function ping() {
     const text = await res.text();
 
     const timestamp = new Date().toLocaleString();
-    
+
     if (res.ok) {
       console.log(`[${timestamp}] ✅ Check completed: ${text}`);
     } else {
@@ -43,7 +40,7 @@ async function main() {
   await new Promise(r => setTimeout(r, 5000));
 
   console.log("🚀 Worker started");
-  
+
   // Immediate first run
   await ping();
 
