@@ -212,7 +212,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/home/lemonmantis/Documentos/SilentFail/generated/prisma",
+      "value": "C:\\Users\\brite\\OneDrive\\Documents\\SilentFail\\generated\\prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -221,12 +221,12 @@ const config = {
     "binaryTargets": [
       {
         "fromEnvVar": null,
-        "value": "debian-openssl-3.0.x",
+        "value": "windows",
         "native": true
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "/home/lemonmantis/Documentos/SilentFail/prisma/schema.prisma",
+    "sourceFilePath": "C:\\Users\\brite\\OneDrive\\Documents\\SilentFail\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {

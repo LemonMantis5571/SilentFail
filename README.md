@@ -30,32 +30,69 @@
 
 ---
 
+
 ## 🚀 Quick Start
 
 ### Prerequisites
 
 - Bun or Node.js 18+
-- Docker
+- **Option A (Recommended):** Docker & Docker Compose
+- **Option B (Manual):** PostgreSQL database + method to run cron
 
-### Installation
+### Option A: Docker (Easiest)
 
 ```bash
-# Clone and install
+# Clone
 git clone https://github.com/LemonMantis5571/SilentFail.git
 cd silentfail
 bun install
 
-# Setup environment
+# Setup env
 cp .env.example .env
-# Edit .env and add BETTER_AUTH_SECRET (generate with: openssl rand -base64 32)
+# Edit .env, add BETTER_AUTH_SECRET (openssl rand -base64 32)
 
-# Start database and cron worker
+# Start DB + Cron Worker
 docker-compose up -d
 bun run db:push
 
-# Start app
+# Start App
 bun run dev
 ```
+
+### Option B: Manual / Cloud
+
+If you have a cloud database (Supabase, Neon, Railway) or local Postgres:
+
+1. **Configure .env**:
+   - Set `DATABASE_URL` to your connection string.
+   - Set `BETTER_AUTH_SECRET` and others.
+
+2. **Initialize DB**:
+   ```bash
+   bun run db:push
+   ```
+
+3. **Start the App**:
+   ```bash
+   bun run dev
+   ```
+
+4. **Start the Cron Worker**:
+   This app needs a "pinger" service to check for silent failures.
+   
+   **Run locally:**
+   ```bash
+   bun run worker
+   ```
+   
+   **Or use system cron:**
+   ```bash
+   # Run every minute
+   * * * * * curl -H "Authorization: Bearer <YOUR_SECRET>" -s http://localhost:3000/api/cron/check
+   ```
+   
+   **Or use Vercel Cron:**
+   - Configure `vercel.json` and deploy.
 
 Open http://localhost:3000
 
