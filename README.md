@@ -73,8 +73,18 @@ If you have a cloud database (Supabase, Neon, Railway) or local Postgres:
    ```
 
 3. **Start the App**:
+   
+   **Development:**
    ```bash
    bun run dev
+   ```
+
+   **Production:**
+   ```bash
+   bun run build
+   bun start
+   # Or shortcut:
+   bun run preview
    ```
 
 4. **Start the Cron Worker**:
@@ -168,6 +178,7 @@ docker-compose down -v  # Reset database
 bun run dev    # Start dev server
 bun run build  # Build for production
 bun run start  # Run production build
+bun run preview # Build + Start (Shortcut)
 ```
 
 ---
