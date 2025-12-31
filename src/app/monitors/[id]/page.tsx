@@ -139,7 +139,8 @@ export default async function MonitorPage({ params }: { params: Promise<{ id: st
                     name: monitor.name,
                     interval: monitor.interval,
                     gracePeriod: monitor.gracePeriod,
-                    useSmartGrace: monitor.useSmartGrace || false
+                    useSmartGrace: monitor.useSmartGrace || false,
+                    secret: monitor.secret
                 }} />
 
                 {/* Connectivity & Security Section */}

@@ -25,6 +25,7 @@ interface EditMonitorModalProps {
         interval: number;
         gracePeriod: number;
         useSmartGrace: boolean;
+        secret: string | null;
     }
 }
 
@@ -32,6 +33,7 @@ export function EditMonitorModal({ monitor }: EditMonitorModalProps) {
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const [name, setName] = useState(monitor.name);
+    const [secret, setSecret] = useState(monitor.secret || "");
     const [interval, setInterval] = useState(monitor.interval.toString());
     const [gracePeriod, setGracePeriod] = useState(monitor.gracePeriod.toString());
     const [useSmartGrace, setUseSmartGrace] = useState<boolean | undefined>(monitor.useSmartGrace);
@@ -43,7 +45,8 @@ export function EditMonitorModal({ monitor }: EditMonitorModalProps) {
                 name,
                 interval: parseInt(interval),
                 gracePeriod: parseInt(gracePeriod),
-                smartGrace: useSmartGrace
+                smartGrace: useSmartGrace,
+                secret: secret || undefined
             });
             setOpen(false);
             toast.success("Monitor updated successfully");
@@ -91,6 +94,21 @@ export function EditMonitorModal({ monitor }: EditMonitorModalProps) {
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                         />
+                    </div>
+
+                    {/* Secret Field */}
+                    <div className="grid gap-2">
+                        <div className="flex items-center justify-between">
+                            <Label htmlFor="secret">Secret (Optional)</Label>
+                        </div>
+                        <Input
+                            id="secret"
+                            type="password"
+                            placeholder="Secret key for authentication"
+                            value={secret}
+                            onChange={(e) => setSecret(e.target.value)}
+                        />
+                        <p className="text-[10px] text-muted-foreground">If set, requests must include `?secret=YOUR_SECRET` or Bearer token.</p>
                     </div>
 
                     {/* Time Settings Row */}

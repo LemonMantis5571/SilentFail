@@ -23,7 +23,8 @@ describe('EditMonitorModal', () => {
         name: 'My Monitor',
         interval: 30,
         gracePeriod: 2,
-        useSmartGrace: true
+        useSmartGrace: true,
+        secret: 'initial-secret'
     }
 
     beforeEach(() => {
@@ -41,6 +42,7 @@ describe('EditMonitorModal', () => {
         expect(screen.getByLabelText(/friendly name/i)).toHaveValue('My Monitor')
         expect(screen.getByLabelText(/interval/i)).toHaveValue(30)
         expect(screen.getByLabelText(/grace period/i)).toHaveValue(2)
+        expect(screen.getByLabelText(/secret/i)).toHaveValue('initial-secret')
     })
 
     it('calls updateMonitor with new data', async () => {
@@ -62,6 +64,10 @@ describe('EditMonitorModal', () => {
         await user.clear(intervalInput)
         await user.type(intervalInput, '60')
 
+        const secretInput = screen.getByLabelText(/secret/i)
+        await user.clear(secretInput)
+        await user.type(secretInput, 'new-secret')
+
 
         await user.click(screen.getByRole('button', { name: /save changes/i }))
 
@@ -70,7 +76,8 @@ describe('EditMonitorModal', () => {
                 name: 'Updated Name',
                 interval: 60,
                 gracePeriod: 2,
-                smartGrace: true
+                smartGrace: true,
+                secret: 'new-secret'
             })
         })
 

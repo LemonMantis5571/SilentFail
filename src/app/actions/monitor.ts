@@ -172,6 +172,7 @@ export async function updateMonitor(id: string, data: { name: string; interval: 
       interval: data.interval,
       gracePeriod: data.gracePeriod,
       useSmartGrace: data.smartGrace,
+      secret: data.secret,
     }
   });
 
