@@ -54,6 +54,7 @@ describe('CreateMonitorButton', () => {
 
         fireEvent.change(screen.getByLabelText(/friendly name/i), { target: { value: 'Test Monitor' } })
         fireEvent.change(screen.getByLabelText(/interval/i), { target: { value: '60' } })
+        fireEvent.change(screen.getByLabelText(/secret/i), { target: { value: 'mysecret' } })
 
         fireEvent.click(screen.getByRole('button', { name: 'Create Monitor' }))
 
@@ -62,7 +63,8 @@ describe('CreateMonitorButton', () => {
                 name: 'Test Monitor',
                 interval: 60,
                 gracePeriod: 5, // default
-                smartGrace: false
+                smartGrace: false,
+                secret: 'mysecret'
             })
         })
 

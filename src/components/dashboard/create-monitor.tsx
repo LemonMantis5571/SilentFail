@@ -9,7 +9,7 @@ import {
   DialogTitle,
   DialogTrigger,
   DialogFooter,
-  DialogDescription, 
+  DialogDescription,
 } from "~/components/ui/dialog";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
@@ -25,6 +25,7 @@ export function CreateMonitorButton() {
   const [interval, setInterval] = useState("1440"); // Default 24h
   const [gracePeriod, setGracePeriod] = useState("5"); // Default 5m
   const [useSmartGrace, setUseSmartGrace] = useState<boolean | undefined>(false);
+  const [secret, setSecret] = useState("");
 
   const handleSubmit = async () => {
     setLoading(true);
@@ -33,12 +34,14 @@ export function CreateMonitorButton() {
         name,
         interval: parseInt(interval),
         gracePeriod: parseInt(gracePeriod), // Pass it to the backend
-        smartGrace: useSmartGrace
+        smartGrace: useSmartGrace,
+        secret: secret || undefined
       });
       setOpen(false);
       setName("");
       setInterval("1440");
       setGracePeriod("5");
+      setSecret("");
       toast.success("Monitor created successfully");
     } catch (error) {
       toast.error("Failed to create monitor");
@@ -83,6 +86,21 @@ export function CreateMonitorButton() {
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
+          </div>
+
+          {/* Secret Field */}
+          <div className="grid gap-2">
+            <div className="flex items-center justify-between">
+              <Label htmlFor="secret">Secret (Optional)</Label>
+            </div>
+            <Input
+              id="secret"
+              type="password"
+              placeholder="Secret key for authentication"
+              value={secret}
+              onChange={(e) => setSecret(e.target.value)}
+            />
+            <p className="text-[10px] text-muted-foreground">If set, requests must include `?secret=YOUR_SECRET` or Bearer token.</p>
           </div>
 
           {/* Time Settings Row */}

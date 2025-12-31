@@ -187,7 +187,8 @@ exports.Prisma.MonitorScalarFieldEnum = {
   userId: 'userId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  useSmartGrace: 'useSmartGrace'
+  useSmartGrace: 'useSmartGrace',
+  secret: 'secret'
 };
 
 exports.Prisma.PingEventScalarFieldEnum = {

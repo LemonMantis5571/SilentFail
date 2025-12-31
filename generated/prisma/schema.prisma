@@ -103,6 +103,7 @@ model Monitor {
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
   useSmartGrace Boolean     @default(false)
+  secret        String? // Optional secret for auth
   downtimes     Downtime[]
 
   @@index([userId])

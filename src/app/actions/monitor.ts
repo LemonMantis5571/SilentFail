@@ -1,6 +1,7 @@
 'use server';
 
 import { db } from "~/server/db";
+import { createId } from "@paralleldrive/cuid2";
 import { headers } from "next/headers";
 
 import { revalidatePath } from "next/cache";
@@ -32,7 +33,7 @@ export async function getMonitors() {
 
 export type MonitorWithPings = Awaited<ReturnType<typeof getMonitors>>[number];
 
-export async function createMonitor(data: { name: string; interval: number; gracePeriod: number, smartGrace: boolean | undefined }) {
+export async function createMonitor(data: { name: string; interval: number; gracePeriod: number, smartGrace: boolean | undefined, secret?: string }) {
   const session = await auth.api.getSession({
     headers: await headers()
   });
@@ -46,6 +47,7 @@ export async function createMonitor(data: { name: string; interval: number; grac
       interval: data.interval,
       gracePeriod: data.gracePeriod,
       useSmartGrace: data.smartGrace,
+      secret: data.secret || null,
       status: "PENDING"
     }
   });
@@ -141,7 +143,7 @@ export async function rotateMonitorKey(id: string) {
   await db.monitor.update({
     where: { id },
     data: {
-      key: crypto.randomUUID() // Generate new CUID/UUID
+      key: createId() // Generate new CUID
     }
   });
 
@@ -149,7 +151,7 @@ export async function rotateMonitorKey(id: string) {
   revalidatePath("/dashboard");
 }
 
-export async function updateMonitor(id: string, data: { name: string; interval: number; gracePeriod: number, smartGrace: boolean | undefined }) {
+export async function updateMonitor(id: string, data: { name: string; interval: number; gracePeriod: number, smartGrace: boolean | undefined, secret?: string }) {
   const session = await auth.api.getSession({
     headers: await headers()
   });

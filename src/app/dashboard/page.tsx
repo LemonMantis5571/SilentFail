@@ -12,6 +12,7 @@ import { getMonitors, deleteMonitor, type MonitorWithPings } from "../actions/mo
 import { CopyUrlButton } from "~/components/dashboard/copy-button";
 import { MonitorSparkline } from "~/components/dashboard/monitor-sparkline";
 import { RefreshMonitorsButton } from "~/components/dashboard/refresh-button";
+import { IntegrationsModal } from "~/components/dashboard/integration-modal";
 import Link from "next/link";
 
 import { headers } from "next/headers";
@@ -97,7 +98,7 @@ function StatsCard({ title, value, icon: Icon, color = "text-white" }: any) {
 }
 
 function MonitorCard({ monitor }: { monitor: MonitorWithPings }) {
-  const pingUrl = `${process.env.NEXT_PUBLIC_APP_URL}api/ping/${monitor.key}`;
+  const pingUrl = `${process.env.NEXT_PUBLIC_APP_URL}/api/ping/${monitor.key}`;
 
   return (
     <Card className="bg-[#0B1121] border-white/10 hover:border-indigo-500/50 transition-all duration-300 shadow-lg group flex flex-col justify-between overflow-hidden">
@@ -107,7 +108,7 @@ function MonitorCard({ monitor }: { monitor: MonitorWithPings }) {
             <CardTitle className="text-lg font-bold flex items-center gap-2 text-white">
               {monitor.name}
 
-              {/* Modern Status Dot */}
+
               <span className="relative flex h-2.5 w-2.5">
                 {monitor.status === 'UP' && (
                   <>
@@ -162,7 +163,10 @@ function MonitorCard({ monitor }: { monitor: MonitorWithPings }) {
               <span className="select-none text-indigo-400 font-bold">$ </span>
               curl {pingUrl}
             </div>
-            <CopyUrlButton url={`curl ${pingUrl}`} />
+            <div className="flex items-center">
+              <CopyUrlButton url={`curl ${pingUrl}`} />
+              <IntegrationsModal monitorKey={monitor.key} secret={monitor.secret} />
+            </div>
           </div>
 
           {/* Sparkline */}

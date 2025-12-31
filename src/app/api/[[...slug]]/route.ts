@@ -17,7 +17,7 @@ const app = new Elysia({ prefix: '/api' })
   })
 
   .group('/ping', (app) => app
-    .get('/:key', async ({ params: { key } }) => {
+    .get('/:key', async ({ params: { key }, request }) => {
       try {
         const monitor = await db.monitor.findUnique({
           where: { key },
@@ -25,6 +25,18 @@ const app = new Elysia({ prefix: '/api' })
             pings: { take: 10, orderBy: { createdAt: 'desc' } }
           }
         });
+
+        if (monitor && monitor.secret) {
+          const url = new URL(request.url);
+          const secretParam = url.searchParams.get("secret");
+          const authHeader = request.headers.get("authorization");
+
+          const providedSecret = secretParam || (authHeader?.startsWith("Bearer ") ? authHeader.slice(7) : null);
+
+          if (providedSecret !== monitor.secret) {
+            return new Response("Unauthorized: Invalid Secret", { status: 401 });
+          }
+        }
 
         if (!monitor) {
           const errorOutput = createTerminalCard("NOT FOUND", {
@@ -115,9 +127,21 @@ const app = new Elysia({ prefix: '/api' })
       }
     })
 
-    .post('/:key', async ({ params: { key }, body }) => {
+    .post('/:key', async ({ params: { key }, body, request }) => {
       const monitor = await db.monitor.findUnique({ where: { key } });
       if (!monitor) return new Response("Not found", { status: 404 });
+
+      if (monitor.secret) {
+        const url = new URL(request.url);
+        const secretParam = url.searchParams.get("secret");
+        const authHeader = request.headers.get("authorization");
+
+        const providedSecret = secretParam || (authHeader?.startsWith("Bearer ") ? authHeader.slice(7) : null);
+
+        if (providedSecret !== monitor.secret) {
+          return new Response("Unauthorized: Invalid Secret", { status: 401 });
+        }
+      }
 
       await db.monitor.update({
         where: { id: monitor.id },

@@ -6441,6 +6441,7 @@ export namespace Prisma {
     createdAt: Date | null
     updatedAt: Date | null
     useSmartGrace: boolean | null
+    secret: string | null
   }
 
   export type MonitorMaxAggregateOutputType = {
@@ -6455,6 +6456,7 @@ export namespace Prisma {
     createdAt: Date | null
     updatedAt: Date | null
     useSmartGrace: boolean | null
+    secret: string | null
   }
 
   export type MonitorCountAggregateOutputType = {
@@ -6469,6 +6471,7 @@ export namespace Prisma {
     createdAt: number
     updatedAt: number
     useSmartGrace: number
+    secret: number
     _all: number
   }
 
@@ -6495,6 +6498,7 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     useSmartGrace?: true
+    secret?: true
   }
 
   export type MonitorMaxAggregateInputType = {
@@ -6509,6 +6513,7 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     useSmartGrace?: true
+    secret?: true
   }
 
   export type MonitorCountAggregateInputType = {
@@ -6523,6 +6528,7 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     useSmartGrace?: true
+    secret?: true
     _all?: true
   }
 
@@ -6624,6 +6630,7 @@ export namespace Prisma {
     createdAt: Date
     updatedAt: Date
     useSmartGrace: boolean
+    secret: string | null
     _count: MonitorCountAggregateOutputType | null
     _avg: MonitorAvgAggregateOutputType | null
     _sum: MonitorSumAggregateOutputType | null
@@ -6657,6 +6664,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     useSmartGrace?: boolean
+    secret?: boolean
     pings?: boolean | Monitor$pingsArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
     downtimes?: boolean | Monitor$downtimesArgs<ExtArgs>
@@ -6675,6 +6683,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     useSmartGrace?: boolean
+    secret?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["monitor"]>
 
@@ -6690,6 +6699,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     useSmartGrace?: boolean
+    secret?: boolean
   }
 
   export type MonitorInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6721,6 +6731,7 @@ export namespace Prisma {
       createdAt: Date
       updatedAt: Date
       useSmartGrace: boolean
+      secret: string | null
     }, ExtArgs["result"]["monitor"]>
     composites: {}
   }
@@ -7128,6 +7139,7 @@ export namespace Prisma {
     readonly createdAt: FieldRef<"Monitor", 'DateTime'>
     readonly updatedAt: FieldRef<"Monitor", 'DateTime'>
     readonly useSmartGrace: FieldRef<"Monitor", 'Boolean'>
+    readonly secret: FieldRef<"Monitor", 'String'>
   }
     
 
@@ -9540,7 +9552,8 @@ export namespace Prisma {
     userId: 'userId',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
-    useSmartGrace: 'useSmartGrace'
+    useSmartGrace: 'useSmartGrace',
+    secret: 'secret'
   };
 
   export type MonitorScalarFieldEnum = (typeof MonitorScalarFieldEnum)[keyof typeof MonitorScalarFieldEnum]
@@ -10030,6 +10043,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Monitor"> | Date | string
     updatedAt?: DateTimeFilter<"Monitor"> | Date | string
     useSmartGrace?: BoolFilter<"Monitor"> | boolean
+    secret?: StringNullableFilter<"Monitor"> | string | null
     pings?: PingEventListRelationFilter
     user?: XOR<UserRelationFilter, UserWhereInput>
     downtimes?: DowntimeListRelationFilter
@@ -10047,6 +10061,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     useSmartGrace?: SortOrder
+    secret?: SortOrderInput | SortOrder
     pings?: PingEventOrderByRelationAggregateInput
     user?: UserOrderByWithRelationInput
     downtimes?: DowntimeOrderByRelationAggregateInput
@@ -10067,6 +10082,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Monitor"> | Date | string
     updatedAt?: DateTimeFilter<"Monitor"> | Date | string
     useSmartGrace?: BoolFilter<"Monitor"> | boolean
+    secret?: StringNullableFilter<"Monitor"> | string | null
     pings?: PingEventListRelationFilter
     user?: XOR<UserRelationFilter, UserWhereInput>
     downtimes?: DowntimeListRelationFilter
@@ -10084,6 +10100,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     useSmartGrace?: SortOrder
+    secret?: SortOrderInput | SortOrder
     _count?: MonitorCountOrderByAggregateInput
     _avg?: MonitorAvgOrderByAggregateInput
     _max?: MonitorMaxOrderByAggregateInput
@@ -10106,6 +10123,7 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"Monitor"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Monitor"> | Date | string
     useSmartGrace?: BoolWithAggregatesFilter<"Monitor"> | boolean
+    secret?: StringNullableWithAggregatesFilter<"Monitor"> | string | null
   }
 
   export type PingEventWhereInput = {
@@ -10629,6 +10647,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     useSmartGrace?: boolean
+    secret?: string | null
     pings?: PingEventCreateNestedManyWithoutMonitorInput
     user: UserCreateNestedOneWithoutMonitorsInput
     downtimes?: DowntimeCreateNestedManyWithoutMonitorInput
@@ -10646,6 +10665,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     useSmartGrace?: boolean
+    secret?: string | null
     pings?: PingEventUncheckedCreateNestedManyWithoutMonitorInput
     downtimes?: DowntimeUncheckedCreateNestedManyWithoutMonitorInput
   }
@@ -10661,6 +10681,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     useSmartGrace?: BoolFieldUpdateOperationsInput | boolean
+    secret?: NullableStringFieldUpdateOperationsInput | string | null
     pings?: PingEventUpdateManyWithoutMonitorNestedInput
     user?: UserUpdateOneRequiredWithoutMonitorsNestedInput
     downtimes?: DowntimeUpdateManyWithoutMonitorNestedInput
@@ -10678,6 +10699,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     useSmartGrace?: BoolFieldUpdateOperationsInput | boolean
+    secret?: NullableStringFieldUpdateOperationsInput | string | null
     pings?: PingEventUncheckedUpdateManyWithoutMonitorNestedInput
     downtimes?: DowntimeUncheckedUpdateManyWithoutMonitorNestedInput
   }
@@ -10694,6 +10716,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     useSmartGrace?: boolean
+    secret?: string | null
   }
 
   export type MonitorUpdateManyMutationInput = {
@@ -10707,6 +10730,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     useSmartGrace?: BoolFieldUpdateOperationsInput | boolean
+    secret?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type MonitorUncheckedUpdateManyInput = {
@@ -10721,6 +10745,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     useSmartGrace?: BoolFieldUpdateOperationsInput | boolean
+    secret?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type PingEventCreateInput = {
@@ -11224,6 +11249,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     useSmartGrace?: SortOrder
+    secret?: SortOrder
   }
 
   export type MonitorAvgOrderByAggregateInput = {
@@ -11243,6 +11269,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     useSmartGrace?: SortOrder
+    secret?: SortOrder
   }
 
   export type MonitorMinOrderByAggregateInput = {
@@ -11257,6 +11284,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     useSmartGrace?: SortOrder
+    secret?: SortOrder
   }
 
   export type MonitorSumOrderByAggregateInput = {
@@ -12125,6 +12153,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     useSmartGrace?: boolean
+    secret?: string | null
     pings?: PingEventCreateNestedManyWithoutMonitorInput
     downtimes?: DowntimeCreateNestedManyWithoutMonitorInput
   }
@@ -12140,6 +12169,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     useSmartGrace?: boolean
+    secret?: string | null
     pings?: PingEventUncheckedCreateNestedManyWithoutMonitorInput
     downtimes?: DowntimeUncheckedCreateNestedManyWithoutMonitorInput
   }
@@ -12277,6 +12307,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Monitor"> | Date | string
     updatedAt?: DateTimeFilter<"Monitor"> | Date | string
     useSmartGrace?: BoolFilter<"Monitor"> | boolean
+    secret?: StringNullableFilter<"Monitor"> | string | null
   }
 
   export type UserCreateWithoutSessionsInput = {
@@ -12599,6 +12630,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     useSmartGrace?: boolean
+    secret?: string | null
     user: UserCreateNestedOneWithoutMonitorsInput
     downtimes?: DowntimeCreateNestedManyWithoutMonitorInput
   }
@@ -12615,6 +12647,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     useSmartGrace?: boolean
+    secret?: string | null
     downtimes?: DowntimeUncheckedCreateNestedManyWithoutMonitorInput
   }
 
@@ -12645,6 +12678,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     useSmartGrace?: BoolFieldUpdateOperationsInput | boolean
+    secret?: NullableStringFieldUpdateOperationsInput | string | null
     user?: UserUpdateOneRequiredWithoutMonitorsNestedInput
     downtimes?: DowntimeUpdateManyWithoutMonitorNestedInput
   }
@@ -12661,6 +12695,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     useSmartGrace?: BoolFieldUpdateOperationsInput | boolean
+    secret?: NullableStringFieldUpdateOperationsInput | string | null
     downtimes?: DowntimeUncheckedUpdateManyWithoutMonitorNestedInput
   }
 
@@ -12675,6 +12710,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     useSmartGrace?: boolean
+    secret?: string | null
     pings?: PingEventCreateNestedManyWithoutMonitorInput
     user: UserCreateNestedOneWithoutMonitorsInput
   }
@@ -12691,6 +12727,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     useSmartGrace?: boolean
+    secret?: string | null
     pings?: PingEventUncheckedCreateNestedManyWithoutMonitorInput
   }
 
@@ -12721,6 +12758,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     useSmartGrace?: BoolFieldUpdateOperationsInput | boolean
+    secret?: NullableStringFieldUpdateOperationsInput | string | null
     pings?: PingEventUpdateManyWithoutMonitorNestedInput
     user?: UserUpdateOneRequiredWithoutMonitorsNestedInput
   }
@@ -12737,6 +12775,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     useSmartGrace?: BoolFieldUpdateOperationsInput | boolean
+    secret?: NullableStringFieldUpdateOperationsInput | string | null
     pings?: PingEventUncheckedUpdateManyWithoutMonitorNestedInput
   }
 
@@ -12783,6 +12822,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     useSmartGrace?: boolean
+    secret?: string | null
   }
 
   export type SessionUpdateWithoutUserInput = {
@@ -12892,6 +12932,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     useSmartGrace?: BoolFieldUpdateOperationsInput | boolean
+    secret?: NullableStringFieldUpdateOperationsInput | string | null
     pings?: PingEventUpdateManyWithoutMonitorNestedInput
     downtimes?: DowntimeUpdateManyWithoutMonitorNestedInput
   }
@@ -12907,6 +12948,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     useSmartGrace?: BoolFieldUpdateOperationsInput | boolean
+    secret?: NullableStringFieldUpdateOperationsInput | string | null
     pings?: PingEventUncheckedUpdateManyWithoutMonitorNestedInput
     downtimes?: DowntimeUncheckedUpdateManyWithoutMonitorNestedInput
   }
@@ -12922,6 +12964,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     useSmartGrace?: BoolFieldUpdateOperationsInput | boolean
+    secret?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type PingEventCreateManyMonitorInput = {
