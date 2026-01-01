@@ -60,7 +60,7 @@ export function EditMonitorModal({ monitor }: EditMonitorModalProps) {
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <Button variant="outline" size="sm" className="hidden md:flex h-8 gap-2 bg-slate-900 border-slate-700 hover:bg-slate-800 text-slate-300">
+                <Button variant="outline" size="sm" className="hidden md:flex h-8 gap-2 bg-slate-900 border-slate-700 hover:bg-slate-800 text-slate-300 hover:cursor-pointer">
                     <Settings2 className="h-3.5 w-3.5" />
                     Edit
                 </Button>

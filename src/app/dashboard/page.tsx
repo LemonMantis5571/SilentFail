@@ -98,7 +98,12 @@ function StatsCard({ title, value, icon: Icon, color = "text-white" }: any) {
 }
 
 function MonitorCard({ monitor }: { monitor: MonitorWithPings }) {
-  const pingUrl = `${process.env.NEXT_PUBLIC_APP_URL}/api/ping/${monitor.key}`;
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://silentfail.com"; // Fallback
+  let pingUrl = `${baseUrl}/api/ping/${monitor.key}`;
+
+  if (monitor.secret) {
+    pingUrl += `?secret=${monitor.secret}`;
+  }
 
   return (
     <Card className="bg-[#0B1121] border-white/10 hover:border-indigo-500/50 transition-all duration-300 shadow-lg group flex flex-col justify-between overflow-hidden">

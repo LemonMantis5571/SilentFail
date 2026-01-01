@@ -103,7 +103,7 @@ export default async function MonitorPage({ params }: { params: Promise<{ id: st
     // Calculate downtime metrics
     const downtimeMetrics = calculateAccurateDowntime(downtimes, 24);
 
-    const pingUrl = `${process.env.NEXT_PUBLIC_APP_URL}api/ping/${monitor.key}`;
+    const pingUrl = `${process.env.NEXT_PUBLIC_APP_URL}/api/ping/${monitor.key}`;
 
     return (
         <div className="min-h-screen bg-[#020817] text-slate-300 p-8">
