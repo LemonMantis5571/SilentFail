@@ -19,9 +19,9 @@
     "preview": "next build && next start",
     "start": "next start",
     "typecheck": "tsc --noEmit",
-    "setup": "node scripts/setup-env.js && docker-compose up -d && bun run db:push",
+    "setup": "bun install && node scripts/setup-env.js && docker-compose up -d && bun run db:push",
     "clean": "rm -rf .next node_modules",
-    "reset-db": "docker-compose down -v && docker-compose up -d && bun run db:push",
+    "reset-db": "docker-compose down -v && bun run setup",
     "worker": "bun scripts/worker.ts",
     "test": "vitest"
   },

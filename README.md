@@ -45,15 +45,10 @@
 # Clone
 git clone https://github.com/LemonMantis5571/SilentFail.git
 cd silentfail
-bun install
 
-# Setup env
-cp .env.example .env
-# Edit .env, add BETTER_AUTH_SECRET (openssl rand -base64 32)
-
-# Start DB + Cron Worker
-docker-compose up -d
-bun run db:push
+# Run the all-in-one setup
+# This installs dependencies, creates .env, starts Docker, and pushes schema
+bun run setup
 
 # Start App
 bun run dev
@@ -64,15 +59,21 @@ bun run dev
 If you have a cloud database (Supabase, Neon, Railway) or local Postgres:
 
 1. **Configure .env**:
-   - Set `DATABASE_URL` to your connection string.
-   - Set `BETTER_AUTH_SECRET` and others.
+   - Set all required environment variables.
 
-2. **Initialize DB**:
+2. **Install Dependencies**:
+   ```bash
+   bun install
+   # or
+   npm install
+   ```
+
+3. **Initialize DB**:
    ```bash
    bun run db:push
    ```
 
-3. **Start the App**:
+4. **Start the App**:
    
    **Development:**
    ```bash
@@ -113,30 +114,32 @@ Open http://localhost:3000
 ### Required
 
 ```env
+# App Configuration
 DATABASE_URL="postgresql://silentfail:securepassword@localhost:5432/silentfail"
 BETTER_AUTH_SECRET="your_generated_secret_here"
 BETTER_AUTH_URL="http://localhost:3000"
-```
+NEXT_PUBLIC_APP_URL="http://localhost:3000"
 
-### Optional
+# Docker Postgres (Only required for Option A)
+# If using a cloud database (Option B), you can ignore these.
+DB_USER="silentfail"
+DB_PASSWORD="securepassword"
+DB_NAME="silentfail"
 
-```env
-# GitHub OAuth
+# OAuth (Required for Auth)
 BETTER_AUTH_GITHUB_CLIENT_ID="your_client_id"
 BETTER_AUTH_GITHUB_CLIENT_SECRET="your_client_secret"
-
-# Discord OAuth
 BETTER_AUTH_DISCORD_CLIENT_ID="your_client_id"
 BETTER_AUTH_DISCORD_CLIENT_SECRET="your_client_secret"
 
-# Email alerts
+# Email (Required for Alerts)
 RESEND_API_KEY="re_..."
 EMAIL_FROM="SilentFail <onboarding@resend.dev>"
 
-# Cron security & Configuration
+# Cron (Required for Monitoring)
 CRON_SECRET="your_cron_secret"
-CRON_INTERVAL="60" # Seconds between checks
-APP_URL="http://localhost:3000" # URL for cron to ping
+CRON_INTERVAL="60"
+APP_URL="http://localhost:3000"
 ```
 
 ---
