@@ -51,7 +51,7 @@ export default function Home() {
           <div className="container mx-auto px-4 relative z-10">
             <div className="flex flex-col lg:flex-row items-center gap-12">
 
-         
+
               <motion.div
                 className="flex-1 text-center lg:text-left space-y-8"
                 initial="hidden"
@@ -76,7 +76,7 @@ export default function Home() {
                 </motion.p>
 
                 <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                  <Button size="lg" className="h-12 px-8 text-base shadow-lg shadow-primary/25 hover:shadow-primary/40 transition-shadow text-neutral-300">
+                  <Button size="lg" className="h-12 px-8 text-base bg-blue-700 shadow-lg shadow-primary/25 hover:shadow-primary/40 transition-shadow text-neutral-300">
                     Start Monitoring Free
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
@@ -146,7 +146,7 @@ export default function Home() {
                     </motion.div>
                   </div>
                 </div>
-            
+
                 <motion.div
                   animate={{ rotate: 360 }}
                   transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
@@ -157,7 +157,7 @@ export default function Home() {
           </div>
         </section>
 
-   
+
         <section id="features" className="py-24 bg-muted/5 border-y border-border/40">
           <div className="container mx-auto px-4">
             <motion.div
@@ -205,7 +205,7 @@ export default function Home() {
           </div>
         </section>
 
-     
+
         <section id="how-it-works" className="py-24 relative overflow-hidden">
           <div className="container mx-auto px-4 relative z-10">
             <div className="grid lg:grid-cols-2 gap-16 items-center">
@@ -297,7 +297,7 @@ export default function Home() {
                 Join developers who sleep better knowing SilentFail is watching their background tasks.
               </motion.p>
               <motion.div variants={fadeInUp}>
-                <Button size="lg" className="h-12 px-10 text-base shadow-xl shadow-primary/20 hover:shadow-primary/40 transition-all text-neutral-300">
+                <Button size="lg" className="h-12 bg-blue-700 px-10 text-base shadow-xl shadow-primary/20 hover:shadow-primary/40 transition-all text-neutral-300">
                   Start Monitoring Now
                 </Button>
               </motion.div>

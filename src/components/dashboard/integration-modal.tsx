@@ -106,7 +106,7 @@ export function IntegrationsModal({ monitorKey, secret }: IntegrationsModalProps
                     {/* Code Area */}
                     <div className="relative group rounded-lg overflow-hidden border border-slate-700/50 shadow-lg">
                         {/* Editor Header Bar */}
-                        <div className="flex items-center justify-between px-4 py-2 bg-gradient-to-r from-slate-800/80 to-slate-800/60 border-b border-slate-700/50">
+                        <div className="flex items-center justify-between px-4 py-2 bg-linear-to-r from-slate-800/80 to-slate-800/60 border-b border-slate-700/50">
                             <div className="flex items-center space-x-2">
                                 <div className="flex space-x-1.5">
                                     <div className="w-3 h-3 rounded-full bg-red-500/80"></div>
