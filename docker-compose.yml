@@ -1,6 +1,6 @@
 services:
   db:
-    image: postgres:16
+    image: postgres:16.1
     container_name: silentfail-db
     restart: unless-stopped
     environment:
@@ -16,6 +16,47 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - silentfail-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # Next.js Application
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: silentfail-app
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET}
+      - BETTER_AUTH_URL=${BETTER_AUTH_URL}
+      - NEXT_PUBLIC_APP_URL=${NEXT_PUBLIC_APP_URL}
+      - BETTER_AUTH_GITHUB_CLIENT_ID=${BETTER_AUTH_GITHUB_CLIENT_ID}
+      - BETTER_AUTH_GITHUB_CLIENT_SECRET=${BETTER_AUTH_GITHUB_CLIENT_SECRET}
+      - BETTER_AUTH_DISCORD_CLIENT_ID=${BETTER_AUTH_DISCORD_CLIENT_ID}
+      - BETTER_AUTH_DISCORD_CLIENT_SECRET=${BETTER_AUTH_DISCORD_CLIENT_SECRET}
+      - DISCORD_CLIENT_ID=${BETTER_AUTH_DISCORD_CLIENT_ID}
+      - DISCORD_CLIENT_SECRET=${BETTER_AUTH_DISCORD_CLIENT_SECRET}
+      - RESEND_API_KEY=${RESEND_API_KEY}
+      - EMAIL_FROM=${EMAIL_FROM}
+      - CRON_SECRET=${CRON_SECRET}
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - silentfail-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   # Cron runner for monitor health checks
   cron:
@@ -23,15 +64,23 @@ services:
     container_name: silentfail-cron
     restart: unless-stopped
     environment:
-      # Host mode: container shares host network (localhost works directly)
-      - APP_URL=${APP_URL:-http://localhost:3000}
-      - CRON_SECRET=${CRON_SECRET:-}
+      - APP_URL=http://app:3000
+      - CRON_SECRET=${CRON_SECRET}
       - CRON_INTERVAL=${CRON_INTERVAL:-60}
-    # Host network: more reliable on Linux than extra_hosts
-    network_mode: host
     depends_on:
-      db:
-        condition: service_healthy
+      app:
+        condition: service_started
+    networks:
+      - silentfail-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
 volumes:
   postgres_data:
+
+networks:
+  silentfail-network:
+    driver: bridge

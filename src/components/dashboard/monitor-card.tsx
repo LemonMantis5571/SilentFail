@@ -1,4 +1,6 @@
+"use client";
 
+import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "~/components/ui/card";
 import { Button } from "~/components/ui/button";
 import { MoreVertical, Activity, Zap } from "lucide-react";
@@ -16,6 +18,12 @@ import Link from "next/link";
 import { DeleteMonitorItem } from "~/components/dashboard/delete-monitor-item";
 
 export function MonitorCard({ monitor }: { monitor: MonitorWithPings }) {
+    const [isMounted, setIsMounted] = useState(false);
+
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
+
 
 
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://silentfail.com";
@@ -104,7 +112,7 @@ export function MonitorCard({ monitor }: { monitor: MonitorWithPings }) {
                 <div className="flex items-center justify-between text-xs font-medium text-slate-500 border-t border-white/5 pt-3">
                     <span>Last Heartbeat</span>
                     <span className={`font-mono ${monitor.lastPing ? 'text-slate-300' : 'text-slate-600'}`}>
-                        {monitor.lastPing ? new Date(monitor.lastPing).toLocaleTimeString() : 'Waiting...'}
+                        {isMounted && monitor.lastPing ? new Date(monitor.lastPing).toLocaleTimeString() : 'Waiting...'}
                     </span>
                 </div>
             </div>

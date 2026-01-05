@@ -3,7 +3,7 @@
 # SilentFail Cron Runner
 # Calls the /api/cron/check endpoint at regular intervals
 
-APP_URL="${APP_URL:-http://host.docker.internal:3000}"
+APP_URL="${APP_URL:-http://app:3000}"
 CRON_SECRET="${CRON_SECRET:-}"
 INTERVAL="${CRON_INTERVAL:-60}"  # Default: every 60 seconds
 

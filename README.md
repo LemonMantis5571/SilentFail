@@ -7,7 +7,8 @@
 ## ✨ Quick Highlights
 
 - 🔔 **Zero-config HTTP ping monitoring**
-- 🐋 **Dockerized Cron Worker** (Reliable background checks)
+- 🐋 **Fully Dockerized** (Database + App + Cron Worker)
+- 🔒 **Production-ready security** (Non-root containers, log rotation)
 - 🧠 **AI-driven adaptive grace periods**
 - ⏱️ **Precision Downtime Tracking**
 - 📧 **Instant email alerts** (Resend)
@@ -23,43 +24,75 @@
 | **Framework** | Next.js 15 (App Router) |
 | **Runtime** | Bun (or Node.js 18+) |
 | **API** | ElysiaJS (Route Handlers) |
-| **Database** | PostgreSQL + Prisma |
+| **Database** | PostgreSQL 16.1 + Prisma |
 | **Authentication** | Better Auth (GitHub, Discord) |
 | **Email** | Resend |
 | **UI** | Tailwind CSS v4, Shadcn/UI, Framer Motion |
+| **Deployment** | Docker + Docker Compose |
 
 ---
-
 
 ## 🚀 Quick Start
 
 ### Prerequisites
 
-- Bun or Node.js 18+
-- **Option A (Recommended):** Docker & Docker Compose
-- **Option B (Manual):** PostgreSQL database + method to run cron
+- **Docker & Docker Compose** (Recommended)
+- Or: Bun/Node.js 18+ with PostgreSQL
 
-### Option A: Docker (Easiest)
+### Option A: Docker (Recommended - Full Stack)
+
+Run the entire application in Docker with a single command:
 
 ```bash
 # Clone
 git clone https://github.com/LemonMantis5571/SilentFail.git
 cd silentfail
 
-# Run the all-in-one setup
-# This installs dependencies, creates .env, starts Docker, and pushes schema
-bun run setup
+# Create .env file (copy from .env.example and fill in your values)
+cp .env.example .env
 
-# Start App
+# Start entire stack (DB + App + Cron Worker)
+docker-compose up -d
+
+# View logs
+docker-compose logs -f
+```
+
+The app will be available at **http://localhost:3000**
+
+**Managing the stack:**
+```bash
+docker-compose down          # Stop all services
+docker-compose down -v       # Stop and remove all data
+docker-compose logs -f app   # View app logs
+docker-compose logs -f cron  # View cron worker logs
+docker-compose restart app   # Restart app service
+```
+
+### Option B: Hybrid Development
+
+For faster development iteration (database in Docker, app runs locally):
+
+```bash
+# Start only the database
+docker-compose up db -d
+
+# Install dependencies
+bun install
+
+# Push database schema
+bun run db:push
+
+# Run app locally
 bun run dev
 ```
 
-### Option B: Manual / Cloud
+### Option C: Manual / Cloud
 
 If you have a cloud database (Supabase, Neon, Railway) or local Postgres:
 
 1. **Configure .env**:
-   - Set all required environment variables.
+   - Set all required environment variables (see below)
 
 2. **Install Dependencies**:
    ```bash
@@ -88,7 +121,7 @@ If you have a cloud database (Supabase, Neon, Railway) or local Postgres:
    bun run preview
    ```
 
-4. **Start the Cron Worker**:
+5. **Start the Cron Worker**:
    This app needs a "pinger" service to check for silent failures.
    
    **Run locally:**
@@ -105,8 +138,6 @@ If you have a cloud database (Supabase, Neon, Railway) or local Postgres:
    **Or use Vercel Cron:**
    - Configure `vercel.json` and deploy.
 
-Open http://localhost:3000
-
 ---
 
 ## 📝 Environment Variables
@@ -116,30 +147,36 @@ Open http://localhost:3000
 ```env
 # App Configuration
 DATABASE_URL="postgresql://silentfail:securepassword@localhost:5432/silentfail"
-BETTER_AUTH_SECRET="your_generated_secret_here"
+BETTER_AUTH_SECRET="your_generated_secret_here"  # Generate: openssl rand -base64 32
 BETTER_AUTH_URL="http://localhost:3000"
 NEXT_PUBLIC_APP_URL="http://localhost:3000"
 
-# Docker Postgres (Only required for Option A)
-# If using a cloud database (Option B), you can ignore these.
+# Docker Postgres (Only for Docker setup)
 DB_USER="silentfail"
 DB_PASSWORD="securepassword"
 DB_NAME="silentfail"
 
-# OAuth (Required for Auth)
-BETTER_AUTH_GITHUB_CLIENT_ID="your_client_id"
-BETTER_AUTH_GITHUB_CLIENT_SECRET="your_client_secret"
-BETTER_AUTH_DISCORD_CLIENT_ID="your_client_id"
-BETTER_AUTH_DISCORD_CLIENT_SECRET="your_client_secret"
+# OAuth (GitHub required, Discord optional)
+BETTER_AUTH_GITHUB_CLIENT_ID="your_github_client_id"
+BETTER_AUTH_GITHUB_CLIENT_SECRET="your_github_client_secret"
+BETTER_AUTH_DISCORD_CLIENT_ID="your_discord_client_id"  # Optional
+BETTER_AUTH_DISCORD_CLIENT_SECRET="your_discord_secret"  # Optional
 
 # Email (Required for Alerts)
 RESEND_API_KEY="re_..."
-EMAIL_FROM="SilentFail <onboarding@resend.dev>"
+EMAIL_FROM="SilentFail <noreply@yourdomain.com>"
 
-# Cron (Required for Monitoring)
-CRON_SECRET="your_cron_secret"
-CRON_INTERVAL="60"
-APP_URL="http://localhost:3000"
+# Cron Worker
+CRON_SECRET="your_cron_secret"  # Generate a random string
+CRON_INTERVAL="60"  # Check interval in seconds
+APP_URL="http://localhost:3000"  # For Docker: http://app:3000
+```
+
+**Quick setup:**
+```bash
+# Generate secrets
+openssl rand -base64 32  # For BETTER_AUTH_SECRET
+openssl rand -hex 32     # For CRON_SECRET
 ```
 
 ---
@@ -163,14 +200,17 @@ await fetch("https://your-app.com/api/ping/abc123xyz");
 
 3. Get alerted if your script stops pinging
 
----
 
 ## 🗄️ Database Management
 
 ```bash
-bun run db:studio  # View/edit data
-bun run db:push    # Update schema
-docker-compose down -v  # Reset database
+bun run db:studio         # View/edit data in browser
+bun run db:push           # Push schema changes
+bun run db:generate       # Generate migrations
+
+# Docker-specific
+docker-compose down -v    # Reset database (WARNING: deletes all data)
+docker-compose logs db    # View database logs
 ```
 
 ---
@@ -178,25 +218,53 @@ docker-compose down -v  # Reset database
 ## 🔧 Development
 
 ```bash
-bun run dev    # Start dev server
-bun run build  # Build for production
-bun run start  # Run production build
-bun run preview # Build + Start (Shortcut)
+bun run dev              # Start dev server
+bun run build            # Build for production
+bun run start            # Run production build
+bun run preview          # Build + Start (Shortcut)
+bun run check            # Lint + Type check
+bun run test             # Run tests
 ```
 
 ---
 
 ## 🌐 OAuth Setup
 
-### GitHub
-1. https://github.com/settings/developers
-2. New OAuth App
-3. Callback URL: `http://localhost:3000/api/auth/callback/github`
+### GitHub (Required)
+1. Go to https://github.com/settings/developers
+2. Click "New OAuth App"
+3. Set Authorization callback URL: `http://localhost:3000/api/auth/callback/github`
+4. Copy Client ID and Client Secret to `.env`
 
-### Discord
-1. https://discord.com/developers/applications
-2. New Application → OAuth2
-3. Redirect URL: `http://localhost:3000/api/auth/callback/discord`
+### Discord (Optional)
+1. Go to https://discord.com/developers/applications
+2. Create New Application → OAuth2
+3. Add Redirect URL: `http://localhost:3000/api/auth/callback/discord`
+4. Copy Client ID and Client Secret to `.env`
+
+---
+
+## 🚢 Production Deployment
+
+The Docker setup is production-ready. For cloud deployment:
+
+1. **Remove database port exposure** (unless needed):
+   ```yaml
+   # In docker-compose.yml, remove:
+   ports:
+     - "5432:5432"
+   ```
+
+2. **Use Docker secrets** for sensitive data in production
+
+3. **Set up SSL/TLS** with a reverse proxy (nginx, Traefik, Caddy)
+
+4. **Configure proper DNS** and update `BETTER_AUTH_URL` and `NEXT_PUBLIC_APP_URL`
+
+5. **Monitor logs**:
+   ```bash
+   docker-compose logs -f --tail=100
+   ```
 
 ---
 

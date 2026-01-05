@@ -213,7 +213,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "C:\\Users\\brite\\OneDrive\\Documents\\SilentFail\\generated\\prisma",
+      "value": "C:\\Users\\brite\\OneDrive\\Documents\\DeadsManLogic\\silentfail\\generated\\prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -227,7 +227,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "C:\\Users\\brite\\OneDrive\\Documents\\SilentFail\\prisma\\schema.prisma",
+    "sourceFilePath": "C:\\Users\\brite\\OneDrive\\Documents\\DeadsManLogic\\silentfail\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
