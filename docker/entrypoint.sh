@@ -3,7 +3,7 @@
 # SilentFail Combined Entrypoint
 # Runs both the Next.js app and cron worker in a single container
 
-APP_URL="${APP_URL:-http://localhost:3000}"
+APP_URL="${NEXT_PUBLIC_APP_URL:-http://localhost:3000}"
 CRON_PATH="${CRON_PATH:-/api/cron/check}"
 CRON_SECRET="${CRON_SECRET:-}"
 CRON_INTERVAL="${CRON_INTERVAL:-60}"
