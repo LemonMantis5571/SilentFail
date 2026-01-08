@@ -35,10 +35,6 @@ ENV RESEND_API_KEY="re_placeholder"
 ENV EMAIL_FROM="noreply@placeholder.com"
 ENV CRON_SECRET="placeholder"
 
-# NEXT_PUBLIC_* vars are baked in at build time - pass via Railway build args
-ARG NEXT_PUBLIC_APP_URL=http://localhost:8080
-ENV NEXT_PUBLIC_APP_URL=$NEXT_PUBLIC_APP_URL
-
 # Build Next.js app
 RUN bun run build
 
