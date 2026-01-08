@@ -14,12 +14,12 @@ export const auth = betterAuth({
     github: {
       clientId: env.BETTER_AUTH_GITHUB_CLIENT_ID,
       clientSecret: env.BETTER_AUTH_GITHUB_CLIENT_SECRET,
-      redirectURI: "http://localhost:3000/api/auth/callback/github",
+      redirectURI: `${env.NEXT_PUBLIC_APP_URL}/api/auth/callback/github`,
     },
     discord: {
       clientId: env.DISCORD_CLIENT_ID,
       clientSecret: env.DISCORD_CLIENT_SECRET,
-      redirectURI: "http://localhost:3000/api/auth/callback/discord",
+      redirectURI: `${env.NEXT_PUBLIC_APP_URL}/api/auth/callback/discord`,
     }
   },
   advanced: {
