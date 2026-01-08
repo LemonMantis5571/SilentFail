@@ -49,12 +49,17 @@ cd silentfail
 # Create .env file
 cp .env.example .env
 # Edit .env with your values
+```
 
-# Start entire stack (DB + App with built-in cron)
+**Choose your database setup:**
+
+```bash
+# Option 1: Local Docker Postgres (includes database container)
+docker-compose --profile local-db up -d
+
+# Option 2: Cloud Database (Supabase, Neon, Railway, etc.)
+# Just set DATABASE_URL in .env, then:
 docker-compose up -d
-
-# View logs
-docker-compose logs -f
 ```
 
 The app will be available at **http://localhost:3000**
@@ -76,8 +81,8 @@ docker-compose restart app   # Restart app service
 For faster development iteration:
 
 ```bash
-# Start only the database
-docker-compose up db -d
+# Start only the database (requires --profile flag)
+docker-compose --profile local-db up db -d
 
 # Install dependencies
 bun install

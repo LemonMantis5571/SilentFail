@@ -1,5 +1,7 @@
 services:
+  # Local Postgres - only runs with: docker-compose --profile local-db up
   db:
+    profiles: ["local-db"]
     image: postgres:16.1
     container_name: silentfail-db
     restart: unless-stopped
@@ -47,9 +49,7 @@ services:
       - RESEND_API_KEY=${RESEND_API_KEY}
       - EMAIL_FROM=${EMAIL_FROM}
       - CRON_SECRET=${CRON_SECRET}
-    depends_on:
-      db:
-        condition: service_healthy
+    # Note: If using local-db profile, start db first: docker-compose --profile local-db up -d db
     networks:
       - silentfail-network
     logging:
