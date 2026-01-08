@@ -19,6 +19,7 @@ import "prismjs/components/prism-python";
 import "prismjs/components/prism-javascript";
 import "prismjs/components/prism-go";
 import "prismjs/components/prism-bash";
+import { useAppConfig } from "~/hooks/use-app-config";
 
 interface IntegrationsModalProps {
     monitorKey: string;
@@ -32,10 +33,11 @@ export function IntegrationsModal({ monitorKey, secret }: IntegrationsModalProps
     const [open, setOpen] = useState(false);
     const [activeTab, setActiveTab] = useState<Language>("curl");
     const [copied, setCopied] = useState(false);
+    const { config } = useAppConfig();
 
 
 
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://silentfail.com"; // Fallback
+    const baseUrl = config.appUrl || (typeof window !== 'undefined' ? window.location.origin : "");
     let pingUrl = `${baseUrl}/api/ping/${monitorKey}`;
 
     if (secret) {

@@ -14,11 +14,13 @@ import { type MonitorWithPings } from "~/app/actions/monitor";
 import { CopyUrlButton } from "~/components/dashboard/copy-button";
 import { MonitorSparkline } from "~/components/dashboard/monitor-sparkline";
 import { IntegrationsModal } from "~/components/dashboard/integration-modal";
+import { useAppConfig } from "~/hooks/use-app-config";
 import Link from "next/link";
 import { DeleteMonitorItem } from "~/components/dashboard/delete-monitor-item";
 
 export function MonitorCard({ monitor }: { monitor: MonitorWithPings }) {
     const [isMounted, setIsMounted] = useState(false);
+    const { config } = useAppConfig();
 
     useEffect(() => {
         setIsMounted(true);
@@ -26,7 +28,7 @@ export function MonitorCard({ monitor }: { monitor: MonitorWithPings }) {
 
 
 
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://silentfail.com";
+    const baseUrl = config.appUrl || window.location.origin;
     let pingUrl = `${baseUrl}/api/ping/${monitor.key}`;
 
     if (monitor.secret) {
