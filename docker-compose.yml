@@ -64,7 +64,7 @@ services:
     container_name: silentfail-cron
     restart: unless-stopped
     environment:
-      - APP_URL=http://app:3000
+      - APP_URL=${NEXT_PUBLIC_APP_URL:-http://app:3000}
       - CRON_SECRET=${CRON_SECRET}
       - CRON_INTERVAL=${CRON_INTERVAL:-60}
     depends_on:
