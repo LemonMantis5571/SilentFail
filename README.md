@@ -2,12 +2,15 @@
 
 > A lightweight **"Dead Man's Switch"** for cron jobs and background scripts — detect silent failures when automated tasks stop checking in.
 
+![Beta](https://img.shields.io/badge/status-beta-yellow)
+![License](https://img.shields.io/badge/license-MIT-blue)
+
 ---
 
 ## ✨ Quick Highlights
 
 - 🔔 **Zero-config HTTP ping monitoring**
-- 🐋 **Fully Dockerized** (Database + App + Cron Worker)
+- 🐋 **Fully Dockerized** (single container with built-in cron)
 - 🔒 **Production-ready security** (Non-root containers, log rotation)
 - 🧠 **AI-driven adaptive grace periods**
 - ⏱️ **Precision Downtime Tracking**
@@ -28,30 +31,26 @@
 | **Authentication** | Better Auth (GitHub, Discord) |
 | **Email** | Resend |
 | **UI** | Tailwind CSS v4, Shadcn/UI, Framer Motion |
-| **Deployment** | Docker + Docker Compose |
+| **Deployment** | Docker |
 
 ---
 
 ## 🚀 Quick Start
 
-### Prerequisites
+### Option A: Docker (Recommended)
 
-- **Docker & Docker Compose** (Recommended)
-- Or: Bun/Node.js 18+ with PostgreSQL
-
-### Option A: Docker (Recommended - Full Stack)
-
-Run the entire application in Docker with a single command:
+Run the entire application with a single command:
 
 ```bash
 # Clone
 git clone https://github.com/LemonMantis5571/SilentFail.git
 cd silentfail
 
-# Create .env file (copy from .env.example and fill in your values)
+# Create .env file
 cp .env.example .env
+# Edit .env with your values
 
-# Start entire stack (DB + App + Cron Worker)
+# Start entire stack (DB + App with built-in cron)
 docker-compose up -d
 
 # View logs
@@ -60,18 +59,21 @@ docker-compose logs -f
 
 The app will be available at **http://localhost:3000**
 
+> 💡 **Note:** The Docker image includes a built-in cron worker that automatically checks for silent failures. No separate cron service needed!
+
 **Managing the stack:**
 ```bash
 docker-compose down          # Stop all services
 docker-compose down -v       # Stop and remove all data
 docker-compose logs -f app   # View app logs
-docker-compose logs -f cron  # View cron worker logs
 docker-compose restart app   # Restart app service
 ```
 
-### Option B: Hybrid Development
+---
 
-For faster development iteration (database in Docker, app runs locally):
+### Option B: Local Development
+
+For faster development iteration:
 
 ```bash
 # Start only the database
@@ -85,96 +87,59 @@ bun run db:push
 
 # Run app locally
 bun run dev
+
+# In a separate terminal, run the cron worker
+bun run worker
 ```
-
-### Option C: Manual / Cloud
-
-If you have a cloud database (Supabase, Neon, Railway) or local Postgres:
-
-1. **Configure .env**:
-   - Set all required environment variables (see below)
-
-2. **Install Dependencies**:
-   ```bash
-   bun install
-   # or
-   npm install
-   ```
-
-3. **Initialize DB**:
-   ```bash
-   bun run db:push
-   ```
-
-4. **Start the App**:
-   
-   **Development:**
-   ```bash
-   bun run dev
-   ```
-
-   **Production:**
-   ```bash
-   bun run build
-   bun start
-   # Or shortcut:
-   bun run preview
-   ```
-
-5. **Start the Cron Worker**:
-   This app needs a "pinger" service to check for silent failures.
-   
-   **Run locally:**
-   ```bash
-   bun run worker
-   ```
-   
-   **Or use system cron:**
-   ```bash
-   # Run every minute
-   * * * * * curl -H "Authorization: Bearer <YOUR_SECRET>" -s http://localhost:3000/api/cron/check
-   ```
-   
-   **Or use Vercel Cron:**
-   - Configure `vercel.json` and deploy.
 
 ---
 
 ## 📝 Environment Variables
 
-### Required
+### Required Variables
 
 ```env
 # App Configuration
-DATABASE_URL="postgresql://silentfail:securepassword@localhost:5432/silentfail"
-BETTER_AUTH_SECRET="your_generated_secret_here"  # Generate: openssl rand -base64 32
-BETTER_AUTH_URL="http://localhost:3000"
-NEXT_PUBLIC_APP_URL="http://localhost:3000"
+DATABASE_URL="postgresql://user:password@localhost:5432/silentfail"
+NEXT_PUBLIC_APP_URL="https://your-domain.com"  # Your deployed URL
 
-# Docker Postgres (Only for Docker setup)
+# Authentication
+BETTER_AUTH_SECRET=""      # Generate: openssl rand -base64 32
+BETTER_AUTH_URL=""         # Same as NEXT_PUBLIC_APP_URL
+
+# OAuth (at least one required)
+BETTER_AUTH_GITHUB_CLIENT_ID=""
+BETTER_AUTH_GITHUB_CLIENT_SECRET=""
+
+# Email Alerts
+RESEND_API_KEY="re_..."
+EMAIL_FROM="SilentFail <alerts@yourdomain.com>"
+
+# Cron Security
+CRON_SECRET=""             # Generate: openssl rand -hex 32
+```
+
+### Optional Variables
+
+```env
+# Server Port (default: 3000, some platforms use 8080)
+PORT="3000"
+
+# Discord OAuth
+DISCORD_CLIENT_ID=""
+DISCORD_CLIENT_SECRET=""
+
+# Cron Configuration
+CRON_INTERVAL="60"         # Check interval in seconds (default: 60)
+
+# Docker Postgres
 DB_USER="silentfail"
 DB_PASSWORD="securepassword"
 DB_NAME="silentfail"
-
-# OAuth (GitHub required, Discord optional)
-BETTER_AUTH_GITHUB_CLIENT_ID="your_github_client_id"
-BETTER_AUTH_GITHUB_CLIENT_SECRET="your_github_client_secret"
-BETTER_AUTH_DISCORD_CLIENT_ID="your_discord_client_id"  # Optional
-BETTER_AUTH_DISCORD_CLIENT_SECRET="your_discord_secret"  # Optional
-
-# Email (Required for Alerts)
-RESEND_API_KEY="re_..."
-EMAIL_FROM="SilentFail <noreply@yourdomain.com>"
-
-# Cron Worker
-CRON_SECRET="your_cron_secret"  # Generate a random string
-CRON_INTERVAL="60"  # Check interval in seconds
-APP_URL="http://localhost:3000"  # For Docker: http://app:3000
 ```
 
-**Quick setup:**
+**Quick secret generation:**
 ```bash
-# Generate secrets
 openssl rand -base64 32  # For BETTER_AUTH_SECRET
 openssl rand -hex 32     # For CRON_SECRET
 ```
@@ -183,11 +148,11 @@ openssl rand -hex 32     # For CRON_SECRET
 
 ## 📌 How It Works
 
-1. Create a monitor in the dashboard
-2. Add the ping URL to your script:
+1. **Create a monitor** in the dashboard
+2. **Add the ping URL** to the end of your script:
 
 ```bash
-# Bash
+# Bash example
 pg_dump mydb > backup.sql && curl https://your-app.com/api/ping/abc123xyz
 
 # Python
@@ -198,8 +163,43 @@ requests.get("https://your-app.com/api/ping/abc123xyz")
 await fetch("https://your-app.com/api/ping/abc123xyz");
 ```
 
-3. Get alerted if your script stops pinging
+3. **Get alerted** if your script stops pinging within the expected interval
 
+---
+
+## 🧪 Testing Your Setup
+
+Use the included test scripts to simulate a monitored job:
+
+**PowerShell (Windows):**
+```powershell
+.\scripts\test-monitor.ps1 -PingId your-ping-id -Interval 10
+```
+
+**Bash (Linux/Mac):**
+```bash
+./scripts/test-monitor.sh your-ping-id 10
+```
+
+These scripts will ping your monitor every N seconds. Stop the script with `Ctrl+C` to simulate a failure and test your alerting.
+
+---
+
+## 🌐 OAuth Setup
+
+### GitHub (Required)
+1. Go to https://github.com/settings/developers
+2. Click "New OAuth App"
+3. Set Authorization callback URL: `https://your-app.com/api/auth/callback/github`
+4. Copy Client ID and Client Secret to your environment variables
+
+### Discord (Optional)
+1. Go to https://discord.com/developers/applications
+2. Create New Application → OAuth2
+3. Add Redirect URL: `https://your-app.com/api/auth/callback/discord`
+4. Copy Client ID and Client Secret to your environment variables
+
+---
 
 ## 🗄️ Database Management
 
@@ -224,47 +224,25 @@ bun run start            # Run production build
 bun run preview          # Build + Start (Shortcut)
 bun run check            # Lint + Type check
 bun run test             # Run tests
+bun run worker           # Run cron worker locally
 ```
 
 ---
 
-## 🌐 OAuth Setup
+## 🚢 Production Checklist
 
-### GitHub (Required)
-1. Go to https://github.com/settings/developers
-2. Click "New OAuth App"
-3. Set Authorization callback URL: `http://localhost:3000/api/auth/callback/github`
-4. Copy Client ID and Client Secret to `.env`
-
-### Discord (Optional)
-1. Go to https://discord.com/developers/applications
-2. Create New Application → OAuth2
-3. Add Redirect URL: `http://localhost:3000/api/auth/callback/discord`
-4. Copy Client ID and Client Secret to `.env`
+- [ ] Set `NEXT_PUBLIC_APP_URL` to your production domain
+- [ ] Generate secure values for `BETTER_AUTH_SECRET` and `CRON_SECRET`
+- [ ] Configure OAuth callback URLs for your production domain
+- [ ] Set up a verified domain in Resend for email alerts
+- [ ] (Optional) Remove database port exposure in docker-compose.yml
+- [ ] (Optional) Set up SSL/TLS with a reverse proxy
 
 ---
 
-## 🚢 Production Deployment
+## 🤝 Contributing
 
-The Docker setup is production-ready. For cloud deployment:
-
-1. **Remove database port exposure** (unless needed):
-   ```yaml
-   # In docker-compose.yml, remove:
-   ports:
-     - "5432:5432"
-   ```
-
-2. **Use Docker secrets** for sensitive data in production
-
-3. **Set up SSL/TLS** with a reverse proxy (nginx, Traefik, Caddy)
-
-4. **Configure proper DNS** and update `BETTER_AUTH_URL` and `NEXT_PUBLIC_APP_URL`
-
-5. **Monitor logs**:
-   ```bash
-   docker-compose logs -f --tail=100
-   ```
+Contributions are welcome! Please feel free to submit a Pull Request.
 
 ---
 
