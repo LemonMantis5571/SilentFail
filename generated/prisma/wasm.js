@@ -137,7 +137,8 @@ exports.Prisma.UserScalarFieldEnum = {
   emailVerified: 'emailVerified',
   image: 'image',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  apiKey: 'apiKey'
 };
 
 exports.Prisma.SessionScalarFieldEnum = {

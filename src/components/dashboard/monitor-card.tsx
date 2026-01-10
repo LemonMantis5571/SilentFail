@@ -28,7 +28,7 @@ export function MonitorCard({ monitor }: { monitor: MonitorWithPings }) {
 
 
 
-    const baseUrl = config.appUrl || window.location.origin;
+    const baseUrl = isMounted ? (config.appUrl || window.location.origin) : "";
     let pingUrl = `${baseUrl}/api/ping/${monitor.key}`;
 
     if (monitor.secret) {

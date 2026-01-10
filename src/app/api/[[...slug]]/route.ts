@@ -3,7 +3,10 @@ import { db } from '~/server/db';
 import { Resend } from 'resend';
 import AlertEmail from '~/components/emails/alert-email';
 import { calculateSmartGrace } from '~/lib/smart-grace';
+import { createId } from "@paralleldrive/cuid2";
 import { createTerminalCard, STYLES } from '~/server/terminal-response';
+
+
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -157,6 +160,106 @@ const app = new Elysia({ prefix: '/api' })
     }, { body: t.String() })
   )
 
+  .group('/admin', (app) => app
+    .resolve(async ({ request }) => {
+      const authHeader = request.headers.get("authorization");
+      if (!authHeader?.startsWith("Bearer ")) {
+        throw new Error("Unauthorized");
+      }
+      
+      const apiKey = authHeader.slice(7);
+      const user = await db.user.findUnique({
+        where: { apiKey }
+      });
+      
+      if (!user) {
+        throw new Error("Unauthorized");
+      }
+      
+      return { user };
+    })
+    .get('/monitors', async ({ user }) => {
+      return await db.monitor.findMany({
+        where: { userId: user.id },
+        orderBy: { createdAt: 'desc' }
+      });
+    }, {
+      detail: {
+        tags: ['Admin'],
+        summary: 'List Monitors',
+        description: 'Retrieve all monitors for the authenticated user.'
+      }
+    })
+    .post('/monitors', async ({ user, body }) => {
+      const { name, interval, useSmartGrace, gracePeriod, privateMonitor } = body;
+      
+      const monitor = await db.monitor.create({
+        data: {
+          userId: user.id,
+          name,
+          interval,
+          gracePeriod,  
+          useSmartGrace,
+          secret: privateMonitor ? createId() : null, 
+          status: "PENDING",
+          key: createId(),
+        }
+      });
+      
+      return monitor;
+    }, {
+      body: t.Object({
+        name: t.String(),
+        interval: t.Number(),
+        useSmartGrace: t.Boolean(),
+        gracePeriod: t.Number(),
+        privateMonitor: t.Boolean()
+      }),
+      detail: {
+        tags: ['Admin'],
+        summary: 'Create Monitor',
+        description: 'Create a new monitor with specified configuration.'
+      }
+    })
+    .patch('/monitors/:id', async ({ user, params: { id }, body }) => {
+      const { name, interval, useSmartGrace, gracePeriod, privateMonitor } = body;
+      
+      const monitor = await db.monitor.findUnique({
+         where: { id, userId: user.id }
+      });
+
+      if (!monitor) {
+        throw new Error("Monitor not found or unauthorized");
+      }
+
+      await db.monitor.update({
+        where: { id },
+        data: {
+          name: name ?? undefined,
+          interval: interval ?? undefined,
+          gracePeriod: gracePeriod ?? undefined,
+          useSmartGrace: useSmartGrace ?? undefined,
+          secret: privateMonitor === undefined ? undefined : (privateMonitor ? (monitor.secret || createId()) : null)
+        }
+      });
+
+      return { success: true };
+    }, {
+      body: t.Object({
+        name: t.Optional(t.String()),
+        interval: t.Optional(t.Number()),
+        useSmartGrace: t.Optional(t.Boolean()),
+        gracePeriod: t.Optional(t.Number()),
+        privateMonitor: t.Optional(t.Boolean())
+      }),
+      detail: {
+        tags: ['Admin'],
+        summary: 'Update Monitor',
+        description: 'Update an existing monitor configuration.'
+      }
+    })
+  )
+
   .group('/cron', (app) => app
     .onBeforeHandle(({ request }) => {
       const authHeader = request.headers.get("authorization");
@@ -164,7 +267,6 @@ const app = new Elysia({ prefix: '/api' })
         return new Response("Unauthorized", { status: 401 });
       }
     })
-
     .get('/check', async () => {
       const now = new Date();
       const fromEmail = process.env.EMAIL_FROM || "onboarding@resend.dev";
@@ -234,8 +336,15 @@ const app = new Elysia({ prefix: '/api' })
         checked: activeMonitors.length,
         markedDown: deadMonitorIds.length
       };
+    }, {
+      detail: {
+        tags: ['System'],
+        summary: 'Run Checks',
+        description: 'Trigger a manual check of all monitors (Internal/Cron use).'
+      }
     })
-  );
+  )
 
 export const GET = app.handle;
 export const POST = app.handle;
+export const PATCH = app.handle;

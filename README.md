@@ -12,10 +12,10 @@
 - 🔔 **Zero-config HTTP ping monitoring**
 - 🐋 **Fully Dockerized** (single container with built-in cron)
 - 🔒 **Production-ready security** (Non-root containers, log rotation)
-- 🧠 **AI-driven adaptive grace periods**
+- 🧠 **Adaptive grace periods**
+- 📊 **AI Incident history & automatic resolution (Soon)**
 - ⏱️ **Precision Downtime Tracking**
 - 📧 **Instant email alerts** (Resend)
-- 📊 **Incident history & automatic resolution**
 - ⚡ **Modern stack:** Next.js 15, Tailwind v4, Shadcn/UI, Framer Motion
 
 ---

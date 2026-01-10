@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { Button } from "~/components/ui/button";
 
-import { LogOut, LayoutDashboard, Settings, ListStartIcon } from "lucide-react";
+import { LogOut, LayoutDashboard, Settings, ListStartIcon, BookOpen } from "lucide-react";
 import { useRouter } from "next/navigation";
 import {
     DropdownMenu,
@@ -92,6 +92,12 @@ export function AuthButtons() {
                             <Link href="/settings" className="cursor-pointer ">
                                 <Settings className="mr-2 h-4 w-4" />
                                 Settings
+                            </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                            <Link href="/docs" target="_blank" className="cursor-pointer">
+                                <BookOpen className="mr-2 h-4 w-4" />
+                                Documentation
                             </Link>
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />

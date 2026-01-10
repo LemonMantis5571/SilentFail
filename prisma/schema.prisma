@@ -39,6 +39,7 @@ model User {
   accounts      Account[]
   posts         Post[]
   monitors      Monitor[]
+  apiKey        String?   @unique
 
   @@unique([email])
   @@map("user")

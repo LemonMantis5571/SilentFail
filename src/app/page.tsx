@@ -76,25 +76,18 @@ export default function Home() {
                 </motion.p>
 
                 <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                  <Button size="lg" className="h-12 px-8 text-base bg-blue-700 shadow-lg shadow-primary/25 hover:shadow-primary/40 transition-shadow text-neutral-300">
-                    Start Monitoring Free
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
+                  <Link href="/dashboard">
+                    <Button size="lg" className="h-12 px-8 text-base bg-blue-700 shadow-lg shadow-primary/25 hover:shadow-primary/40 transition-shadow text-neutral-300">
+                      Start Monitoring
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Button>
+                  </Link>
                   <Button size="lg" variant="outline" className="h-12 px-8 text-base bg-transparent border-primary/20 hover:bg-primary/10">
                     View Documentation
                   </Button>
                 </motion.div>
 
-                <motion.div variants={fadeInUp} className="pt-4 flex items-center justify-center lg:justify-start gap-6 text-sm text-muted-foreground">
-                  <div className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-green-500" />
-                    <span>Free Tier Available</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-green-500" />
-                    <span>No Credit Card</span>
-                  </div>
-                </motion.div>
+
               </motion.div>
 
               {/* Visual/Code Block */}
@@ -298,7 +291,7 @@ export default function Home() {
               </motion.p>
               <motion.div variants={fadeInUp}>
                 <Button size="lg" className="h-12 bg-blue-700 px-10 text-base shadow-xl shadow-primary/20 hover:shadow-primary/40 transition-all text-neutral-300">
-                  Start Monitoring Now
+                  <Link href="/dashboard">Start Monitoring Now</Link>
                 </Button>
               </motion.div>
             </motion.div>
