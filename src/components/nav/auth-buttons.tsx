@@ -95,7 +95,7 @@ export function AuthButtons() {
                             </Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem asChild>
-                            <Link href="/docs" target="_blank" className="cursor-pointer">
+                            <Link href="https://github.com/LemonMantis5571/SilentFail/blob/main/docs/API.md" target="_blank" className="cursor-pointer">
                                 <BookOpen className="mr-2 h-4 w-4" />
                                 Documentation
                             </Link>

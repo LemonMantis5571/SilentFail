@@ -6,8 +6,6 @@ import { calculateSmartGrace } from '~/lib/smart-grace';
 import { createId } from "@paralleldrive/cuid2";
 import { createTerminalCard, STYLES } from '~/server/terminal-response';
 
-
-
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 const app = new Elysia({ prefix: '/api' })
@@ -183,12 +181,6 @@ const app = new Elysia({ prefix: '/api' })
         where: { userId: user.id },
         orderBy: { createdAt: 'desc' }
       });
-    }, {
-      detail: {
-        tags: ['Admin'],
-        summary: 'List Monitors',
-        description: 'Retrieve all monitors for the authenticated user.'
-      }
     })
     .post('/monitors', async ({ user, body }) => {
       const { name, interval, useSmartGrace, gracePeriod, privateMonitor } = body;
@@ -214,12 +206,7 @@ const app = new Elysia({ prefix: '/api' })
         useSmartGrace: t.Boolean(),
         gracePeriod: t.Number(),
         privateMonitor: t.Boolean()
-      }),
-      detail: {
-        tags: ['Admin'],
-        summary: 'Create Monitor',
-        description: 'Create a new monitor with specified configuration.'
-      }
+      })
     })
     .patch('/monitors/:id', async ({ user, params: { id }, body }) => {
       const { name, interval, useSmartGrace, gracePeriod, privateMonitor } = body;
@@ -251,12 +238,7 @@ const app = new Elysia({ prefix: '/api' })
         useSmartGrace: t.Optional(t.Boolean()),
         gracePeriod: t.Optional(t.Number()),
         privateMonitor: t.Optional(t.Boolean())
-      }),
-      detail: {
-        tags: ['Admin'],
-        summary: 'Update Monitor',
-        description: 'Update an existing monitor configuration.'
-      }
+      })
     })
   )
 
@@ -336,12 +318,6 @@ const app = new Elysia({ prefix: '/api' })
         checked: activeMonitors.length,
         markedDown: deadMonitorIds.length
       };
-    }, {
-      detail: {
-        tags: ['System'],
-        summary: 'Run Checks',
-        description: 'Trigger a manual check of all monitors (Internal/Cron use).'
-      }
     })
   )
 

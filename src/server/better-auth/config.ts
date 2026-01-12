@@ -17,8 +17,8 @@ export const auth = betterAuth({
       redirectURI: `${env.NEXT_PUBLIC_APP_URL}/api/auth/callback/github`,
     },
     discord: {
-      clientId: env.DISCORD_CLIENT_ID,
-      clientSecret: env.DISCORD_CLIENT_SECRET,
+      clientId:   env.DISCORD_CLIENT_ID!,
+      clientSecret: env.DISCORD_CLIENT_SECRET!,
       redirectURI: `${env.NEXT_PUBLIC_APP_URL}/api/auth/callback/discord`,
     }
   },
