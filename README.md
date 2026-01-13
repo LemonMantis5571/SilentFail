@@ -276,4 +276,4 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## 📄 License
 
-GPU General Public License v3.0 
+GPL General Public License v3.0 
