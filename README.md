@@ -3,7 +3,7 @@
 > A lightweight **"Dead Man's Switch"** for cron jobs and background scripts — detect silent failures when automated tasks stop checking in.
 
 ![Beta](https://img.shields.io/badge/status-beta-yellow)
-![License](https://img.shields.io/badge/license-MIT-blue)
+![License](https://img.shields.io/badge/license-GNU%20General%20Public%20License%20v3.0-blue)
 
 ---
 
@@ -276,4 +276,4 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## 📄 License
 
-GNU General Public License v3.0 
+GPU General Public License v3.0 
