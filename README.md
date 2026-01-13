@@ -66,6 +66,8 @@ The app will be available at **http://localhost:3000**
 
 > 💡 **Note:** The Docker image includes a built-in cron worker that automatically checks for silent failures. No separate cron service needed!
 
+> ⚠️ **Docker Runtime:** The Docker image uses **Bun** as its runtime. For npm-based deployments, see Option B below.
+
 **Managing the stack:**
 ```bash
 docker-compose down          # Stop all services
@@ -80,8 +82,9 @@ docker-compose restart app   # Restart app service
 
 For faster development iteration:
 
+**Using Bun (recommended):**
 ```bash
-# Start only the database (requires --profile flag)
+# Start only the database
 docker-compose --profile local-db up db -d
 
 # Install dependencies
@@ -95,6 +98,24 @@ bun run dev
 
 # In a separate terminal, run the cron worker
 bun run worker
+```
+
+**Using npm:**
+```bash
+# Start only the database
+docker-compose --profile local-db up db -d
+
+# Install dependencies
+npm install
+
+# Push database schema
+npm run db:push
+
+# Run app locally
+npm run dev
+
+# In a separate terminal, run the cron worker (requires ts-node or tsx)
+npx tsx scripts/worker.ts
 ```
 
 ---
@@ -192,13 +213,15 @@ These scripts will ping your monitor every N seconds. Stop the script with `Ctrl
 
 ## 🌐 OAuth Setup
 
-### GitHub (Required)
+> 💡 **Note:** At least one OAuth provider is required. You can use GitHub, Discord, or both.
+
+### GitHub
 1. Go to https://github.com/settings/developers
 2. Click "New OAuth App"
 3. Set Authorization callback URL: `https://your-app.com/api/auth/callback/github`
 4. Copy Client ID and Client Secret to your environment variables
 
-### Discord (Optional)
+### Discord
 1. Go to https://discord.com/developers/applications
 2. Create New Application → OAuth2
 3. Add Redirect URL: `https://your-app.com/api/auth/callback/discord`
@@ -253,4 +276,4 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## 📄 License
 
-MIT License
+GNU General Public License v3.0 

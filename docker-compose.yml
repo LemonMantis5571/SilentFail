@@ -49,27 +49,9 @@ services:
       - RESEND_API_KEY=${RESEND_API_KEY}
       - EMAIL_FROM=${EMAIL_FROM}
       - CRON_SECRET=${CRON_SECRET}
-    # Note: If using local-db profile, start db first: docker-compose --profile local-db up -d db
-    networks:
-      - silentfail-network
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
-
-  # Cron runner for monitor health checks
-  cron:
-    build: ./docker/cron
-    container_name: silentfail-cron
-    restart: unless-stopped
-    environment:
-      - APP_URL=${NEXT_PUBLIC_APP_URL:-http://app:3000}
-      - CRON_SECRET=${CRON_SECRET}
       - CRON_INTERVAL=${CRON_INTERVAL:-60}
-    depends_on:
-      app:
-        condition: service_started
+    # Note: The cron worker runs inside this container via entrypoint.sh
+    # Note: If using local-db profile, start db first: docker-compose --profile local-db up -d db
     networks:
       - silentfail-network
     logging:
