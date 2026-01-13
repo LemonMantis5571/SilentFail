@@ -257,7 +257,44 @@ bun run worker           # Run cron worker locally
 
 ---
 
-## 🚢 Production Checklist
+## � Updating
+
+When a new version is released:
+
+**Docker users:**
+```bash
+# Pull latest changes
+git pull origin main
+
+# Rebuild and restart containers
+docker-compose down
+docker-compose build --no-cache
+docker-compose up -d
+
+# If there are database schema changes
+docker-compose exec app bunx prisma db push
+```
+
+**Local development:**
+```bash
+# Pull latest changes
+git pull origin main
+
+# Update dependencies
+bun install   # or: npm install
+
+# Apply any schema changes
+bun run db:push   # or: npm run db:push
+
+# Restart your dev server
+bun run dev   # or: npm run dev
+```
+
+> ⚠️ **Breaking Changes:** Check the [releases page](https://github.com/LemonMantis5571/SilentFail/releases) for migration notes before updating.
+
+---
+
+## �🚢 Production Checklist
 
 - [ ] Set `NEXT_PUBLIC_APP_URL` to your production domain
 - [ ] Generate secure values for `BETTER_AUTH_SECRET` and `CRON_SECRET`

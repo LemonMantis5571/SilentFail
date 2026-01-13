@@ -61,7 +61,7 @@ export default function Home() {
                 <motion.div variants={fadeInUp}>
                   <Badge variant="outline" className="px-4 py-1 border-primary/30 text-primary bg-primary/10 rounded-full backdrop-blur-sm">
                     <span className="animate-pulse mr-2 h-2 w-2 rounded-full bg-primary inline-block shadow-[0_0_10px_currentColor]"></span>
-                    New: AI Log Analysis
+                    New: AI Log Analysis (Soon™)
                   </Badge>
                 </motion.div>
 
@@ -175,7 +175,7 @@ export default function Home() {
             >
               {[
                 { title: "Zero Config", icon: Zap, desc: "No SDKs to install. No complex agents. Just a simple URL. If you can make an HTTP request, you can monitor it." },
-                { title: "AI Crash Analysis", icon: Code2, desc: "Pipe your error logs to us. Our AI parses the stack trace and emails you exactly why the script failed." },
+                { title: "AI Crash Analysis (Soon™)", icon: Code2, desc: "Pipe your error logs to us. Our AI parses the stack trace and emails you exactly why the script failed." },
                 { title: "Smart Grace Periods", icon: ShieldAlert, desc: "We learn how long your jobs usually take. If a 5-minute backup suddenly takes 2 seconds, we'll flag it." }
               ].map((feature, i) => (
                 <motion.div key={i} variants={fadeInUp} whileHover={{ y: -5 }} className="h-full">
