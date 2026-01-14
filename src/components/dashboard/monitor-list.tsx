@@ -4,9 +4,10 @@ import { useState, useMemo } from "react";
 import { type MonitorWithPings } from "~/app/actions/monitor";
 import { MonitorCard } from "~/components/dashboard/monitor-card";
 import { Input } from "~/components/ui/input";
-import { Activity, Search, ArrowUpDown } from "lucide-react";
+import { Activity, Search, ArrowUpDown, AlertTriangle } from "lucide-react";
 import { CreateMonitorButton } from "~/components/dashboard/create-monitor";
 import { RefreshMonitorsButton } from "~/components/dashboard/refresh-button";
+import { ErrorBoundary } from "~/components/ui/error-boundary";
 import {
     Select,
     SelectContent,
@@ -113,7 +114,18 @@ export function MonitorList({ initialMonitors }: MonitorListProps) {
                     </div>
                 ) : (
                     filteredAndSortedMonitors.map((monitor) => (
-                        <MonitorCard key={monitor.id} monitor={monitor} />
+                        <ErrorBoundary
+                            key={monitor.id}
+                            fallback={
+                                <div className="bg-[#0B1121] border border-red-500/20 rounded-xl p-6 flex flex-col items-center justify-center text-center">
+                                    <AlertTriangle className="w-8 h-8 text-red-400 mb-3" />
+                                    <p className="text-white font-medium mb-1">Failed to load monitor</p>
+                                    <p className="text-slate-500 text-sm">{monitor.name}</p>
+                                </div>
+                            }
+                        >
+                            <MonitorCard monitor={monitor} />
+                        </ErrorBoundary>
                     ))
                 )}
             </div>

@@ -1,0 +1,67 @@
+.terminal-card {
+  font-family: 'Courier New', 'Monaco', 'Menlo', monospace;
+  background-color: #1e1e1e;
+  border: 1px solid;
+  border-radius: 8px;
+  padding: 16px;
+  margin: 16px 0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+}
+
+.terminal-card.success {
+  border-color: #4caf50;
+}
+
+.terminal-card.error {
+  border-color: #f44336;
+}
+
+.terminal-card.warning {
+  border-color: #ff9800;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.card-header .icon {
+  font-size: 18px;
+  margin-right: 8px;
+}
+
+.card-header .status {
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.metric-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0;
+}
+
+.metric-key {
+  color: #2196f3;
+  font-weight: bold;
+}
+
+.metric-value {
+  color: #fff;
+  font-weight: normal;
+  word-break: break-all;
+  text-align: right;
+  flex: 1;
+  margin-left: 8px;
+}

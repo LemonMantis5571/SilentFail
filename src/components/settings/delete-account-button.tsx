@@ -24,11 +24,11 @@ export function DeleteAccountButton({ monitorCount }: { monitorCount: number }) 
     try {
       await deleteAccount();
       toast.success("Account deleted");
-      window.location.href = "/"; // Hard redirect to home
+      window.location.href = "/";
     } catch (error) {
-        toast.error("Failed to delete account");
-        setLoading(false);
-        setOpen(false);
+      toast.error("Failed to delete account");
+      setLoading(false);
+      setOpen(false);
     }
   };
 
@@ -36,10 +36,10 @@ export function DeleteAccountButton({ monitorCount }: { monitorCount: number }) 
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant="destructive" className="bg-red-600 hover:bg-red-700 text-white cursor-pointer">
-            <Trash2 className="mr-2 h-4 w-4" /> Delete Account
+          <Trash2 className="mr-2 h-4 w-4" /> Delete Account
         </Button>
       </DialogTrigger>
-      
+
       <DialogContent className="sm:max-w-[425px] bg-[#0B1121] border-slate-800 text-slate-300">
         <DialogHeader>
           <DialogTitle className="text-white flex items-center gap-2">
@@ -50,17 +50,17 @@ export function DeleteAccountButton({ monitorCount }: { monitorCount: number }) 
             This action cannot be undone. This will permanently delete your account and remove <strong className="text-white">{monitorCount} monitors</strong> along with all historical data.
           </DialogDescription>
         </DialogHeader>
-        
+
         <DialogFooter className="mt-4 flex gap-4 ">
-          <Button 
-            variant="ghost" 
-            onClick={() => setOpen(false)} 
+          <Button
+            variant="ghost"
+            onClick={() => setOpen(false)}
             className="border border-slate-700 text-slate-300 hover:bg-slate-800 hover:text-white"
           >
             Cancel
           </Button>
-          <Button 
-         
+          <Button
+
             onClick={handleDelete}
             disabled={loading}
             className="bg-red-600 hover:bg-red-700 text-white hover:cursor-pointer"

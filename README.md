@@ -314,3 +314,7 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 ## 📄 License
 
 GPL General Public License v3.0 
+
+## Disclaimer
+
+This is a self-hosted application. If you host it publicly, you are responsible for providing your own Privacy Policy and Terms of Service.
