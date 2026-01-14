@@ -98,8 +98,8 @@ export default function SignInClient({ hasDiscord }: { hasDiscord: boolean }) {
                 </CardContent>
 
                 <CardFooter className="border-t border-slate-800/50 bg-slate-900/30 py-6 flex justify-center">
-                    <p className="text-xs text-slate-500 text-center max-w-[200px]">
-                        By continuing, you agree to our <Link href="#" className="underline hover:text-slate-400">Terms</Link> and <Link href="#" className="underline hover:text-slate-400">Privacy Policy</Link>.
+                    <p className="text-xs text-slate-500 text-center">
+                        Open source on <Link href="https://github.com/LemonMantis5571/SilentFail" target="_blank" className="underline hover:text-slate-400">GitHub</Link>
                     </p>
                 </CardFooter>
             </Card>

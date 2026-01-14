@@ -82,9 +82,11 @@ export default function Home() {
                       <ArrowRight className="ml-2 h-4 w-4" />
                     </Button>
                   </Link>
-                  <Button size="lg" variant="outline" className="h-12 px-8 text-base bg-transparent border-primary/20 hover:bg-primary/10">
-                    View Documentation
-                  </Button>
+                  <Link href="https://github.com/LemonMantis5571/SilentFail/blob/main/docs/API.md" target="_blank">
+                    <Button size="lg" variant="outline" className="h-12 px-8 text-base bg-transparent border-primary/20 hover:bg-primary/10">
+                      View Documentation
+                    </Button>
+                  </Link>
                 </motion.div>
 
 
@@ -303,9 +305,8 @@ export default function Home() {
         <div className="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
           <div>© 2026 SilentFail. Built by a Developer for Developers.</div>
           <div className="flex gap-6">
-            <Link href="#" className="hover:text-primary transition-colors">Privacy</Link>
-            <Link href="#" className="hover:text-primary transition-colors">Terms</Link>
-            <Link href="#" className="hover:text-primary transition-colors">Twitter</Link>
+            <Link href="https://x.com/lee_gv" target="_blank" className="hover:text-primary transition-colors">𝕏 Twitter</Link>
+            <Link href="https://github.com/LemonMantis5571" target="_blank" className="hover:text-primary transition-colors">GitHub</Link>
           </div>
         </div>
       </footer>
