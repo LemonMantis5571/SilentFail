@@ -1,13 +1,6 @@
 "use client";
-
 import Link from "next/link";
-import {
-  ShieldAlert,
-  Zap,
-  CheckCircle2,
-  ArrowRight,
-  Code2
-} from "lucide-react";
+import { Zap, ArrowRight, ShieldAlert, Code2, Minus, Square, X, Github } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/components/ui/card";
 import { Badge } from "~/components/ui/badge";
@@ -35,6 +28,7 @@ export default function Home() {
       <main>
         <section className="relative pt-20 pb-32 md:pt-32 overflow-hidden">
 
+
           <motion.div
             animate={{
               scale: [1, 1.1, 1],
@@ -49,9 +43,15 @@ export default function Home() {
           />
 
           <div className="container mx-auto px-4 relative z-10">
+
+            <motion.div
+              exit={{ rotate: 0 }}
+              animate={{ rotate: 360 }}
+              transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+              className="absolute -z-10 bg-primary/20 w-[120%] h-[120%] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 blur-[120px] rounded-full pointer-events-none"
+            />
+
             <div className="flex flex-col lg:flex-row items-center gap-12">
-
-
               <motion.div
                 className="flex-1 text-center lg:text-left space-y-8"
                 initial="hidden"
@@ -76,17 +76,18 @@ export default function Home() {
                 </motion.p>
 
                 <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                  <Link href="https://github.com/LemonMantis5571/SilentFail/blob/main/docs/API.md" target="_blank">
+                    <Button size="lg" variant="outline" className="h-12 px-8 text-base bg-transparent border-primary/20 hover:bg-primary/10 hover:scale-105 transition-all">
+                      View Documentation
+                    </Button>
+                  </Link>
                   <Link href="/dashboard">
-                    <Button size="lg" className="h-12 px-8 text-base bg-blue-700 shadow-lg shadow-primary/25 hover:shadow-primary/40 transition-shadow text-neutral-300">
+                    <Button size="lg" className="h-12 px-8 text-base bg-blue-700 shadow-lg text-white border-blue-400/20 hover:bg-blue-600/80 hover:scale-105 transition-all">
                       Start Monitoring
                       <ArrowRight className="ml-2 h-4 w-4" />
                     </Button>
                   </Link>
-                  <Link href="https://github.com/LemonMantis5571/SilentFail/blob/main/docs/API.md" target="_blank">
-                    <Button size="lg" variant="outline" className="h-12 px-8 text-base bg-transparent border-primary/20 hover:bg-primary/10">
-                      View Documentation
-                    </Button>
-                  </Link>
+
                 </motion.div>
 
 
@@ -103,50 +104,55 @@ export default function Home() {
 
                   <div className="absolute inset-0 bg-linear-to-br from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
 
-                  <div className="flex items-center gap-2 px-4 py-3 border-b border-border/50 bg-muted/20">
-                    <div className="h-3 w-3 rounded-full bg-red-500/20 border border-red-500/50" />
-                    <div className="h-3 w-3 rounded-full bg-yellow-500/20 border border-yellow-500/50" />
-                    <div className="h-3 w-3 rounded-full bg-green-500/20 border border-green-500/50" />
-                    <div className="ml-2 text-xs text-muted-foreground font-mono">bash — 80x24</div>
+                  <div className="flex items-center justify-between pl-3 border-b border-border/50 bg-muted/10">
+                    <div className="flex items-center gap-2.5 ml-1">
+                      <div className="text-[11px] text-muted-foreground/70 font-mono">bash — 80x24</div>
+                    </div>
+                    <div className="flex items-center -mr-1">
+                      <div className="px-3 py-3 hover:bg-white/5 transition-colors cursor-default group/win">
+                        <Minus className="h-3.5 w-3.5 text-muted-foreground/50" />
+                      </div>
+                      <div className="px-3 py-3 hover:bg-white/5 transition-colors cursor-default group/win">
+                        <Square className="h-3 w-3 text-muted-foreground/50" />
+                      </div>
+                      <div className="pl-3 pr-4 py-3 hover:bg-red-600 transition-colors cursor-default group/win">
+                        <X className="h-3.5 w-3.5 text-muted-foreground/50 group-hover/win:text-white" />
+                      </div>
+                    </div>
                   </div>
-                  <div className="p-6 font-mono text-sm space-y-4 bg-[#0a0a0a] text-green-400">
-                    <div className="flex">
+                  <motion.div
+                    className="p-6 font-mono text-sm space-y-4 bg-[#0a0a0a] text-green-400"
+                    variants={staggerContainer}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true }}
+                  >
+                    <motion.div variants={fadeInUp} className="flex">
                       <span className="text-blue-400 mr-2">~</span>
                       <span className="text-slate-500"># 1. Your backup script runs...</span>
-                    </div>
-                    <div>
+                    </motion.div>
+                    <motion.div variants={fadeInUp}>
                       <span className="text-blue-400 mr-2">➜</span>
                       <span className="text-slate-100">pg_dump database &gt; backup.sql</span>
-                    </div>
-                    <div className="flex">
+                    </motion.div>
+                    <motion.div variants={fadeInUp} className="flex">
                       <span className="text-blue-400 mr-2">~</span>
                       <span className="text-slate-500"># 2. Tell SilentFail it worked</span>
-                    </div>
-                    <motion.div
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ delay: 1.5, duration: 0.5 }}
-                    >
+                    </motion.div>
+                    <motion.div variants={fadeInUp}>
                       <span className="text-blue-400 mr-2">➜</span>
                       <span className="text-slate-100">curl </span>
                       <span className="text-yellow-300">https://api.silentfail.com/ping/5f9a2b</span>
                     </motion.div>
                     <motion.div
-                      className="pt-4 text-white"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ delay: 2.5, duration: 0.5 }}
+                      variants={fadeInUp}
+                      className="pt-4 text-white flex items-center gap-2"
                     >
                       <span className="text-green-500">✔</span> 200 OK. Heartbeat received.
                     </motion.div>
-                  </div>
+                  </motion.div>
                 </div>
 
-                <motion.div
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                  className="absolute -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-primary/20 blur-[100px] rounded-full pointer-events-none"
-                />
               </motion.div>
             </div>
           </div>
@@ -304,9 +310,10 @@ export default function Home() {
       <footer className="py-8 border-t border-border/40 bg-muted/10">
         <div className="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
           <div>© 2026 SilentFail. Built by a Developer for Developers.</div>
-          <div className="flex gap-6">
-            <Link href="https://x.com/lee_gv" target="_blank" className="hover:text-primary transition-colors">𝕏 Twitter</Link>
-            <Link href="https://github.com/LemonMantis5571" target="_blank" className="hover:text-primary transition-colors">GitHub</Link>
+          <div className="flex gap-6 items-center">
+            <Link href="https://x.com/lee_gv" target="_blank" className="hover:text-primary transition-colors">
+              <span className="text-xl">𝕏</span>
+            </Link>
           </div>
         </div>
       </footer>

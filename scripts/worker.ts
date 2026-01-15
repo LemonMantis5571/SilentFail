@@ -1,5 +1,4 @@
 import "dotenv/config";
-import { parseArgs } from "util";
 
 const APP_URL = process.env.APP_URL || "http://localhost:3000";
 const CRON_SECRET = process.env.CRON_SECRET || "";

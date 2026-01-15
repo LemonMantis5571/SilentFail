@@ -5,7 +5,7 @@ import { type Metadata } from "next";
 import { Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
 import { AuthButtons } from "~/components/nav/auth-buttons";
 import Link from "next/link";
-import { ShieldAlert } from "lucide-react";
+import { ShieldAlert, ChevronDown } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "SilentFail",
@@ -46,10 +46,18 @@ export default function RootLayout({
               <span className="font-extrabold tracking-tight">SilentFail</span>
             </Link>
 
-            <nav className="hidden md:flex items-center gap-6 text-sm font-semibold text-muted-foreground">
-              <Link href="/#features" className="hover:text-primary transition-colors">Features</Link>
-              <Link href="/get-started" className="hover:text-primary transition-colors">Get Started</Link>
-              <Link href="/dashboard" className="hover:text-primary transition-colors">Dashboard</Link>
+            <nav className="hidden lg:flex items-center gap-8 text-[13px] font-medium text-muted-foreground/80">
+              <div className="flex items-center gap-6">
+                <div className="flex items-center gap-1 cursor-pointer hover:text-foreground transition-colors group">
+                  <Link href="/#features" className="hover:text-primary transition-colors">Features</Link>
+                </div>
+                <div className="flex items-center gap-1 cursor-pointer hover:text-foreground transition-colors group">
+                  <Link href="/get-started" className="hover:text-primary transition-colors">Get Started</Link>
+                </div>
+                <div className="flex items-center gap-1 cursor-pointer hover:text-foreground transition-colors group">
+                  <Link href="/dashboard" className="hover:text-primary transition-colors">Dashboard</Link>
+                </div>
+              </div>
             </nav>
 
             <AuthButtons />
