@@ -13,7 +13,7 @@ const resend = new Resend(env.RESEND_API_KEY);
 export const cronRoutes = new Elysia({ prefix: '/cron' })
   .onBeforeHandle(({ request }) => {
     const authHeader = request.headers.get("authorization");
-    // Always require auth in production; optional in development
+
     if (process.env.NODE_ENV === 'production') {
       if (authHeader !== `Bearer ${env.CRON_SECRET}`) {
         return new Response("Unauthorized", { status: 401 });
