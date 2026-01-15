@@ -1,8 +1,10 @@
 import { Elysia, t } from 'elysia';
+import { adminRateLimit } from './rate-limit';
 import { db } from '~/server/db';
 import { createId } from "@paralleldrive/cuid2";
 
 export const adminRoutes = new Elysia({ prefix: '/admin' })
+  .use(adminRateLimit)
   .resolve(async ({ request }) => {
     const authHeader = request.headers.get("authorization");
     if (!authHeader?.startsWith("Bearer ")) {

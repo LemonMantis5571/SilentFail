@@ -1,9 +1,11 @@
 import { Elysia, t } from 'elysia';
+import { pingRateLimit } from './rate-limit';
 import { db } from '~/server/db';
 import { calculateSmartGrace } from '~/lib/smart-grace';
 import { createTerminalCard, STYLES } from '~/server/terminal-response';
 
 export const pingRoutes = new Elysia({ prefix: '/ping' })
+  .use(pingRateLimit)
   .get('/:key', async ({ params: { key }, request }) => {
     try {
       const monitor = await db.monitor.findUnique({
@@ -30,7 +32,7 @@ export const pingRoutes = new Elysia({ prefix: '/ping' })
           title: "NOT FOUND",
           metrics: {
             "Error Code": "404",
-            "Key Provided": key,
+            "Key Provided": key ?? "unknown",
             "Message": "Invalid Monitor Key",
             "Action": "Check configuration"
           },

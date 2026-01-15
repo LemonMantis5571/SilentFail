@@ -11,6 +11,14 @@ export const env = createEnv({
       process.env.NODE_ENV === "production"
         ? z.string()
         : z.string().optional(),
+    CRON_SECRET:
+      process.env.NODE_ENV === "production"
+        ? z.string().min(1, "CRON_SECRET is required in production")
+        : z.string().optional(),
+    RESEND_API_KEY:
+      process.env.NODE_ENV === "production"
+        ? z.string().min(1, "RESEND_API_KEY is required in production")
+        : z.string().optional(),
     BETTER_AUTH_GITHUB_CLIENT_ID: z.string(),
     BETTER_AUTH_GITHUB_CLIENT_SECRET: z.string(),
     DISCORD_CLIENT_ID: z.string().optional(),
@@ -35,6 +43,8 @@ export const env = createEnv({
    * middlewares) or client-side so we need to destruct manually.
    */
   runtimeEnv: {
+    CRON_SECRET: process.env.CRON_SECRET,
+    RESEND_API_KEY: process.env.RESEND_API_KEY,
     BETTER_AUTH_SECRET: process.env.BETTER_AUTH_SECRET,
     BETTER_AUTH_GITHUB_CLIENT_ID: process.env.BETTER_AUTH_GITHUB_CLIENT_ID,
     BETTER_AUTH_GITHUB_CLIENT_SECRET:

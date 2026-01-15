@@ -3,6 +3,18 @@
 # SilentFail Combined Entrypoint
 # Runs both the Next.js app and cron worker in a single container
 
+
+if [ "$NODE_ENV" = "production" ]; then
+  if [ -z "$CRON_SECRET" ] || [ "$CRON_SECRET" = "placeholder" ]; then
+    echo "❌ FATAL: CRON_SECRET is required in production"
+    exit 1
+  fi
+  if [ -z "$RESEND_API_KEY" ] || [ "$RESEND_API_KEY" = "re_placeholder" ]; then
+    echo "❌ FATAL: RESEND_API_KEY is required in production"
+    exit 1
+  fi
+fi
+
 APP_URL="${NEXT_PUBLIC_APP_URL:-http://localhost:3000}"
 CRON_PATH="${CRON_PATH:-/api/cron/check}"
 CRON_SECRET="${CRON_SECRET:-}"

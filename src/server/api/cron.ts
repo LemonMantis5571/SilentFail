@@ -2,13 +2,23 @@ import { Elysia } from 'elysia';
 import { db } from '~/server/db';
 import { Resend } from 'resend';
 import AlertEmail from '~/components/emails/alert-email';
+import { env } from '~/env';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+
+if (!env.RESEND_API_KEY && process.env.NODE_ENV === 'production') {
+  throw new Error('RESEND_API_KEY is required in production');
+}
+const resend = new Resend(env.RESEND_API_KEY);
 
 export const cronRoutes = new Elysia({ prefix: '/cron' })
   .onBeforeHandle(({ request }) => {
     const authHeader = request.headers.get("authorization");
-    if (process.env.CRON_SECRET && authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+    // Always require auth in production; optional in development
+    if (process.env.NODE_ENV === 'production') {
+      if (authHeader !== `Bearer ${env.CRON_SECRET}`) {
+        return new Response("Unauthorized", { status: 401 });
+      }
+    } else if (env.CRON_SECRET && authHeader !== `Bearer ${env.CRON_SECRET}`) {
       return new Response("Unauthorized", { status: 401 });
     }
   })
