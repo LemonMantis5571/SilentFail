@@ -178,18 +178,13 @@ openssl rand -hex 32     # For CRON_SECRET
 2. **Add the ping URL** to the end of your script:
 
 ```bash
-# Bash example
-pg_dump mydb > backup.sql && curl https://your-app.com/api/ping/abc123xyz
-
-# Python
-import requests
-requests.get("https://your-app.com/api/ping/abc123xyz")
-
-# Node.js
-await fetch("https://your-app.com/api/ping/abc123xyz");
+# Ping after successful backup
+pg_dump mydb > backup.sql && curl -s https://your-app.com/api/ping/abc123xyz
 ```
 
 3. **Get alerted** if your script stops pinging within the expected interval
+
+> 📚 See **[EXAMPLES.md](./EXAMPLES.md)** for integration examples in Python, Node.js, Go, PHP, Ruby, PowerShell, and more.
 
 ---
 
