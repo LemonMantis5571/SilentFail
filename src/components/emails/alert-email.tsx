@@ -9,9 +9,6 @@ import {
   Heading,
   Button,
   Hr,
-  Img,
-  Row,
-  Column,
 } from "@react-email/components";
 import * as React from "react";
 
@@ -36,7 +33,7 @@ export default function AlertEmail({
 
   return (
     <Html>
-      <Preview>� {monitorName} stopped responding - SilentFail Alert</Preview>
+      <Preview>🔔 {monitorName} stopped responding - SilentFail Alert</Preview>
       <Body style={main}>
         <Container style={container}>
           {/* Header */}
