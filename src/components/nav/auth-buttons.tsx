@@ -48,7 +48,7 @@ export function AuthButtons() {
       </div>
     )
   }
-  console.log(session);
+
 
   if (session) {
     return (
