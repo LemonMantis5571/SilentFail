@@ -8,8 +8,8 @@ import Link from "next/link";
 import { AnalyticsChart } from "~/components/monitor-details/analytics-charts";
 import { auth } from "~/server/better-auth";
 import { headers } from "next/headers";
-import { CopyUrlButton } from "~/components/dashboard/copy-button";
 import { RotateKeyButton } from "~/components/monitor-details/rotate-key-button";
+import { UrlDisplay } from "~/components/monitor-details/url-display";
 import { EditMonitorModal } from "~/components/monitor-details/edit-monitor-modal";
 
 function formatDuration(seconds: number) {
@@ -156,12 +156,7 @@ export default async function MonitorPage({ params }: { params: Promise<{ id: st
                             <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2 block">
                                 Ping URL
                             </label>
-                            <div className="flex items-center gap-2">
-                                <div className="flex-1 rounded-md bg-slate-950 border border-slate-800 p-2 font-mono text-xs text-slate-300 truncate">
-                                    {pingUrl}
-                                </div>
-                                <CopyUrlButton url={pingUrl} />
-                            </div>
+                            <UrlDisplay url={pingUrl} />
                             <p className="text-xs text-slate-500 mt-2">
                                 Make a GET, POST, or HEAD request to this URL to reset the timer.
                             </p>
