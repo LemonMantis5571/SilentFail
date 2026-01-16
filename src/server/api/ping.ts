@@ -50,7 +50,7 @@ export const pingRoutes = new Elysia({ prefix: '/ping' })
       let latency = 0;
 
       if (monitor.lastPing) {
-        console.log(monitor.lastPing, now);
+ 
 
         const diffMs = now.getTime() - monitor.lastPing.getTime();
         latency = Math.floor(diffMs / 1000);
@@ -72,7 +72,6 @@ export const pingRoutes = new Elysia({ prefix: '/ping' })
           where: { id: activeDowntime.id },
           data: { endedAt: now, duration: durationMinutes }
         });
-        console.log(`[Recovery] Closed downtime for ${monitor.name}`);
       }
 
       // 3. Smart Grace Logic

@@ -7,7 +7,7 @@ export function MonitorSparkline({ data, status }: { data: any[], status: string
 
   const strokeColor = status === "UP" ? "#10b981" : "#f43f5e";
 
-  console.log(data);
+
   const chartData = data.length > 0
     ? [...data].reverse().map((p, i) => {
       return {

@@ -47,8 +47,6 @@ export const cronRoutes = new Elysia({ prefix: '/cron' })
       if (now > deadTime) {
         deadMonitorIds.push(monitor.id);
 
-        console.log(`[Alert] ${monitor.name} is DOWN`);
-
         // Queue Email
         emailPromises.push(
           resend.emails.send({
