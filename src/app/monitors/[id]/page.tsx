@@ -11,6 +11,8 @@ import { headers } from "next/headers";
 import { RotateKeyButton } from "~/components/monitor-details/rotate-key-button";
 import { UrlDisplay } from "~/components/monitor-details/url-display";
 import { EditMonitorModal } from "~/components/monitor-details/edit-monitor-modal";
+import { RefreshMonitorButton } from "~/components/monitor-details/refresh-monitor-button";
+import { RecentActivity } from "~/components/monitor-details/recent-activity";
 
 function formatDuration(seconds: number) {
     if (seconds < 1) return `${Math.round(seconds * 1000)}ms`;
@@ -92,7 +94,6 @@ export default async function MonitorPage({ params }: { params: Promise<{ id: st
     const downtimes = monitor.downtimes || [];
     const intervalSeconds = monitor.interval * 60;
 
-    // CALCULATE AVG DRIFT (Delay)
     const avgDrift = pings.length > 0
         ? pings.reduce((acc, p) => {
             const drift = Math.max(0, p.latency - intervalSeconds);
@@ -100,50 +101,64 @@ export default async function MonitorPage({ params }: { params: Promise<{ id: st
         }, 0) / pings.length
         : 0;
 
-    // Calculate downtime metrics
     const downtimeMetrics = calculateAccurateDowntime(downtimes, 24);
 
-    const pingUrl = `${process.env.NEXT_PUBLIC_APP_URL}/api/ping/${monitor.key}`;
+    const headersList = await headers();
+    const host = headersList.get("host") || "localhost:3000";
+    const protocol = headersList.get("x-forwarded-proto") || "http";
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || `${protocol}://${host}`;
+
+    let pingUrl = `${baseUrl}/api/ping/${monitor.key}`;
+    if (monitor.secret) {
+        pingUrl += `?secret=${monitor.secret}`;
+    }
+
+    const commandStr = `curl ${pingUrl}`;
 
     return (
         <div className="min-h-screen bg-[#020817] text-slate-300 p-8">
             <div className="max-w-6xl mx-auto space-y-8">
 
-                {/* Navigation Header */}
-                <div className="flex items-center gap-4">
-                    <Link href="/dashboard">
-                        <Button variant="ghost" size="icon" className="text-slate-400 hover:text-white hover:bg-slate-800">
-                            <ArrowLeft className="h-4 w-4" />
-                        </Button>
-                    </Link>
-                    <div className="flex flex-col">
-                        <h1 className="text-2xl font-bold text-white flex items-center gap-3">
-                            {monitor.name}
-                            <Badge variant="outline" className={`
-                ${monitor.status === 'UP' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : ''}
-                ${monitor.status === 'DOWN' ? 'bg-rose-500/10 text-rose-400 border-rose-500/20' : ''}
-                ${monitor.status === 'PENDING' ? 'bg-amber-500/10 text-amber-400 border-amber-500/20' : ''}
-              `}>
-                                {monitor.status}
-                            </Badge>
-                        </h1>
-                        <p className="text-sm text-slate-500 font-mono flex items-center gap-2 mt-1">
-                            <Clock className="h-3 w-3" /> Interval: {monitor.interval}m
-                            <span className="text-slate-700">|</span>
-                            Grace: {monitor.gracePeriod}m {monitor.useSmartGrace && "(Smart)"}
-                        </p>
+                <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                        <Link href="/dashboard">
+                            <Button variant="ghost" size="icon" className="text-slate-400 hover:text-white hover:bg-slate-800">
+                                <ArrowLeft className="h-4 w-4" />
+                            </Button>
+                        </Link>
+                        <div className="flex flex-col">
+                            <h1 className="text-2xl font-bold text-white flex items-center gap-3">
+                                {monitor.name}
+                                <Badge variant="outline" className={`
+                    ${monitor.status === 'UP' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : ''}
+                    ${monitor.status === 'DOWN' ? 'bg-rose-500/10 text-rose-400 border-rose-500/20' : ''}
+                    ${monitor.status === 'PENDING' ? 'bg-amber-500/10 text-amber-400 border-amber-500/20' : ''}
+                  `}>
+                                    {monitor.status}
+                                </Badge>
+                            </h1>
+                            <p className="text-sm text-slate-500 font-mono flex items-center gap-2 mt-1">
+                                <Clock className="h-3 w-3" /> Interval: {monitor.interval}m
+                                <span className="text-slate-700">|</span>
+                                Grace: {monitor.gracePeriod}m {monitor.useSmartGrace && "(Smart)"}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                        <RefreshMonitorButton />
+                        <EditMonitorModal monitor={{
+                            id: monitor.id,
+                            name: monitor.name,
+                            interval: monitor.interval,
+                            gracePeriod: monitor.gracePeriod,
+                            useSmartGrace: monitor.useSmartGrace || false,
+                            secret: monitor.secret
+                        }} />
                     </div>
                 </div>
-                <EditMonitorModal monitor={{
-                    id: monitor.id,
-                    name: monitor.name,
-                    interval: monitor.interval,
-                    gracePeriod: monitor.gracePeriod,
-                    useSmartGrace: monitor.useSmartGrace || false,
-                    secret: monitor.secret
-                }} />
 
-                {/* Connectivity & Security Section */}
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <Card className="bg-[#0B1121] border-slate-800">
                         <CardHeader>
@@ -156,7 +171,7 @@ export default async function MonitorPage({ params }: { params: Promise<{ id: st
                             <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2 block">
                                 Ping URL
                             </label>
-                            <UrlDisplay url={pingUrl} />
+                            <UrlDisplay url={commandStr} />
                             <p className="text-xs text-slate-500 mt-2">
                                 Make a GET, POST, or HEAD request to this URL to reset the timer.
                             </p>
@@ -225,7 +240,6 @@ export default async function MonitorPage({ params }: { params: Promise<{ id: st
 
                 </div>
 
-                {/* Downtime Incidents */}
                 {downtimes.length > 0 && (
                     <Card className="bg-[#0B1121] border-slate-800 shadow-sm">
                         <CardHeader>
@@ -290,42 +304,7 @@ export default async function MonitorPage({ params }: { params: Promise<{ id: st
                     </CardContent>
                 </Card>
 
-                {/* Recent Logs List */}
-                <div className="space-y-4">
-                    <h2 className="text-lg font-semibold text-white">Recent Activity</h2>
-                    <div className="rounded-md border border-slate-800 bg-[#0B1121] overflow-hidden">
-                        <div className="grid grid-cols-3 gap-4 p-4 border-b border-slate-800 bg-slate-900/50 text-xs font-medium text-slate-500 uppercase tracking-wider">
-                            <div>Status</div>
-                            <div>Time</div>
-                            <div className="text-right">Duration</div>
-                        </div>
-                        <div className="divide-y divide-slate-800 max-h-[500px] overflow-y-auto">
-                            {pings.map((ping) => (
-                                <div key={ping.id} className="grid grid-cols-3 gap-4 p-4 text-sm hover:bg-slate-800/30 transition-colors">
-                                    <div className="flex items-center gap-2">
-                                        <div className="h-2 w-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.4)]" />
-                                        <span className="text-emerald-400 font-medium">Success</span>
-                                    </div>
-                                    <div className="text-slate-400 font-mono text-xs">
-                                        {new Date(ping.createdAt).toLocaleString('en-US', {
-                                            month: 'short',
-                                            day: 'numeric',
-                                            hour: '2-digit',
-                                            minute: '2-digit',
-                                            second: '2-digit'
-                                        })}
-                                    </div>
-                                    <div className="text-right font-mono text-slate-300">
-                                        {formatDuration(ping.latency)}
-                                    </div>
-                                </div>
-                            ))}
-                            {pings.length === 0 && (
-                                <div className="p-8 text-center text-slate-500">No logs recorded yet.</div>
-                            )}
-                        </div>
-                    </div>
-                </div>
+                <RecentActivity pings={pings} />
 
             </div>
         </div >

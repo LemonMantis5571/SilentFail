@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "~/components/ui/button";
 import {
     Dialog,
@@ -13,7 +13,7 @@ import {
 } from "~/components/ui/dialog";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
-import { Loader2, Settings2 } from "lucide-react";
+import { Loader2, Settings2, RotateCcw } from "lucide-react";
 import { updateMonitor } from "~/app/actions/monitor";
 import { toast } from "sonner";
 import { Switch } from "../ui/switch";
@@ -32,11 +32,29 @@ interface EditMonitorModalProps {
 export function EditMonitorModal({ monitor }: EditMonitorModalProps) {
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
+
     const [name, setName] = useState(monitor.name);
     const [secret, setSecret] = useState(monitor.secret || "");
     const [interval, setInterval] = useState(monitor.interval.toString());
     const [gracePeriod, setGracePeriod] = useState(monitor.gracePeriod.toString());
     const [useSmartGrace, setUseSmartGrace] = useState<boolean | undefined>(monitor.useSmartGrace);
+
+    useEffect(() => {
+        setName(monitor.name);
+        setSecret(monitor.secret || "");
+        setInterval(monitor.interval.toString());
+        setGracePeriod(monitor.gracePeriod.toString());
+        setUseSmartGrace(monitor.useSmartGrace);
+    }, [monitor]);
+
+    const handleReset = () => {
+        setName(monitor.name);
+        setSecret(monitor.secret || "");
+        setInterval(monitor.interval.toString());
+        setGracePeriod(monitor.gracePeriod.toString());
+        setUseSmartGrace(monitor.useSmartGrace);
+        toast.info("Reset to original values");
+    };
 
     const handleSubmit = async () => {
         setLoading(true);
@@ -85,7 +103,6 @@ export function EditMonitorModal({ monitor }: EditMonitorModalProps) {
                             onCheckedChange={setUseSmartGrace}
                         />
                     </div>
-                    {/* Name Field */}
                     <div className="grid gap-2">
                         <Label htmlFor="name">Friendly Name</Label>
                         <Input
@@ -96,7 +113,6 @@ export function EditMonitorModal({ monitor }: EditMonitorModalProps) {
                         />
                     </div>
 
-                    {/* Secret Field */}
                     <div className="grid gap-2">
                         <div className="flex items-center justify-between">
                             <Label htmlFor="secret">Secret (Optional)</Label>
@@ -111,7 +127,6 @@ export function EditMonitorModal({ monitor }: EditMonitorModalProps) {
                         <p className="text-[10px] text-muted-foreground">If set, requests must include `?secret=YOUR_SECRET` or Bearer token.</p>
                     </div>
 
-                    {/* Time Settings Row */}
                     <div className="grid grid-cols-2 gap-4">
                         <div className="grid gap-2">
                             <Label htmlFor="interval">Interval (min)</Label>
@@ -143,13 +158,26 @@ export function EditMonitorModal({ monitor }: EditMonitorModalProps) {
                     </div>
 
                 </div>
-                <DialogFooter>
+                <DialogFooter className="gap-2 sm:gap-0">
+                    <div className="flex items-center gap-2 mr-auto">
+                        <Button
+                            type="button"
+                            variant="ghost"
+                            size="sm"
+                            onClick={handleReset}
+                            className="text-slate-400 hover:text-white hover:bg-white/10"
+                            title="Reset to original values"
+                        >
+                            <RotateCcw className="h-4 w-4 mr-2" />
+                            Reset
+                        </Button>
+                    </div>
                     <Button variant={"secondary"} className="hover:cursor-pointer" onClick={handleSubmit} disabled={loading || !name}>
                         {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
                         Save Changes
                     </Button>
                 </DialogFooter>
             </DialogContent>
-        </Dialog>
+        </Dialog >
     );
 }

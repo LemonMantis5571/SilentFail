@@ -20,6 +20,12 @@
 
 ---
 
+## 🎥 Quick Walkthrough
+
+https://github.com/user-attachments/assets/a3d61ada-2a1f-477d-955e-ece6f2e7a4d0
+
+---
+
 ## 🛠 Tech Stack
 
 | Layer | Technology |

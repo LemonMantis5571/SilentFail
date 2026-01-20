@@ -311,6 +311,9 @@ export default function Home() {
         <div className="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
           <div>© 2026 SilentFail. Built by a Developer for Developers.</div>
           <div className="flex gap-6 items-center">
+            <Link href="https://github.com/LemonMantis5571/SilentFail" target="_blank" className="hover:text-primary transition-colors">
+              <Github className="h-5 w-5" />
+            </Link>
             <Link href="https://x.com/lee_gv" target="_blank" className="hover:text-primary transition-colors">
               <span className="text-xl">𝕏</span>
             </Link>

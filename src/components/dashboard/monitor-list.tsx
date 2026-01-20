@@ -21,11 +21,11 @@ interface MonitorListProps {
     initialMonitors: MonitorWithPings[];
 }
 
-type SortOrder = "newest" | "oldest";
+type SortOrder = "newest" | "oldest" | "status" | "name_asc" | "name_desc";
 
 export function MonitorList({ initialMonitors }: MonitorListProps) {
     const [searchQuery, setSearchQuery] = useState("");
-    const [sortOrder, setSortOrder] = useState<SortOrder>("newest");
+    const [sortOrder, setSortOrder] = useState<SortOrder>("status");
 
     const filteredAndSortedMonitors = useMemo(() => {
         let result = [...initialMonitors];
@@ -41,6 +41,21 @@ export function MonitorList({ initialMonitors }: MonitorListProps) {
         }
 
         result.sort((a, b) => {
+            if (sortOrder === "status") {
+                const statusPriority = { DOWN: 0, PENDING: 1, UP: 2 };
+                // @ts-ignore 
+                const priorityA = statusPriority[a.status] ?? 2;
+                // @ts-ignore
+                const priorityB = statusPriority[b.status] ?? 2;
+                if (priorityA !== priorityB) return priorityA - priorityB;
+            }
+            if (sortOrder === "name_asc") {
+                return a.name.localeCompare(b.name);
+            }
+            if (sortOrder === "name_desc") {
+                return b.name.localeCompare(a.name);
+            }
+
             const dateA = new Date(a.createdAt).getTime();
             const dateB = new Date(b.createdAt).getTime();
 
@@ -84,8 +99,11 @@ export function MonitorList({ initialMonitors }: MonitorListProps) {
                             <SelectValue placeholder="Sort by" />
                         </SelectTrigger>
                         <SelectContent className="bg-[#0B1121] border-slate-700 text-slate-300">
+                            <SelectItem value="status">Status (Down First)</SelectItem>
                             <SelectItem value="newest">Newest First</SelectItem>
                             <SelectItem value="oldest">Oldest First</SelectItem>
+                            <SelectItem value="name_asc">Name (A-Z)</SelectItem>
+                            <SelectItem value="name_desc">Name (Z-A)</SelectItem>
                         </SelectContent>
                     </Select>
                 </div>
