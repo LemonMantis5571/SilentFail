@@ -126,6 +126,12 @@ export const pingRoutes = new Elysia({ prefix: '/ping' })
         headers: { 'Content-Type': 'text/plain; charset=utf-8' }
       });
     }
+  }, {
+    detail: {
+      tags: ['Ping'],
+      summary: 'Send heartbeat (GET)',
+      description: 'Records a heartbeat ping for a monitor. For private monitors, include secret as query param or Bearer token.'
+    }
   })
 
   .post('/:key', async ({ params: { key }, body, request }) => {
@@ -155,4 +161,11 @@ export const pingRoutes = new Elysia({ prefix: '/ping' })
     });
 
     return { success: true };
-  }, { body: t.String() });
+  }, {
+    body: t.String(),
+    detail: {
+      tags: ['Ping'],
+      summary: 'Report failure (POST)',
+      description: 'Manually reports a monitor as DOWN and creates a downtime record. For private monitors, include secret as query param or Bearer token.'
+    }
+  });

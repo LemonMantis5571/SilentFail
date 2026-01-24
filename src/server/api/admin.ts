@@ -27,6 +27,13 @@ export const adminRoutes = new Elysia({ prefix: '/admin' })
       where: { userId: user.id },
       orderBy: { createdAt: 'desc' }
     });
+  }, {
+    detail: {
+      tags: ['Admin'],
+      summary: 'Get all monitors',
+      description: 'Returns all monitors owned by the authenticated user',
+      security: [{ bearerAuth: [] }]
+    }
   })
   .post('/monitors', async ({ user, body }) => {
     const { name, interval, useSmartGrace, gracePeriod, privateMonitor } = body;
@@ -52,7 +59,13 @@ export const adminRoutes = new Elysia({ prefix: '/admin' })
       useSmartGrace: t.Boolean(),
       gracePeriod: t.Number(),
       privateMonitor: t.Boolean()
-    })
+    }),
+    detail: {
+      tags: ['Admin'],
+      summary: 'Create a monitor',
+      description: 'Creates a new heartbeat monitor with the specified configuration',
+      security: [{ bearerAuth: [] }]
+    }
   })
   .patch('/monitors/:id', async ({ user, params: { id }, body }) => {
     const { name, interval, useSmartGrace, gracePeriod, privateMonitor } = body;
@@ -84,5 +97,97 @@ export const adminRoutes = new Elysia({ prefix: '/admin' })
       useSmartGrace: t.Optional(t.Boolean()),
       gracePeriod: t.Optional(t.Number()),
       privateMonitor: t.Optional(t.Boolean())
-    })
+    }),
+    detail: {
+      tags: ['Admin'],
+      summary: 'Update a monitor',
+      description: 'Partially updates an existing monitor by ID',
+      security: [{ bearerAuth: [] }]
+    }
+  })
+  .get('/monitors/:id/pings', async ({ user, params: { id }, query }) => {
+    const monitor = await db.monitor.findUnique({
+      where: { id, userId: user.id }
+    });
+
+    if (!monitor) {
+      throw new Error("Monitor not found or unauthorized");
+    }
+
+    const limit = query.limit ? parseInt(query.limit) : 50;
+    const offset = query.offset ? parseInt(query.offset) : 0;
+
+    const pings = await db.pingEvent.findMany({
+      where: { monitorId: id },
+      orderBy: { createdAt: 'desc' },
+      take: limit,
+      skip: offset,
+    });
+
+    const total = await db.pingEvent.count({
+      where: { monitorId: id }
+    });
+
+    return { pings, total, limit, offset };
+  }, {
+    query: t.Object({
+      limit: t.Optional(t.String()),
+      offset: t.Optional(t.String())
+    }),
+    detail: {
+      tags: ['Admin'],
+      summary: 'Get ping history',
+      description: 'Returns paginated ping history for a specific monitor',
+      security: [{ bearerAuth: [] }]
+    }
+  })
+ 
+  .delete('/monitors/:id', async ({ user, params: { id } }) => {
+    const monitor = await db.monitor.findUnique({
+      where: { id, userId: user.id }
+    });
+
+    if (!monitor) {
+      throw new Error("Monitor not found or unauthorized");
+    }
+
+
+    await db.pingEvent.deleteMany({ where: { monitorId: id } });
+    await db.downtime.deleteMany({ where: { monitorId: id } });
+    await db.monitor.delete({ where: { id } });
+
+    return { success: true, message: "Monitor deleted" };
+  }, {
+    detail: {
+      tags: ['Admin'],
+      summary: 'Delete a monitor',
+      description: 'Permanently deletes a monitor and all its associated data (pings, downtime records)',
+      security: [{ bearerAuth: [] }]
+    }
+  })
+
+  .post('/monitors/:id/regenerate-key', async ({ user, params: { id } }) => {
+    const monitor = await db.monitor.findUnique({
+      where: { id, userId: user.id }
+    });
+
+    if (!monitor) {
+      throw new Error("Monitor not found or unauthorized");
+    }
+
+    const newKey = createId();
+    
+    await db.monitor.update({
+      where: { id },
+      data: { key: newKey }
+    });
+
+    return { success: true, key: newKey };
+  }, {
+    detail: {
+      tags: ['Admin'],
+      summary: 'Regenerate monitor key',
+      description: 'Generates a new unique key for the monitor. The old key will no longer work.',
+      security: [{ bearerAuth: [] }]
+    }
   });

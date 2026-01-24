@@ -100,6 +100,12 @@ export function AuthButtons() {
                 Documentation
               </Link>
             </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link href="/api-docs" target="_blank" className="cursor-pointer">
+                <BookOpen className="mr-2 h-4 w-4" />
+                API Docs
+              </Link>
+            </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={handleSignOut} className="text-red-500 focus:text-red-500 cursor-pointer">
               <LogOut className="mr-2 h-4 w-4" />
