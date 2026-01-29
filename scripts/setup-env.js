@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+// @ts-nocheck
 
 import fs from 'fs';
 import path from 'path';
@@ -19,7 +20,7 @@ envContent.split('\n').forEach(line => {
   if (match) {
     const key = match[1].trim();
     let value = match[2].trim();
-   
+
     value = value.replace(/^["'](.*)["']$/, '$1');
     env[key] = value;
   }
@@ -29,9 +30,9 @@ envContent.split('\n').forEach(line => {
 if (env.DB_USER && env.DB_PASSWORD && env.DB_NAME) {
   const host = env.DB_HOST || 'localhost';
   const port = env.DB_PORT || '5432';
-  
+
   const newDatabaseUrl = `postgresql://${env.DB_USER}:${env.DB_PASSWORD}@${host}:${port}/${env.DB_NAME}`;
-  
+
   // Update DATABASE_URL in .env file
   if (envContent.includes('DATABASE_URL=')) {
     envContent = envContent.replace(
@@ -41,9 +42,9 @@ if (env.DB_USER && env.DB_PASSWORD && env.DB_NAME) {
   } else {
     envContent += `\nDATABASE_URL="${newDatabaseUrl}"\n`;
   }
-  
+
   fs.writeFileSync(envPath, envContent);
-  
+
   console.log('✅ DATABASE_URL generated successfully!');
   console.log(`📊 ${newDatabaseUrl.replace(env.DB_PASSWORD, '****')}`);
 } else {

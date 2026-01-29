@@ -112,7 +112,7 @@ export const adminRoutes = new Elysia({ prefix: '/admin' })
         interval: interval ?? undefined,
         gracePeriod: gracePeriod ?? undefined,
         useSmartGrace: useSmartGrace ?? undefined,
-        secret: privateMonitor === undefined ? undefined : (privateMonitor ? (monitor.secret || createId()) : null)
+        secret: privateMonitor === undefined ? undefined : (privateMonitor ? (monitor.secret ?? createId()) : null)
       }
     });
 
