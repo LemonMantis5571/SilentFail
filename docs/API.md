@@ -87,6 +87,56 @@ PATCH /api/admin/monitors/{id}
 
 ---
 
+### Get System Stats
+
+```
+GET /api/admin/stats
+```
+
+Returns global statistics for the system.
+
+**Response:**
+```json
+{
+  "total": 5,
+  "active": 4,
+  "down": 1,
+  "monitors": {
+    "total": 5,
+    "active": 4,
+    "down": 1
+  }
+}
+```
+
+---
+
+### Get Monitor Details
+
+```
+GET /api/admin/monitors/{id}
+```
+
+Returns full configuration details for a specific monitor.
+
+---
+
+### Get Downtime History
+
+```
+GET /api/admin/monitors/{id}/downtimes
+```
+
+Returns a paginated list of downtime incidents for a monitor.
+
+**Query Parameters:**
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `limit` | number | 50 | Number of records to return |
+| `offset` | number | 0 | Number of records to skip |
+
+---
+
 ## Example Usage
 
 ```bash

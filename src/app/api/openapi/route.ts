@@ -63,6 +63,40 @@ export async function GET(request: NextRequest) {
       },
     },
     paths: {
+      '/admin/stats': {
+        get: {
+          tags: ['Admin'],
+          summary: 'Get system stats',
+          description: 'Returns overview statistics of all monitors',
+          security: [{ bearerAuth: [] }],
+          responses: {
+            '200': {
+              description: 'System statistics',
+              content: {
+                'application/json': {
+                  schema: {
+                    type: 'object',
+                    properties: {
+                      total: { type: 'integer' },
+                      active: { type: 'integer' },
+                      down: { type: 'integer' },
+                      monitors: {
+                        type: 'object',
+                        properties: {
+                          total: { type: 'integer' },
+                          active: { type: 'integer' },
+                          down: { type: 'integer' },
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            '401': { description: 'Unauthorized' }
+          }
+        }
+      },
       '/admin/monitors': {
         get: {
           tags: ['Admin'],
@@ -111,6 +145,27 @@ export async function GET(request: NextRequest) {
         },
       },
       '/admin/monitors/{id}': {
+        get: {
+          tags: ['Admin'],
+          summary: 'Get a monitor',
+          description: 'Returns details of a specific monitor',
+          security: [{ bearerAuth: [] }],
+          parameters: [
+            { name: 'id', in: 'path', required: true, schema: { type: 'string' } },
+          ],
+          responses: {
+            '200': {
+              description: 'Monitor details',
+              content: {
+                'application/json': {
+                  schema: { $ref: '#/components/schemas/Monitor' },
+                },
+              },
+            },
+            '401': { description: 'Unauthorized' },
+            '404': { description: 'Monitor not found' },
+          },
+        },
         patch: {
           tags: ['Admin'],
           summary: 'Update a monitor',
@@ -173,6 +228,39 @@ export async function GET(request: NextRequest) {
                     type: 'object',
                     properties: {
                       pings: { type: 'array', items: { type: 'object', properties: { id: { type: 'string' }, monitorId: { type: 'string' }, latency: { type: 'number' }, createdAt: { type: 'string', format: 'date-time' } } } },
+                      total: { type: 'integer' },
+                      limit: { type: 'integer' },
+                      offset: { type: 'integer' },
+                    },
+                  },
+                },
+              },
+            },
+            '401': { description: 'Unauthorized' },
+            '404': { description: 'Monitor not found' },
+          },
+        },
+      },
+      '/admin/monitors/{id}/downtimes': {
+        get: {
+          tags: ['Admin'],
+          summary: 'Get downtime history',
+          description: 'Returns paginated downtime history for a specific monitor',
+          security: [{ bearerAuth: [] }],
+          parameters: [
+            { name: 'id', in: 'path', required: true, schema: { type: 'string' } },
+            { name: 'limit', in: 'query', required: false, schema: { type: 'integer', default: 50 }, description: 'Number of records to return' },
+            { name: 'offset', in: 'query', required: false, schema: { type: 'integer', default: 0 }, description: 'Number of records to skip' },
+          ],
+          responses: {
+            '200': {
+              description: 'Paginated downtime history',
+              content: {
+                'application/json': {
+                  schema: {
+                    type: 'object',
+                    properties: {
+                      downtimes: { type: 'array', items: { type: 'object', properties: { id: { type: 'string' }, monitorId: { type: 'string' }, startedAt: { type: 'string', format: 'date-time' }, endedAt: { type: 'string', format: 'date-time', nullable: true }, duration: { type: 'integer', nullable: true } } } },
                       total: { type: 'integer' },
                       limit: { type: 'integer' },
                       offset: { type: 'integer' },

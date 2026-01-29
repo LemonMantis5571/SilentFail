@@ -22,6 +22,33 @@ export const adminRoutes = new Elysia({ prefix: '/admin' })
     
     return { user };
   })
+  .get('/stats', async ({ user }) => {
+    const monitors = await db.monitor.findMany({
+      where: { userId: user.id }
+    });
+
+    const total = monitors.length;
+    const active = monitors.filter(m => m.status === 'UP').length;
+    const down = monitors.filter(m => m.status === 'DOWN').length;
+
+    return {
+      total,
+      active,
+      down,
+      monitors: {
+        total,
+        active,
+        down
+      }
+    };
+  }, {
+    detail: {
+      tags: ['Admin'],
+      summary: 'Get system stats',
+      description: 'Returns overview statistics of all monitors',
+      security: [{ bearerAuth: [] }]
+    }
+  })
   .get('/monitors', async ({ user }) => {
     return await db.monitor.findMany({
       where: { userId: user.id },
@@ -105,6 +132,24 @@ export const adminRoutes = new Elysia({ prefix: '/admin' })
       security: [{ bearerAuth: [] }]
     }
   })
+  .get('/monitors/:id', async ({ user, params: { id } }) => {
+    const monitor = await db.monitor.findUnique({
+      where: { id, userId: user.id }
+    });
+
+    if (!monitor) {
+      throw new Error("Monitor not found or unauthorized");
+    }
+
+    return monitor;
+  }, {
+    detail: {
+      tags: ['Admin'],
+      summary: 'Get a monitor',
+      description: 'Returns details of a specific monitor',
+      security: [{ bearerAuth: [] }]
+    }
+  })
   .get('/monitors/:id/pings', async ({ user, params: { id }, query }) => {
     const monitor = await db.monitor.findUnique({
       where: { id, userId: user.id }
@@ -138,6 +183,42 @@ export const adminRoutes = new Elysia({ prefix: '/admin' })
       tags: ['Admin'],
       summary: 'Get ping history',
       description: 'Returns paginated ping history for a specific monitor',
+      security: [{ bearerAuth: [] }]
+    }
+  })
+  .get('/monitors/:id/downtimes', async ({ user, params: { id }, query }) => {
+    const monitor = await db.monitor.findUnique({
+      where: { id, userId: user.id }
+    });
+
+    if (!monitor) {
+      throw new Error("Monitor not found or unauthorized");
+    }
+
+    const limit = query.limit ? parseInt(query.limit) : 50;
+    const offset = query.offset ? parseInt(query.offset) : 0;
+
+    const downtimes = await db.downtime.findMany({
+      where: { monitorId: id },
+      orderBy: { startedAt: 'desc' },
+      take: limit,
+      skip: offset,
+    });
+
+    const total = await db.downtime.count({
+      where: { monitorId: id }
+    });
+
+    return { downtimes, total, limit, offset };
+  }, {
+    query: t.Object({
+      limit: t.Optional(t.String()),
+      offset: t.Optional(t.String())
+    }),
+    detail: {
+      tags: ['Admin'],
+      summary: 'Get downtime history',
+      description: 'Returns paginated downtime history for a specific monitor',
       security: [{ bearerAuth: [] }]
     }
   })

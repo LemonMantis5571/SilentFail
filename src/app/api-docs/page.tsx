@@ -37,7 +37,7 @@ export default function ApiDocsPage() {
     return (
         <div
             ref={containerRef}
-            className="fixed inset-0 z-50 bg-[#0f0f10]"
+            className="fixed inset-0 z-50 bg-[#0f0f10] overflow-y-auto"
         >
             <div
                 id="api-reference"
