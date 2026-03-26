@@ -1,8 +1,7 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { adminRoutes } from './admin';
 import { db } from '~/server/db';
 
-// Mock the database
 vi.mock('~/server/db', () => ({
   db: {
     user: {
@@ -28,210 +27,131 @@ vi.mock('~/server/db', () => ({
   },
 }));
 
-describe('Admin Routes', () => {
-  const mockUser = {
-    id: 'user1',
-    apiKey: 'valid-api-key',
-  };
+const mockUser = {
+  id: 'user1',
+  apiKey: 'valid-api-key',
+  email: 'user@example.com',
+};
 
+const mockedDb = db as unknown as {
+  user: { findUnique: ReturnType<typeof vi.fn> };
+  monitor: {
+    findMany: ReturnType<typeof vi.fn>;
+    findUnique: ReturnType<typeof vi.fn>;
+  };
+  downtime: {
+    findMany: ReturnType<typeof vi.fn>;
+    count: ReturnType<typeof vi.fn>;
+  };
+};
+
+function createRequest(path: string, method = 'GET', body?: unknown) {
+  return new Request(`http://localhost${path}`, {
+    method,
+    headers: {
+      Authorization: `Bearer ${mockUser.apiKey}`,
+      'Content-Type': 'application/json',
+    },
+    body: body ? JSON.stringify(body) : undefined,
+  });
+}
+
+async function readJson<T>(response: Response) {
+  return (await response.json()) as T;
+}
+
+describe('Admin Routes', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.mocked(db.user.findUnique).mockResolvedValue(mockUser as any);
+    mockedDb.user.findUnique.mockResolvedValue(mockUser as never);
   });
 
-  const createRequest = (path: string, method: string = 'GET', body?: unknown) => {
-    return new Request(`http://localhost${path}`, {
-      method,
-      headers: {
-        'Authorization': `Bearer ${mockUser.apiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: body ? JSON.stringify(body) : undefined,
-    });
-  };
+  it('returns 401 when the API key is missing', async () => {
+    const response = await adminRoutes.handle(
+      new Request('http://localhost/admin/stats'),
+    );
+    const message = await response.text();
 
-  describe('GET /stats', () => {
-    it('should return correct statistics', async () => {
-      const mockMonitors = [
+    expect(response.status).toBe(401);
+    expect(message).toBe('Unauthorized');
+  });
+
+  it('returns correct statistics', async () => {
+    mockedDb.monitor.findMany.mockResolvedValue(
+      [
         { id: '1', status: 'UP' },
         { id: '2', status: 'DOWN' },
         { id: '3', status: 'UP' },
-      ];
-      vi.mocked(db.monitor.findMany).mockResolvedValue(mockMonitors as any);
+      ] as never,
+    );
 
-      const response = await adminRoutes.handle(createRequest('/admin/stats'));
-      const data = await response.json();
+    const response = await adminRoutes.handle(createRequest('/admin/stats'));
+    const data = await readJson<{
+      total: number;
+      active: number;
+      down: number;
+      monitors: {
+        total: number;
+        active: number;
+        down: number;
+      };
+    }>(response);
 
-      expect(response.status).toBe(200);
-      expect(data).toEqual({
+    expect(response.status).toBe(200);
+    expect(data).toEqual({
+      total: 3,
+      active: 2,
+      down: 1,
+      monitors: {
         total: 3,
         active: 2,
         down: 1,
-        monitors: {
-          total: 3,
-          active: 2,
-          down: 1,
-        },
-      });
-    });
-  });
-
-  describe('GET /monitors/:id', () => {
-    it('should return monitor details', async () => {
-      const mockMonitor = { id: 'm1', name: 'Test Monitor', userId: mockUser.id };
-      vi.mocked(db.monitor.findUnique).mockResolvedValue(mockMonitor as any);
-
-      const response = await adminRoutes.handle(createRequest('/admin/monitors/m1'));
-      const data = await response.json();
-
-      expect(response.status).toBe(200);
-      expect(data).toEqual(mockMonitor);
-      expect(db.monitor.findUnique).toHaveBeenCalledWith({
-        where: { id: 'm1', userId: mockUser.id },
-      });
-    });
-
-    it('should return 500 if monitor not found', async () => {
-      vi.mocked(db.monitor.findUnique).mockResolvedValue(null);
-
-      const response = await adminRoutes.handle(createRequest('/admin/monitors/m999'));
-      
-      expect(response.status).toBe(500); 
-    });
-  });
-
-  describe('GET /monitors/:id/downtimes', () => {
-    it('should return downtimes list', async () => {
-      const mockMonitor = { id: 'm1', userId: mockUser.id };
-      const mockDowntimes = [{ id: 'd1', startedAt: new Date().toISOString() }];
-      
-      vi.mocked(db.monitor.findUnique).mockResolvedValue(mockMonitor as any);
-      vi.mocked(db.downtime.findMany).mockResolvedValue(mockDowntimes as any);
-      vi.mocked(db.downtime.count).mockResolvedValue(1);
-
-      const response = await adminRoutes.handle(createRequest('/admin/monitors/m1/downtimes'));
-      const data = await response.json();
-
-      expect(response.status).toBe(200);
-      expect(data.downtimes).toHaveLength(1);
-      expect(data.total).toBe(1);
-    });
-  });
-});
-
-vi.mock('~/server/db', () => ({
-  db: {
-    user: {
-      findUnique: vi.fn(),
-    },
-    monitor: {
-      findMany: vi.fn(),
-      findUnique: vi.fn(),
-      create: vi.fn(),
-      update: vi.fn(),
-      delete: vi.fn(),
-    },
-    pingEvent: {
-      findMany: vi.fn(),
-      count: vi.fn(),
-      deleteMany: vi.fn(),
-    },
-    downtime: {
-      findMany: vi.fn(),
-      count: vi.fn(),
-      deleteMany: vi.fn(),
-    },
-  },
-}));
-
-describe('Admin Routes', () => {
-  const mockUser = {
-    id: 'user1',
-    apiKey: 'valid-api-key',
-  };
-
-  beforeEach(() => {
-    vi.clearAllMocks();
-    (db.user.findUnique as any).mockResolvedValue(mockUser);
-  });
-
-  const createRequest = (path: string, method: string = 'GET', body?: any) => {
-    return new Request(`http://localhost${path}`, {
-      method,
-      headers: {
-        'Authorization': `Bearer ${mockUser.apiKey}`,
-        'Content-Type': 'application/json',
       },
-      body: body ? JSON.stringify(body) : undefined,
-    });
-  };
-
-  describe('GET /stats', () => {
-    it('should return correct statistics', async () => {
-      const mockMonitors = [
-        { id: '1', status: 'UP' },
-        { id: '2', status: 'DOWN' },
-        { id: '3', status: 'UP' },
-      ];
-      (db.monitor.findMany as any).mockResolvedValue(mockMonitors);
-
-      const response = await adminRoutes.handle(createRequest('/admin/stats'));
-      const data = await response.json();
-
-      expect(response.status).toBe(200);
-      expect(data).toEqual({
-        total: 3,
-        active: 2,
-        down: 1,
-        monitors: {
-          total: 3,
-          active: 2,
-          down: 1,
-        },
-      });
     });
   });
 
-  describe('GET /monitors/:id', () => {
-    it('should return monitor details', async () => {
-      const mockMonitor = { id: 'm1', name: 'Test Monitor', userId: mockUser.id };
-      (db.monitor.findUnique as any).mockResolvedValue(mockMonitor);
+  it('returns monitor details for the owner', async () => {
+    const mockMonitor = { id: 'm1', name: 'Test Monitor', userId: mockUser.id };
+    mockedDb.monitor.findUnique.mockResolvedValue(mockMonitor as never);
 
-      const response = await adminRoutes.handle(createRequest('/admin/monitors/m1'));
-      const data = await response.json();
+    const response = await adminRoutes.handle(createRequest('/admin/monitors/m1'));
+    const data = await readJson<typeof mockMonitor>(response);
 
-      expect(response.status).toBe(200);
-      expect(data).toEqual(mockMonitor);
-      expect(db.monitor.findUnique).toHaveBeenCalledWith({
-        where: { id: 'm1', userId: mockUser.id },
-      });
-    });
-
-    it('should return 500 if monitor not found', async () => {
-      (db.monitor.findUnique as any).mockResolvedValue(null);
-
-      const response = await adminRoutes.handle(createRequest('/admin/monitors/m999'));
-      
-      expect(response.status).toBe(500); 
-     
+    expect(response.status).toBe(200);
+    expect(data).toEqual(mockMonitor);
+    expect(mockedDb.monitor.findUnique.mock.calls[0]?.[0]).toEqual({
+      where: { id: 'm1', userId: mockUser.id },
     });
   });
 
-  describe('GET /monitors/:id/downtimes', () => {
-    it('should return downtimes list', async () => {
-      const mockMonitor = { id: 'm1', userId: mockUser.id };
-      const mockDowntimes = [{ id: 'd1', startedAt: new Date() }];
-      
-      (db.monitor.findUnique as any).mockResolvedValue(mockMonitor);
-      (db.downtime.findMany as any).mockResolvedValue(mockDowntimes);
-      (db.downtime.count as any).mockResolvedValue(1);
+  it('returns 404 when a monitor is missing', async () => {
+    mockedDb.monitor.findUnique.mockResolvedValue(null as never);
 
-      const response = await adminRoutes.handle(createRequest('/admin/monitors/m1/downtimes'));
-      const data = await response.json();
+    const response = await adminRoutes.handle(createRequest('/admin/monitors/m999'));
+    const message = await response.text();
 
-      expect(response.status).toBe(200);
-      expect(data.downtimes).toHaveLength(1);
-      expect(data.total).toBe(1);
-    });
+    expect(response.status).toBe(404);
+    expect(message).toBe('Monitor not found');
+  });
+
+  it('returns downtime history for a monitor', async () => {
+    const mockMonitor = { id: 'm1', userId: mockUser.id };
+    const mockDowntimes = [{ id: 'd1', startedAt: new Date() }];
+
+    mockedDb.monitor.findUnique.mockResolvedValue(mockMonitor as never);
+    mockedDb.downtime.findMany.mockResolvedValue(mockDowntimes as never);
+    mockedDb.downtime.count.mockResolvedValue(1 as never);
+
+    const response = await adminRoutes.handle(
+      createRequest('/admin/monitors/m1/downtimes'),
+    );
+    const data = await readJson<{
+      downtimes: typeof mockDowntimes;
+      total: number;
+    }>(response);
+
+    expect(response.status).toBe(200);
+    expect(data.downtimes).toHaveLength(1);
+    expect(data.total).toBe(1);
   });
 });

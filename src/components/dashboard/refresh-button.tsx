@@ -3,7 +3,7 @@
 import { RefreshCw } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
+import { useTransition } from "react";
 
 export function RefreshMonitorsButton() {
     const router = useRouter();

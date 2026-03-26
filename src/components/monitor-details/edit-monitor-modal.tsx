@@ -34,14 +34,14 @@ export function EditMonitorModal({ monitor }: EditMonitorModalProps) {
     const [loading, setLoading] = useState(false);
 
     const [name, setName] = useState(monitor.name);
-    const [secret, setSecret] = useState(monitor.secret || "");
+    const [secret, setSecret] = useState(monitor.secret ?? "");
     const [interval, setInterval] = useState(monitor.interval.toString());
     const [gracePeriod, setGracePeriod] = useState(monitor.gracePeriod.toString());
     const [useSmartGrace, setUseSmartGrace] = useState<boolean | undefined>(monitor.useSmartGrace);
 
     useEffect(() => {
         setName(monitor.name);
-        setSecret(monitor.secret || "");
+        setSecret(monitor.secret ?? "");
         setInterval(monitor.interval.toString());
         setGracePeriod(monitor.gracePeriod.toString());
         setUseSmartGrace(monitor.useSmartGrace);
@@ -49,7 +49,7 @@ export function EditMonitorModal({ monitor }: EditMonitorModalProps) {
 
     const handleReset = () => {
         setName(monitor.name);
-        setSecret(monitor.secret || "");
+        setSecret(monitor.secret ?? "");
         setInterval(monitor.interval.toString());
         setGracePeriod(monitor.gracePeriod.toString());
         setUseSmartGrace(monitor.useSmartGrace);
@@ -68,7 +68,7 @@ export function EditMonitorModal({ monitor }: EditMonitorModalProps) {
             });
             setOpen(false);
             toast.success("Monitor updated successfully");
-        } catch (error) {
+        } catch {
             toast.error("Failed to update monitor");
         } finally {
             setLoading(false);

@@ -23,6 +23,19 @@ interface MonitorListProps {
 
 type SortOrder = "newest" | "oldest" | "status" | "name_asc" | "name_desc";
 
+function getStatusPriority(status: string) {
+    switch (status) {
+        case "DOWN":
+            return 0;
+        case "PENDING":
+            return 1;
+        case "UP":
+            return 2;
+        default:
+            return 2;
+    }
+}
+
 export function MonitorList({ initialMonitors }: MonitorListProps) {
     const [searchQuery, setSearchQuery] = useState("");
     const [sortOrder, setSortOrder] = useState<SortOrder>("status");
@@ -42,11 +55,8 @@ export function MonitorList({ initialMonitors }: MonitorListProps) {
 
         result.sort((a, b) => {
             if (sortOrder === "status") {
-                const statusPriority = { DOWN: 0, PENDING: 1, UP: 2 };
-                // @ts-ignore 
-                const priorityA = statusPriority[a.status] ?? 2;
-                // @ts-ignore
-                const priorityB = statusPriority[b.status] ?? 2;
+                const priorityA = getStatusPriority(a.status);
+                const priorityB = getStatusPriority(b.status);
                 if (priorityA !== priorityB) return priorityA - priorityB;
             }
             if (sortOrder === "name_asc") {
@@ -125,7 +135,7 @@ export function MonitorList({ initialMonitors }: MonitorListProps) {
                             <>
                                 <Activity className="h-12 w-12 text-slate-500 mb-4 opacity-50" />
                                 <h3 className="text-xl font-bold text-white">No monitors yet</h3>
-                                <p className="text-slate-400 mb-6 font-medium">Create your first dead man's switch to get started.</p>
+                                <p className="text-slate-400 mb-6 font-medium">Create your first dead man&apos;s switch to get started.</p>
                                 <CreateMonitorButton />
                             </>
                         )}

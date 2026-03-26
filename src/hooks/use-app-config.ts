@@ -17,7 +17,7 @@ let cachedConfig: AppConfig | null = null;
  * Fetches from /api/config on first load and caches the result.
  */
 export function useAppConfig() {
-  const [config, setConfig] = useState<AppConfig>(cachedConfig || defaultConfig);
+  const [config, setConfig] = useState<AppConfig>(cachedConfig ?? defaultConfig);
   const [isLoading, setIsLoading] = useState(!cachedConfig);
 
   useEffect(() => {

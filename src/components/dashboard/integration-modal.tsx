@@ -37,7 +37,8 @@ export function IntegrationsModal({ monitorKey, secret }: IntegrationsModalProps
 
 
 
-    const baseUrl = config.appUrl || (typeof window !== 'undefined' ? window.location.origin : "");
+    const baseUrl =
+        config.appUrl ?? (typeof window !== 'undefined' ? window.location.origin : "");
     let pingUrl = `${baseUrl}/api/ping/${monitorKey}`;
 
     if (secret) {
@@ -57,7 +58,7 @@ export function IntegrationsModal({ monitorKey, secret }: IntegrationsModalProps
             setCopied(true);
             toast.success("Snippet copied to clipboard");
             setTimeout(() => setCopied(false), 2000);
-        } catch (err) {
+        } catch {
             toast.error("Failed to copy");
         }
     };

@@ -33,7 +33,7 @@ describe('IntegrationsModal', () => {
         expect(screen.getByText('Integration Snippets')).toBeInTheDocument()
 
         // Check for curl snippet
-        expect(screen.getByText(/curl.*test-key/)).toBeInTheDocument()
+        expect(screen.getByRole('dialog')).toHaveTextContent(/curl\s+http:\/\/localhost:3000\/api\/ping\/test-key/)
     })
 
     it('switches tabs', async () => {
@@ -42,15 +42,15 @@ describe('IntegrationsModal', () => {
 
         // Switch to Python
         fireEvent.click(screen.getByRole('button', { name: 'python' }))
-        expect(screen.getByText(/import requests/)).toBeInTheDocument()
+        expect(screen.getByRole('dialog')).toHaveTextContent(/import\s+requests/)
 
         // Switch to JS
         fireEvent.click(screen.getByRole('button', { name: 'javascript' }))
-        expect(screen.getByText(/fetch/)).toBeInTheDocument()
+        expect(screen.getByRole('dialog')).toHaveTextContent(/fetch/)
 
         // Switch to Go
         fireEvent.click(screen.getByRole('button', { name: 'go' }))
-        expect(screen.getByText(/package main/)).toBeInTheDocument()
+        expect(screen.getByRole('dialog')).toHaveTextContent(/package\s+main/)
     })
 
     it('copies content on button click', async () => {

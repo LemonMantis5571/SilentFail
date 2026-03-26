@@ -40,7 +40,7 @@ describe('RotateKeyButton', () => {
     it('calls rotateMonitorKey when confirmed', async () => {
         const user = userEvent.setup()
         const rotateMock = vi.mocked(monitorActions.rotateMonitorKey)
-        rotateMock.mockResolvedValue({} as any)
+        rotateMock.mockResolvedValue(undefined)
 
         render(<RotateKeyButton monitorId={monitorId} />)
 

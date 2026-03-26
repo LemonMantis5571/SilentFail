@@ -27,7 +27,7 @@ export default function GetStartedPage() {
             How SilentFail Works
           </h1>
           <p className="text-lg text-slate-400 max-w-2xl mx-auto">
-            Set up your first dead man's switch in less than 2 minutes. We monitor your background jobs and alert you only when they stop working.
+            Set up your first dead man&apos;s switch in less than 2 minutes. We monitor your background jobs and alert you only when they stop working.
           </p>
         </div>
 
@@ -49,7 +49,7 @@ export default function GetStartedPage() {
               </div>
               <h3 className="hidden md:block text-2xl font-bold text-white">Create a Monitor</h3>
               <p className="text-slate-400 leading-relaxed max-w-10/12 md:max-w-none">
-                Define the expected schedule for your script. Tell us how often it should run (e.g., every 24 hours) and how much "grace period" (buffer time) to allow for network delays.
+                Define the expected schedule for your script. Tell us how often it should run (e.g., every 24 hours) and how much &quot;grace period&quot; (buffer time) to allow for network delays.
               </p>
 
               <Card className="bg-[#0B1121] border-slate-800 shadow-lg w-fit md:w-auto max-w-10/12 md:max-w-none">
@@ -85,7 +85,7 @@ export default function GetStartedPage() {
               </div>
               <h3 className="hidden md:block text-2xl font-bold text-white">Add the Hook</h3>
               <p className="text-slate-400 leading-relaxed max-w-10/12 md:max-w-none">
-                Copy the unique ping URL and append it to the end of your script. It's a simple HTTP GET request.
+                Copy the unique ping URL and append it to the end of your script. It&apos;s a simple HTTP GET request.
               </p>
 
               <div className="rounded-lg bg-[#020617] border border-slate-800 overflow-hidden font-mono text-sm relative group/code max-w-10/12 md:max-w-none">
@@ -119,7 +119,7 @@ export default function GetStartedPage() {
               </div>
               <h3 className="hidden md:block text-2xl font-bold text-white">Relax</h3>
               <p className="text-slate-400 leading-relaxed max-w-10/12 md:max-w-none">
-                We silently listen for that heartbeat. If your script crashes, hangs, or the server loses power, the signal stops. We'll wait for the grace period, then alert you instantly.
+                We silently listen for that heartbeat. If your script crashes, hangs, or the server loses power, the signal stops. We&apos;ll wait for the grace period, then alert you instantly.
               </p>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-10/12 md:max-w-none">

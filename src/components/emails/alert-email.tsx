@@ -23,7 +23,7 @@ export default function AlertEmail({
   monitorId = "123",
   lastPing = new Date(),
 }: AlertEmailProps) {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
   const formattedTime = lastPing
     ? new Intl.DateTimeFormat('en-US', {
       dateStyle: 'medium',
@@ -123,7 +123,7 @@ export default function AlertEmail({
               This alert was triggered because your script stopped pinging SilentFail.
             </Text>
             <Text style={footerMuted}>
-              Dead Man's Switch Monitoring • {new Date().getFullYear()} SilentFail
+              Dead Man&apos;s Switch Monitoring • {new Date().getFullYear()} SilentFail
             </Text>
           </Section>
         </Container>

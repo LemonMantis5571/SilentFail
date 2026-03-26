@@ -5,7 +5,7 @@ import { type Metadata } from "next";
 import { Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
 import { AuthButtons } from "~/components/nav/auth-buttons";
 import Link from "next/link";
-import { ShieldAlert, ChevronDown } from "lucide-react";
+import { ShieldAlert } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "SilentFail",

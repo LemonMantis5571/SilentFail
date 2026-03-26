@@ -2,12 +2,14 @@
 
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "~/components/ui/chart";
+import { type MonitorWithPings } from "~/app/actions/monitor";
 
-export function AnalyticsChart({ data }: { data: any[] }) {
-  const chartData = [...data].reverse().map(p => ({
-    time: new Date(p.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-    latency: p.latency,
-    status: "UP" // In future you can color code DOWN states
+type PingPoint = MonitorWithPings["pings"][number];
+
+export function AnalyticsChart({ data }: { data: PingPoint[] }) {
+  const chartData = [...data].reverse().map((ping) => ({
+    time: new Date(ping.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+    latency: ping.latency,
   }));
 
   return (
@@ -15,7 +17,7 @@ export function AnalyticsChart({ data }: { data: any[] }) {
       <ChartContainer
         config={{
           latency: {
-            label: "Latency",
+            label: "Observed Interval (s)",
             color: "hsl(var(--primary))",
           },
         }}
@@ -43,7 +45,7 @@ export function AnalyticsChart({ data }: { data: any[] }) {
             axisLine={false}
             stroke="#64748b"
             fontSize={12}
-            tickFormatter={(value) => `${value}ms`}
+            tickFormatter={(value: number) => `${value}s`}
           />
           <ChartTooltip 
             cursor={{ stroke: "#1e293b" }}

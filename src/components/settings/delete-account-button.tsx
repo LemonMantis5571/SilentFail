@@ -25,7 +25,7 @@ export function DeleteAccountButton({ monitorCount }: { monitorCount: number }) 
       await deleteAccount();
       toast.success("Account deleted");
       window.location.href = "/";
-    } catch (error) {
+    } catch {
       toast.error("Failed to delete account");
       setLoading(false);
       setOpen(false);

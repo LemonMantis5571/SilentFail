@@ -318,6 +318,20 @@ export async function GET(_request: NextRequest) {
             '404': { description: 'Monitor not found' },
           },
         },
+        head: {
+          tags: ['Ping'],
+          summary: 'Send heartbeat (HEAD)',
+          description: 'Records a heartbeat ping without returning a response body. For private monitors, include secret as query param or Bearer token.',
+          parameters: [
+            { name: 'key', in: 'path', required: true, schema: { type: 'string' } },
+            { name: 'secret', in: 'query', required: false, schema: { type: 'string' }, description: 'Secret for private monitors' },
+          ],
+          responses: {
+            '204': { description: 'Heartbeat recorded successfully without a body' },
+            '401': { description: 'Unauthorized - Invalid secret for private monitor' },
+            '404': { description: 'Monitor not found' },
+          },
+        },
         post: {
           tags: ['Ping'],
           summary: 'Report failure (POST)',

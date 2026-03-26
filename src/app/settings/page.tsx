@@ -1,14 +1,12 @@
 
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { Button } from "~/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/components/ui/card";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
-import { ShieldAlert, Trash2 } from "lucide-react";
-import { deleteAccount } from "~/app/actions/user";
-import { db } from "~/server/db"; // 1. Import Prisma DB
+import { ShieldAlert } from "lucide-react";
+import { db } from "~/server/db";
 import { auth } from "~/server/better-auth";
 import { DeleteAccountButton } from "~/components/settings/delete-account-button";
 import { getApiKey } from "~/app/actions/user";
@@ -48,7 +46,7 @@ export default async function SettingsPage() {
                     <CardContent className="space-y-6">
                         <div className="flex items-center gap-4">
                             <Avatar className="h-16 w-16 border-2 border-slate-700">
-                                <AvatarImage src={user.image || ""} />
+                                <AvatarImage src={user.image ?? ""} />
                                 <AvatarFallback className="bg-slate-800 text-white text-xl">
                                     {user.name.charAt(0)}
                                 </AvatarFallback>

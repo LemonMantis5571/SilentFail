@@ -158,8 +158,8 @@ CRON_SECRET=""             # Generate: openssl rand -hex 32
 PORT="3000"
 
 # Discord OAuth
-DISCORD_CLIENT_ID=""
-DISCORD_CLIENT_SECRET=""
+BETTER_AUTH_DISCORD_CLIENT_ID=""
+BETTER_AUTH_DISCORD_CLIENT_SECRET=""
 
 # Cron Configuration
 CRON_INTERVAL="60"         # Check interval in seconds (default: 60)

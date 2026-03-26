@@ -14,6 +14,16 @@ import { EditMonitorModal } from "~/components/monitor-details/edit-monitor-moda
 import { RefreshMonitorButton } from "~/components/monitor-details/refresh-monitor-button";
 import { RecentActivity } from "~/components/monitor-details/recent-activity";
 
+type MonitorDetails = NonNullable<Awaited<ReturnType<typeof getMonitor>>>;
+type DowntimeRecord = MonitorDetails["downtimes"][number];
+type StatCardProps = {
+    title: string;
+    value: string | number;
+    icon: React.ComponentType<{ className?: string }>;
+    subtext?: string;
+    colorClass?: string;
+};
+
 function formatDuration(seconds: number) {
     if (seconds < 1) return `${Math.round(seconds * 1000)}ms`;
     if (seconds < 60) return `${Math.round(seconds)}s`;
@@ -36,22 +46,22 @@ function formatDowntime(minutes: number): string {
 }
 
 // Calculate accurate downtime from downtime records
-function calculateAccurateDowntime(downtimes: any[], hours: number = 24) {
+function calculateAccurateDowntime(downtimes: DowntimeRecord[], hours = 24) {
     const now = new Date();
     const cutoffTime = new Date(now.getTime() - hours * 60 * 60 * 1000);
 
     let totalDowntimeMinutes = 0;
 
     // Filter downtimes that overlap with the window [cutoffTime, now]
-    const relevantDowntimes = downtimes.filter(d => {
-        const start = new Date(d.startedAt);
-        const end = d.endedAt ? new Date(d.endedAt) : now;
+    const relevantDowntimes = downtimes.filter((downtime) => {
+        const start = new Date(downtime.startedAt);
+        const end = downtime.endedAt ? new Date(downtime.endedAt) : now;
         return start < now && end > cutoffTime;
     });
 
-    relevantDowntimes.forEach(d => {
-        const start = new Date(d.startedAt);
-        const end = d.endedAt ? new Date(d.endedAt) : now;
+    relevantDowntimes.forEach((downtime) => {
+        const start = new Date(downtime.startedAt);
+        const end = downtime.endedAt ? new Date(downtime.endedAt) : now;
 
         // Clamp to window
         const clampedStart = start < cutoffTime ? cutoffTime : start;
@@ -63,7 +73,7 @@ function calculateAccurateDowntime(downtimes: any[], hours: number = 24) {
         totalDowntimeMinutes += durationMinutes;
     });
 
-    const activeDowntime = downtimes.find(d => !d.endedAt);
+    const activeDowntime = downtimes.find((downtime) => !downtime.endedAt);
 
     // Calculate uptime percentage
     const totalMinutes = hours * 60;
@@ -90,8 +100,8 @@ export default async function MonitorPage({ params }: { params: Promise<{ id: st
         return null
     }
 
-    const pings = monitor.pings || [];
-    const downtimes = monitor.downtimes || [];
+    const pings = monitor.pings ?? [];
+    const downtimes = monitor.downtimes ?? [];
     const intervalSeconds = monitor.interval * 60;
 
     const avgDrift = pings.length > 0
@@ -104,9 +114,9 @@ export default async function MonitorPage({ params }: { params: Promise<{ id: st
     const downtimeMetrics = calculateAccurateDowntime(downtimes, 24);
 
     const headersList = await headers();
-    const host = headersList.get("host") || "localhost:3000";
-    const protocol = headersList.get("x-forwarded-proto") || "http";
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || `${protocol}://${host}`;
+    const host = headersList.get("host") ?? "localhost:3000";
+    const protocol = headersList.get("x-forwarded-proto") ?? "http";
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? `${protocol}://${host}`;
 
     let pingUrl = `${baseUrl}/api/ping/${monitor.key}`;
     if (monitor.secret) {
@@ -152,7 +162,7 @@ export default async function MonitorPage({ params }: { params: Promise<{ id: st
                             name: monitor.name,
                             interval: monitor.interval,
                             gracePeriod: monitor.gracePeriod,
-                            useSmartGrace: monitor.useSmartGrace || false,
+                            useSmartGrace: monitor.useSmartGrace,
                             secret: monitor.secret
                         }} />
                     </div>
@@ -274,7 +284,7 @@ export default async function MonitorPage({ params }: { params: Promise<{ id: st
                                             </div>
                                             <div className="text-right">
                                                 <div className={`text-sm font-semibold ${isOngoing ? 'text-rose-400' : 'text-slate-300'}`}>
-                                                    {formatDowntime(duration || 0)}
+                                                    {formatDowntime(duration ?? 0)}
                                                 </div>
                                                 {!isOngoing && (
                                                     <div className="text-xs text-slate-500 font-mono">
@@ -311,7 +321,7 @@ export default async function MonitorPage({ params }: { params: Promise<{ id: st
     );
 }
 
-function StatCard({ title, value, icon: Icon, subtext, colorClass = "text-white" }: any) {
+function StatCard({ title, value, icon: Icon, subtext, colorClass = "text-white" }: StatCardProps) {
     return (
         <Card className="bg-[#0B1121] border-slate-800">
             <CardContent className="p-6">

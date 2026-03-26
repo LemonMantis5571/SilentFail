@@ -41,7 +41,7 @@ export function RecentActivity({ pings }: RecentActivityProps) {
 
     const filteredPings = pings.filter((ping) => {
         let matchesType = true;
-        if (filter === "slow") matchesType = ping.latency > 0.5;
+        if (filter === "slow") matchesType = ping.latency > 30;
 
         let matchesDate = true;
         if (dateFilter !== "all") {
@@ -92,7 +92,7 @@ export function RecentActivity({ pings }: RecentActivityProps) {
                         onClick={() => setFilter("slow")}
                         className="text-xs h-8"
                     >
-                        Slow ({">"}500ms)
+                        Long ({">"}30s)
                     </Button>
                 </div>
             </div>
@@ -101,7 +101,7 @@ export function RecentActivity({ pings }: RecentActivityProps) {
                 <div className="grid grid-cols-3 gap-4 p-4 border-b border-slate-800 bg-slate-900/50 text-xs font-medium text-slate-500 uppercase tracking-wider">
                     <div>Status</div>
                     <div>Time</div>
-                    <div className="text-right">Duration</div>
+                    <div className="text-right">Elapsed</div>
                 </div>
                 <div className="divide-y divide-slate-800 max-h-[500px] overflow-y-auto">
                     {filteredPings.map((ping) => (

@@ -25,7 +25,7 @@ export async function getMonitors() {
       },
       orderBy: { createdAt: 'desc' }
     });
-  } catch (error) {
+  } catch {
     return [];
   }
 }
@@ -47,7 +47,7 @@ export async function createMonitor(data: { name: string; interval: number; grac
       interval: data.interval,
       gracePeriod: data.gracePeriod,
       useSmartGrace: data.smartGrace,
-      secret: data.secret || null,
+      secret: data.secret ?? null,
       status: "PENDING"
     }
   });

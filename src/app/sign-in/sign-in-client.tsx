@@ -15,7 +15,13 @@ function DiscordIcon({ className }: { className?: string }) {
   );
 }
 
-export default function SignInClient({ hasDiscord }: { hasDiscord: boolean }) {
+export default function SignInClient({
+  hasGithub,
+  hasDiscord,
+}: {
+  hasGithub: boolean;
+  hasDiscord: boolean;
+}) {
   const [loadingProvider, setLoadingProvider] = useState<"github" | "discord" | null>(null);
 
   const handleSocialLogin = async (provider: "github" | "discord") => {
@@ -49,7 +55,7 @@ export default function SignInClient({ hasDiscord }: { hasDiscord: boolean }) {
           </div>
         </Link>
         <h1 className="text-3xl font-bold text-white tracking-tight mt-4">Welcome to SilentFail</h1>
-        <p className="text-slate-400 mt-2">The dead man's switch for your cron jobs.</p>
+        <p className="text-slate-400 mt-2">The dead man&apos;s switch for your cron jobs.</p>
       </div>
 
       <Card className="w-full max-w-sm bg-[#0B1121] border-slate-800 shadow-2xl relative z-10">
@@ -65,19 +71,21 @@ export default function SignInClient({ hasDiscord }: { hasDiscord: boolean }) {
         <CardContent className="space-y-4 pb-8">
 
           {/* GitHub Button */}
-          <Button
-            variant="outline"
-            className="w-full h-12 bg-[#1e293b] border-slate-700 hover:bg-[#334155] hover:text-white text-slate-200 font-medium relative group overflow-hidden transition-all"
-            onClick={() => handleSocialLogin("github")}
-            disabled={loadingProvider !== null}
-          >
-            {loadingProvider === "github" ? (
-              <Loader2 className="mr-3 h-5 w-5 animate-spin" />
-            ) : (
-              <Github className="mr-3 h-5 w-5" />
-            )}
-            Continue with GitHub
-          </Button>
+          {hasGithub && (
+            <Button
+              variant="outline"
+              className="w-full h-12 bg-[#1e293b] border-slate-700 hover:bg-[#334155] hover:text-white text-slate-200 font-medium relative group overflow-hidden transition-all"
+              onClick={() => handleSocialLogin("github")}
+              disabled={loadingProvider !== null}
+            >
+              {loadingProvider === "github" ? (
+                <Loader2 className="mr-3 h-5 w-5 animate-spin" />
+              ) : (
+                <Github className="mr-3 h-5 w-5" />
+              )}
+              Continue with GitHub
+            </Button>
+          )}
 
           {/* Discord Button */}
           {hasDiscord && (
@@ -93,6 +101,12 @@ export default function SignInClient({ hasDiscord }: { hasDiscord: boolean }) {
               )}
               Continue with Discord
             </Button>
+          )}
+
+          {!hasGithub && !hasDiscord && (
+            <div className="rounded-lg border border-amber-500/20 bg-amber-500/10 px-4 py-3 text-sm text-amber-200">
+              Configure at least one OAuth provider to sign in.
+            </div>
           )}
 
         </CardContent>

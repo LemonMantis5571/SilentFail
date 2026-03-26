@@ -43,7 +43,7 @@ export function CreateMonitorButton() {
       setGracePeriod("5");
       setSecret("");
       toast.success("Monitor created successfully");
-    } catch (error) {
+    } catch {
       toast.error("Failed to create monitor");
     } finally {
       setLoading(false);

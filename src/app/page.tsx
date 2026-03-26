@@ -66,7 +66,7 @@ export default function Home() {
                 </motion.div>
 
                 <motion.h1 variants={fadeInUp} className="text-4xl md:text-6xl font-extrabold tracking-tight leading-tight bg-linear-to-br from-foreground to-foreground/70 bg-clip-text text-transparent">
-                  The <span className="text-primary bg-clip-text">Dead Man's Switch</span> <br />
+                  The <span className="text-primary bg-clip-text">Dead Man&apos;s Switch</span> <br />
                   for your Cron Jobs.
                 </motion.h1>
 

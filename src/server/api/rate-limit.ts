@@ -1,15 +1,18 @@
 import { rateLimit } from 'elysia-rate-limit';
 
 // Custom IP generator for Next.js proxy environment
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const getClientIP = (request: any) => {
- 
+type RequestLike = {
+  request?: Request;
+  headers?: Headers;
+};
+
+const getClientIP = (request: RequestLike) => {
   const req = request.request ?? request;
-  const forwarded = req.headers?.get?.('x-forwarded-for');
+  const forwarded = req.headers?.get('x-forwarded-for');
   if (forwarded) {
     return forwarded.split(',')[0]?.trim() ?? 'global';
   }
-  const realIP = req.headers?.get?.('x-real-ip');
+  const realIP = req.headers?.get('x-real-ip');
   if (realIP) {
     return realIP;
   }

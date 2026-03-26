@@ -2,13 +2,14 @@ import { Elysia, t } from 'elysia';
 import { adminRateLimit } from './rate-limit';
 import { db } from '~/server/db';
 import { createId } from "@paralleldrive/cuid2";
+import { HttpError } from './http-error';
 
 export const adminRoutes = new Elysia({ prefix: '/admin' })
   .use(adminRateLimit)
   .resolve(async ({ request }) => {
     const authHeader = request.headers.get("authorization");
     if (!authHeader?.startsWith("Bearer ")) {
-      throw new Error("Unauthorized");
+      throw new HttpError(401, "Unauthorized");
     }
     
     const apiKey = authHeader.slice(7);
@@ -17,7 +18,7 @@ export const adminRoutes = new Elysia({ prefix: '/admin' })
     });
     
     if (!user) {
-      throw new Error("Unauthorized");
+      throw new HttpError(401, "Unauthorized");
     }
     
     return { user };
@@ -102,7 +103,7 @@ export const adminRoutes = new Elysia({ prefix: '/admin' })
     });
 
     if (!monitor) {
-      throw new Error("Monitor not found or unauthorized");
+      throw new HttpError(404, "Monitor not found");
     }
 
     await db.monitor.update({
@@ -138,7 +139,7 @@ export const adminRoutes = new Elysia({ prefix: '/admin' })
     });
 
     if (!monitor) {
-      throw new Error("Monitor not found or unauthorized");
+      throw new HttpError(404, "Monitor not found");
     }
 
     return monitor;
@@ -156,7 +157,7 @@ export const adminRoutes = new Elysia({ prefix: '/admin' })
     });
 
     if (!monitor) {
-      throw new Error("Monitor not found or unauthorized");
+      throw new HttpError(404, "Monitor not found");
     }
 
     const limit = query.limit ? parseInt(query.limit) : 50;
@@ -192,7 +193,7 @@ export const adminRoutes = new Elysia({ prefix: '/admin' })
     });
 
     if (!monitor) {
-      throw new Error("Monitor not found or unauthorized");
+      throw new HttpError(404, "Monitor not found");
     }
 
     const limit = query.limit ? parseInt(query.limit) : 50;
@@ -229,7 +230,7 @@ export const adminRoutes = new Elysia({ prefix: '/admin' })
     });
 
     if (!monitor) {
-      throw new Error("Monitor not found or unauthorized");
+      throw new HttpError(404, "Monitor not found");
     }
 
 
@@ -253,7 +254,7 @@ export const adminRoutes = new Elysia({ prefix: '/admin' })
     });
 
     if (!monitor) {
-      throw new Error("Monitor not found or unauthorized");
+      throw new HttpError(404, "Monitor not found");
     }
 
     const newKey = createId();

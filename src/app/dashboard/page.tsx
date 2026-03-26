@@ -5,6 +5,13 @@ import { MonitorList } from "~/components/dashboard/monitor-list";
 import { headers } from "next/headers";
 import { auth } from "~/server/better-auth";
 
+type StatsCardProps = {
+  title: string;
+  value: number;
+  icon: React.ComponentType<{ className?: string }>;
+  color?: string;
+};
+
 export default async function DashboardPage() {
   const monitors = await getMonitors();
   const session = await auth.api.getSession({
@@ -46,7 +53,7 @@ export default async function DashboardPage() {
   );
 }
 
-function StatsCard({ title, value, icon: Icon, color = "text-white" }: any) {
+function StatsCard({ title, value, icon: Icon, color = "text-white" }: StatsCardProps) {
   return (
     <div className="relative group overflow-hidden rounded-xl border border-white/10 bg-[#0B1121] p-6 hover:border-white/20 transition-all duration-300">
       <div className="flex items-center justify-between space-y-0 pb-2">
@@ -55,7 +62,7 @@ function StatsCard({ title, value, icon: Icon, color = "text-white" }: any) {
       </div>
       <div className={`text-4xl font-black mt-2 ${color}`}>{value}</div>
 
-      <div className={`absolute -right-6 -bottom-6 h-24 w-24 rounded-full opacity-10 blur-2xl ${color.replace('text-', 'bg-')}`} />
+      <div className={`absolute -right-6 -bottom-6 h-24 w-24 rounded-full opacity-10 blur-2xl ${color.replace("text-", "bg-")}`} />
     </div>
   )
 }

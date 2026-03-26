@@ -17,7 +17,7 @@ export function ApiKeySettings({ initialKey }: { initialKey: string | null }) {
 
     const handleCopy = () => {
         if (!apiKey) return;
-        navigator.clipboard.writeText(apiKey);
+        void navigator.clipboard.writeText(apiKey);
         setJustCopied(true);
         toast.success("API Key copied to clipboard");
         setTimeout(() => setJustCopied(false), 2000);
@@ -52,7 +52,7 @@ export function ApiKeySettings({ initialKey }: { initialKey: string | null }) {
                     <div className="flex gap-2">
                         <div className="relative flex-1">
                             <Input
-                                value={apiKey || ""}
+                                value={apiKey ?? ""}
                                 type={isVisible ? "text" : "password"}
                                 readOnly
                                 placeholder="No API key generated yet"
